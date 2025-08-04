@@ -1,0 +1,36 @@
+<div class="container text-center">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">INICIO</a></li>
+            <li class="breadcrumb-item"><a href="/clientes">LISTA DE CLIENTE</a></li>
+            <li class="breadcrumb-item"><a>EDITAR CLIENTE</a></li>
+            <li class="breadcrumb-item"><a href="/cliente/adicionar">NOVO CLIENTE <img src="img/add-24.png" alt=""></a>
+            </li>
+        </ol>
+    </nav>
+</div>
+<main class="container">
+    <% var arrCliente=JSON.parse(data); arrCliente.forEach(el=> {
+        cliente = el;
+        });
+
+        %>
+        <form action="/cliente/editar/salvar" method="post" class="row g-3">
+            <input type="hidden" value="<%=cliente.idCliente%>" name="idCliente">
+            
+                <div class="col">
+                    <label class="form-label">NOME CLIENTE</label>
+                    <input type="text" class="form-control" value="<%=cliente.nomeCliente%>" name="nomeCliente">
+                </div>
+                <div class="row g-3">
+                    <div class="col-1">
+                         <input type="submit" class="btn btn-success" value="SALVAR">
+                    </div>
+                    <div class="col-1">
+                         <a class="btn btn-secondary" href="/clientes" >CANCELAR</a>
+                    </div>                   
+                </div>
+            
+        </form>
+
+</main>

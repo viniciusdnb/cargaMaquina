@@ -1,0 +1,54 @@
+<div class="container text-center">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">INICIO</a></li>
+            <li class="breadcrumb-item"><a>LISTA DE CLIENTE</a></li>
+            <li class="breadcrumb-item"><a href="/cliente/adicionar">NOVO CLIENTE <img src="/img/add-24.png" alt=""></a>
+            </li>
+        </ol>
+    </nav>
+</div>
+
+
+<main class="container">
+
+
+    <% if(msg !=null){%>
+        <div class="alert alert-secondary" role="alert">
+            <%= msg %>
+        </div>
+        <% } %>
+            <table class="table">
+                <thead class="table-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>CLIENTE</th>
+                        <th>OPÇÕES</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if(typeof data !='undefined' ){ var clientes=JSON.parse(data); clientes.forEach(cliente=>{%>
+                        <tr>
+                            <td>
+                                <%=cliente.idCliente %>
+                            </td>
+                            <td>
+                                <%=cliente.nomeCliente %>
+                            </td>
+                            <td>
+                                <a href="/clientes/editar/<%= cliente.idCliente %>">
+                                    <img src="/img/edit-24.png" alt="">
+                                </a>|
+                                <a id="delete" onclick='perguntar("<%= cliente.idCliente %>", "<%= cliente.nomeCliente %>")' data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                                    href="<%= cliente.idCliente %>">
+                                    <img src="/img/trash-24.png" alt="">
+                                </a>
+                            </td>
+                        </tr>
+                        <%}) }%>
+
+                </tbody>
+            </table>
+</main>
+
+<%- include('modalDelete') %>

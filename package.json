@@ -1,0 +1,31 @@
+{
+  "name": "carga-maquina",
+  "version": "1.0.0",
+  "description": "programa de carga maquina pcp",
+  "homepage": "https://github.com/viniciusdnb/cargaMaquina#readme",
+  "bugs": {
+    "url": "https://github.com/viniciusdnb/cargaMaquina/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/viniciusdnb/cargaMaquina.git"
+  },
+  "license": "ISC",
+  "author": "vinicius",
+  "type": "commonjs",
+  "main": "app.js",
+  "scripts": {
+    "dev": "nodemon app.js"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.7",
+    "dotenv": "^17.2.1",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "mysql2": "^3.14.3",
+    "sequelize": "^6.37.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}

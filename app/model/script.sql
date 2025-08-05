@@ -20,6 +20,11 @@ CREATE TABLE produto(
     FOREIGN KEY (idTipoProduto) REFERENCES tipoProduto(idTipoProduto)
 );
 
+CREATE TABLE tipo_ordem_producao(
+    idTipoOrdemProducao INT PRIMARY KEY AUTO_INCREMENT,
+    descTipoOrdemProducao VARCHAR(10)
+);
+
 CREATE TABLE ordem_producao(
     idOrdemProducao INT PRIMARY KEY AUTO_INCREMENT,
     numeroOrdemProducao VARCHAR(10),
@@ -28,9 +33,11 @@ CREATE TABLE ordem_producao(
     dataEntrega DATETIME,
     idCliente INT,
     idProduto INT, 
+    idTipoOrdemProducao INT,
     quantidade INT,
     FOREIGN KEY (idCliente) REFERENCES cliente(idCliente),
-    FOREIGN KEY (idProduto) REFERENCES produto(idProduto)
+    FOREIGN KEY (idProduto) REFERENCES produto(idProduto),
+    FOREIGN KEY (idTipoOrdemProducao) REFERENCES tipo_ordem_producao(idTipoOrdemProducao)
 );
 
 CREATE TABLE setor(

@@ -2,12 +2,13 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/">INICIO</a></li>
-            <li class="breadcrumb-item"><a>LISTA DE MOTIVO</a></li>
-            <li class="breadcrumb-item"><a href="/motivo/adicionar">NOVO MOTVITO <img src="/img/add-24.png" alt=""></a>
+            <li class="breadcrumb-item"><a>LISTA DE TIPO DE PRODUTOS</a></li>
+            <li class="breadcrumb-item"><a href="/tipoproduto/adicionar">NOVO TIPO PRODUTO <img src="/img/add-24.png" alt=""></a>
             </li>
         </ol>
     </nav>
 </div>
+
 
 <main class="container">
 
@@ -21,29 +22,25 @@
                 <thead class="table-dark">
                     <tr>
                         <th>#</th>
-                        <th>CODIGO</th>
-                        <th>DESCRICAO MOTIVO</th>
+                        <th>TIPO PRODUTO</th>
                         <th>OPÇÕES</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <% if(typeof data !='undefined' ){ var motivos=JSON.parse(data); motivos.forEach(motivo=>{%>
+                    <% if(typeof data !='undefined' ){ var tipoProdutos=JSON.parse(data); tipoProdutos.forEach(tipoProduto=>{%>
                         <tr>
                             <td>
-                                <%=motivo.idMotivo %>
+                                <%=tipoProduto.idTipoProduto %>
                             </td>
                             <td>
-                                <%=motivo.codigoMotivo %>
+                                <%=tipoProduto.descTipoProduto %>
                             </td>
                             <td>
-                                <%=motivo.descMotivo %>
-                            </td>
-                            <td>
-                                <a href="/motivo/editar/<%= motivo.idMotivo %>">
+                                <a href="/tipoproduto/editar/<%= tipoProduto.idTipoProduto %>">
                                     <img src="/img/edit-24.png" alt="">
                                 </a>|
-                                <a id="delete" onclick='perguntar("<%= motivo.idMotivo %>", " <%=motivo.codigoMotivo %>" +" - "+ "<%= motivo.descMotivo %>","motivo")' data-bs-toggle="modal" data-bs-target="#staticBackdrop"
-                                    href="<%= motivo.idMotivo %>">
+                                <a id="delete" onclick='perguntar("<%= tipoProduto.idTipoProduto %>", "<%= tipoProduto.descTipoProduto %>","tipoproduto")' data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                                    href="<%= tipoProduto.idTipoProduto %>">
                                     <img src="/img/trash-24.png" alt="">
                                 </a>
                             </td>
@@ -53,5 +50,4 @@
                 </tbody>
             </table>
 </main>
-
 <%- include('../../layout/modals/modalDelete') %>

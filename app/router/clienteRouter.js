@@ -3,8 +3,8 @@ const clienteRouter = express.Router();
 const clienteController = require('../controller/clienteController');
 
 clienteRouter.get('/cliente', function (req, res) {
-    res.render('cadastro/cliente/index', {pathName: 'main'});
-    //clienteController.index(req, res);
+    //res.render('cadastro/cliente/index', {pathName: 'main'});
+    clienteController.index(req, res);
 });
 
 clienteRouter.get('/cliente/editar/:idCliente', function (req, res) {
@@ -24,8 +24,8 @@ clienteRouter.post('/cliente/novo/salvar', function(req, res){
     clienteController.newSave(req, res);
 });
 
-clienteRouter.delete('/cliente/delete/:idCliente', function(req, res){
-    console.log(req.params);
+clienteRouter.get('/cliente/delete/:idCliente', function(req, res){
+    clienteController.delete(req, res);
 })
 
 module.exports = clienteRouter;

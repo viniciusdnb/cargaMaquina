@@ -11,7 +11,7 @@ const operadorRouter = require('./app/router/operadorRouter');
 const produtoRouter = require('./app/router/produtoRouter');
 const setorRouter = require('./app/router/setorRouter');
 const subMotivoRouter = require('./app/router/subMotivoRouter');
-
+const tipoProduto = require('./app/router/tipoProdutoRouter');
 
 app.use(express.static('./app/public'));
 app.use(express.json());
@@ -28,7 +28,7 @@ app.use('/', operadorRouter);
 app.use('/', produtoRouter);
 app.use('/', setorRouter);
 app.use('/', subMotivoRouter);
-
+app.use('/', tipoProduto);
 
 app.listen(port, function(){
     console.log(`app online in http://${host}:${port}`);

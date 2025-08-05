@@ -1,6 +1,7 @@
 const connect = require('../connect');
 const { DataTypes } = require('sequelize');
 
+
 const maquinaModel = connect.define(
     'maquina',
     {
@@ -13,6 +14,12 @@ const maquinaModel = connect.define(
         },
         idSetor:{
             type: DataTypes.INTEGER,    
+        },
+        velocidade:{
+            type: DataTypes.INTEGER
+        },
+        undVelocidade:{
+             type: DataTypes.CHAR
         }
     },
      {
@@ -20,5 +27,7 @@ const maquinaModel = connect.define(
         freezeTableName: true
     }
 );
+
+
 
 module.exports = maquinaModel;

@@ -37,9 +37,9 @@ module.exports = {
             }
         });
 
-        let msg = cliente[0] > 0 ? "CADASTRO ALTERADO COM SUCESSO!" : "NAO FOI POSSIVEL ALTERAR, TENTE NOVAMENTE MAIS TARDE";
+        //let msg = cliente[0] > 0 ? "CADASTRO ALTERADO COM SUCESSO!" : "NAO FOI POSSIVEL ALTERAR, TENTE NOVAMENTE MAIS TARDE";
 
-        this.index(req, res, msg);
+        res.redirect('/cliente');
     },
     new: function (req, res) {
         res.render('cadastro/cliente/index', { "pathName": "new" });
@@ -51,11 +51,30 @@ module.exports = {
                 nomeCliente: req.body.nomeCliente
             });
 
-            let msg = "CADASTRO INSERIDO COM SUCESSO!";
-            this.index(req, res, msg);
+            //let msg = "CADASTRO INSERIDO COM SUCESSO!";
+           
         } catch (err) {
-            let msg = "NAO FOI POSSIVEL INSERIR, TENTE NOVAMENTE MAIS TARDE"
-            this.index(req, res, msg);
+            //let msg = "NAO FOI POSSIVEL INSERIR, TENTE NOVAMENTE MAIS TARDE"
+            
         }
+        res.redirect('/cliente');
+    },
+    delete: async function (req, res) {
+        let msg = "";
+        try {
+            const cliente = await clienteModel.destroy({
+                where: {
+                    idCliente: req.params.idCliente
+                }
+            });
+
+            msg = cliente > 0 ? "CADASTRO DELETADO COM SUCESSO" : "NÃO FOI POSSIVEL DELETAR";
+
+        } catch (err) {
+            msg = "ERRO, NAO FOI POSSIVEL DELETAR";
+        }
+
+        res.redirect('/cliente');
+
     }
 }

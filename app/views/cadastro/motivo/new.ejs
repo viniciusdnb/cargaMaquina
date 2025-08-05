@@ -8,3 +8,29 @@
         </ol>
     </nav>
 </div>
+
+<main class="container">
+  
+        <form action="/motivo/novo/salvar" method="post" class="row g-3">
+           
+            
+                <div class="col">
+                    <label class="form-label">CODIGO MOTIVO</label>
+                    <input type="number" class="form-control"  name="codigoMotivo">
+                </div>
+                <div class="col">
+                    <label class="form-label">DESCRIÇÃO MOTIVO</label>
+                    <input type="text" class="form-control"  name="descMotivo">
+                </div>
+                <div class="row g-3">
+                    <div class="col-1">
+                         <input type="submit" class="btn btn-success" value="SALVAR">
+                    </div>
+                    <div class="col-1">
+                         <a class="btn btn-secondary" href="/motivo" >CANCELAR</a>
+                    </div>                   
+                </div>
+            
+        </form>
+
+</main>

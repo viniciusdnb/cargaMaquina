@@ -9,6 +9,44 @@
     </nav>
 </div>
 
-<main>
+<main class="container">
+
+
+    <% if(msg != null && typeof msg != 'undefined'){%>
+        <div class="alert alert-secondary" role="alert">
+            <%= msg %>
+        </div>
+        <% } %>
+            <table class="table">
+                <thead class="table-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>SETOR</th>
+                        <th>OPÇÕES</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if(typeof data !='undefined' ){ var setores=JSON.parse(data); setores.forEach(setor=>{%>
+                        <tr>
+                            <td>
+                                <%=setor.idSetor %>
+                            </td>
+                            <td>
+                                <%=setor.descSetor %>
+                            </td>
+                            <td>
+                                <a href="/setor/editar/<%= setor.idSetor %>">
+                                    <img src="/img/edit-24.png" alt="">
+                                </a>|
+                                <a id="delete" onclick='perguntar("<%= setor.idSetor %>", "<%= setor.descSetor %>","setor")' data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                                    href="<%= setor.idSetor %>">
+                                    <img src="/img/trash-24.png" alt="">
+                                </a>
+                            </td>
+                        </tr>
+                        <%}) }%>
+
+                </tbody>
+            </table>
 </main>
 <%- include('../../layout/modals/modalDelete') %>

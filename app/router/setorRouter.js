@@ -6,7 +6,7 @@ setorRouter.get('/setor', function(req, res){
     setorController.index(req, res);
 });
 
-setorRouter.get('/setor/editar/:idMaquina', function(req, res){
+setorRouter.get('/setor/editar/:idSetor', function(req, res){
     setorController.edit(req, res);
 });
 
@@ -19,10 +19,10 @@ setorRouter.get('/setor/adicionar', function(req, res){
 });
 
 setorRouter.post('/setor/novo/salvar', function(req, res){
-    setorController.new(req, res);
+    setorController.newSave(req, res);
 });
 
-setorRouter.delete('/setor/delete/:idMaquina', function(req, res){
+setorRouter.get('/setor/delete/:idSetor', function(req, res){
     setorController.delete(req, res);
 });
 

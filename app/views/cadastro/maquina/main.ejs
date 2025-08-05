@@ -3,12 +3,63 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/">INICIO</a></li>
             <li class="breadcrumb-item"><a>LISTA DE MAQUINAS</a></li>
-            <li class="breadcrumb-item"><a href="/maquina/adicionar">NOVO MAQUINAS <img src="/img/add-24.png" alt=""></a>
+            <li class="breadcrumb-item"><a href="/maquina/adicionar">NOVO MAQUINAS <img src="/img/add-24.png"
+                        alt=""></a>
             </li>
         </ol>
     </nav>
 </div>
 
-<main>
+<main class="container">
+    <%  if(msg !=null && typeof msg !='undefined' ){ %>
+        <div class="alert alert-secondary" role="alert">
+            <%= msg %>
+        </div>
+        <% } %>
+            <table class="table">
+                <thead class="table-dark">
+                    <tr>
+                        <th>#</th>
+                        <th class="text-center">MÁQUINA</th>
+                        <th class="text-center">VELOCIDADE</th>
+                        <th class="text-center">UND</th>
+                        <th class="text-center">SETOR</th>
+                        <th>OPÇÕES</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%console.log(data);
+                         if(typeof data !='undefined' ){ var maquinas=JSON.parse(data); maquinas.forEach(maquina=>{%>
+                        <tr>
+                            <td>
+                                <%= maquina.idMaquina %>
+                            </td>
+                            <td class="text-center">
+                                <%= maquina.descMaquina %>
+                            </td>
+                            <td class="text-center">
+                                <%= maquina.velocidade %>
+                            </td>
+                            <td class="text-center">
+                                <%= maquina.undVelocidade %>
+                            </td>
+                            <td class="text-center">
+                                <%= maquina.setor.descSetor %>
+                            </td>
+                            <td>
+                                <a href="/maquina/editar/<%= maquina.idMaquina %>">
+                                    <img src="/img/edit-24.png" alt="">
+                                </a>|
+                                <a id="delete"
+                                    onclick='perguntar("<%= maquina.idMaquina %>", "<%= maquina.descMaquina %>","maquina")'
+                                    data-bs-toggle="modal" data-bs-target="#staticBackdrop" href="">
+                                    <img src="/img/trash-24.png" alt="">
+                                </a>
+                            </td>
+                        </tr>
+                        <% }) } %>
+                </tbody>
+            </table>
 </main>
+
 <%- include('../../layout/modals/modalDelete') %>

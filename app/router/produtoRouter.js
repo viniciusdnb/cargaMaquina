@@ -6,7 +6,7 @@ produtoRouter.get('/produto', function(req, res){
     produtoController.index(req, res);
 });
 
-produtoRouter.get('/produto/editar/:idMaquina', function(req, res){
+produtoRouter.get('/produto/editar/:idProduto', function(req, res){
     produtoController.edit(req, res);
 });
 
@@ -19,10 +19,10 @@ produtoRouter.get('/produto/adicionar', function(req, res){
 });
 
 produtoRouter.post('/produto/novo/salvar', function(req, res){
-    produtoController.new(req, res);
+    produtoController.newSave(req, res);
 });
 
-produtoRouter.delete('/produto/delete/:idMaquina', function(req, res){
+produtoRouter.get('/produto/delete/:idProduto', function(req, res){
     produtoController.delete(req, res);
 });
 

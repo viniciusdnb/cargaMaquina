@@ -2,20 +2,20 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/">INICIO</a></li>
-            <li class="breadcrumb-item"><a href="/operador">LISTA DE OPERADOR</a></li>
-            <li class="breadcrumb-item"><a>NOVO OPERADOR</a>
+            <li class="breadcrumb-item"><a href="/tipoproduto">LISTA DE TIPO DE PRODUTO</a></li>
+            <li class="breadcrumb-item"><a>NOVO TIPO DE PRODUTO</a>
             </li>
         </ol>
     </nav>
 </div>
 <main class="container">
 
-        <form action="/operador/novo/salvar" method="post" class="row g-3">
+        <form action="/tipoproduto/novo/salvar" method="post" class="row g-3">
            
 
             <div class="col">
-                <label class="form-label">NOME OPERADORO</label>
-                <input type="text" class="form-control"name="nomeOperador">
+                <label class="form-label">NOME TIPO DE PRODUTO</label>
+                <input type="text" class="form-control"name="descTipoProduto">
             </div>
 
             <div class="row g-3">
@@ -23,7 +23,7 @@
                     <input type="submit" class="btn btn-success" value="SALVAR">
                 </div>
                 <div class="col-1">
-                    <a class="btn btn-secondary" href="/operador">CANCELAR</a>
+                    <a class="btn btn-secondary" href="/tipoproduto">CANCELAR</a>
                 </div>
             </div>
         </form>

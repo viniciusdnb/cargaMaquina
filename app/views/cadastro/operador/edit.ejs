@@ -4,8 +4,33 @@
             <li class="breadcrumb-item"><a href="/">INICIO</a></li>
             <li class="breadcrumb-item"><a href="/operador">LISTA DE OPERADOR</a></li>
             <li class="breadcrumb-item"><a>EDITAR OPERADOR</a></li>
-            <li class="breadcrumb-item"><a href="/operador/adicionar">NOVA OPERADOR <img src="img/add-24.png" alt=""></a>
+            <li class="breadcrumb-item"><a href="/operador/adicionar">NOVA OPERADOR <img src="img/add-24.png"
+                        alt=""></a>
             </li>
         </ol>
     </nav>
 </div>
+<main class="container">
+    <% var arrOperador=JSON.parse(data); arrOperador.forEach(el=> {
+        operador = el;
+        });
+
+        %>
+        <form action="/operador/editar/salvar" method="post" class="row g-3">
+            <input type="hidden" value="<%=operador.idOperador%>" name="idOperador">
+
+            <div class="col">
+                <label class="form-label">NOME OPERADOR</label>
+                <input type="text" class="form-control" value="<%=operador.nomeOperador%>" name="nomeOperador">
+            </div>
+
+            <div class="row g-3">
+                <div class="col-1">
+                    <input type="submit" class="btn btn-success" value="SALVAR">
+                </div>
+                <div class="col-1">
+                    <a class="btn btn-secondary" href="/operador">CANCELAR</a>
+                </div>
+            </div>
+        </form>
+</main>

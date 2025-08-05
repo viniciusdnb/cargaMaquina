@@ -9,3 +9,34 @@
         </ol>
     </nav>
 </div>
+
+<main class="container">
+    <% var arrMotivo=JSON.parse(data);
+         arrMotivo.forEach(el=> {
+            motivo = el;
+        });
+
+        %>
+        <form action="/motivo/editar/salvar" method="post" class="row g-3">
+            <input type="hidden" value="<%=motivo.idMotivo%>" name="idMotivo">
+            
+                <div class="col">
+                    <label class="form-label">CODIGO MOTIVO</label>
+                    <input type="number" class="form-control" value="<%=motivo.codigoMotivo%>" name="codigoMotivo">
+                </div>
+                <div class="col">
+                    <label class="form-label">DESCRIÇÃO MOTIVO</label>
+                    <input type="text" class="form-control" value="<%=motivo.descMotivo%>" name="descMotivo">
+                </div>
+                <div class="row g-3">
+                    <div class="col-1">
+                         <input type="submit" class="btn btn-success" value="SALVAR">
+                    </div>
+                    <div class="col-1">
+                         <a class="btn btn-secondary" href="/motivo" >CANCELAR</a>
+                    </div>                   
+                </div>
+            
+        </form>
+
+</main>

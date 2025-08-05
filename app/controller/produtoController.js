@@ -1,23 +1,81 @@
 const produtoModel = require('../model/models/produtoModel');
+const tipoProdutoModel = require('../model/models/tipoProdutoModel');
+
+produtoModel.belongsTo(tipoProdutoModel,{foreignKey:'idTipoProduto'})
 
 module.exports = {
     index: async function(req, res, msg = null){
-
+        const produtos = await produtoModel.findAll()
+        
+        let data = JSON.stringify(produtos, null);
+        let pathName = 'main';
+        res.render('cadastro/produto/index', {
+            "pathName": pathName,
+            "data": data,
+            "msg": msg
+        });
     },
     edit: async function(req, res){
-
+        const produto = await produtoModel.findAll({
+            include: tipoProdutoModel,
+            where:{idProduto:req.params.idProduto}
+        });
+        const tipoProdutos = await tipoProdutoModel.findAll();
+        res.render('cadastro/produto/index', {
+            "pathName": 'edit',
+            "data": JSON.stringify(produto, null),
+            "tipoProdutos": JSON.stringify(tipoProdutos, null)
+        });
+        
     },
     update: async function(req, res){
+      
+        const produto = await produtoModel.update({
+            descProduto : req.body.descProduto,
+            idTipoProduto : req.body.idTipoProduto,
+            codigoOmie : req.body.codigoOmie
+        },{
+            where:{
+                idProduto:req.body.idProduto
+            }
+        });
 
+         res.redirect('/produto');
     },
-    new: function(req, res){
-
+    new: async function(req, res){
+        const tipoProdutos = await tipoProdutoModel.findAll();
+        res.render('cadastro/produto/index', {
+            "pathName": 'new',
+            "tipoProdutos": JSON.stringify(tipoProdutos, null)
+        })
     },
     newSave: async function(req, res){
+        try {
+            const produto = await produtoModel.create({
+                descProduto: req.body.descProduto,
+                idTipoProduto: req.body.idTipoProduto,
+                codigoOmie: req.body.codigoOmie
+            })
+        } catch (error) {
+            
+        }
 
+        res.redirect('/produto')
     },
     delete: async function(req, res){
+        try {
+            const produto = produtoModel.destroy({
+                where: {
+                    idProduto:req.params.idProduto
+                }
+            });
+            // msg = cliente > 0 ? "CADASTRO DELETADO COM SUCESSO" : "NÃO FOI POSSIVEL DELETAR";
 
+        } catch (err) {
+            //msg = "ERRO, NAO FOI POSSIVEL DELETAR";
+        }
+
+        res.redirect('/produto');
     }
 
 }

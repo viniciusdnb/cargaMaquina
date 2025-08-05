@@ -6,7 +6,7 @@ motivoRouter.get('/motivo', function(req, res){
     motivoController.index(req, res);
 });
 
-motivoRouter.get('/motivo/editar/:idMaquina', function(req, res){
+motivoRouter.get('/motivo/editar/:idMotivo', function(req, res){
     motivoController.edit(req, res);
 });
 
@@ -19,10 +19,10 @@ motivoRouter.get('/motivo/adicionar', function(req, res){
 });
 
 motivoRouter.post('/motivo/novo/salvar', function(req, res){
-    motivoController.new(req, res);
+    motivoController.newSave(req, res);
 });
 
-motivoRouter.delete('/motivo/delete/:idMaquina', function(req, res){
+motivoRouter.get('/motivo/delete/:idMotivo', function(req, res){
     motivoController.delete(req, res);
 });
 

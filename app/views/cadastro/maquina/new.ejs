@@ -8,3 +8,42 @@
         </ol>
     </nav>
 </div>
+
+<main class="container">
+    <% 
+        var arrSetores = JSON.parse(setores);
+        %>
+
+        <form action="/maquina/novo/salvar" method="post" class="row g3">
+             
+            <div class="col">
+                <label class="form-label">DESCRIÇÃO MAQUINA</label>
+                <input type="text" class="form-control"  name="descMaquina">
+            </div>
+             <div class="col">
+                <label class="form-label">SETOR</label>
+                <select class="form-select" name="idSetor">
+                   <% arrSetores.forEach(setor=>{%>
+                        <option                        
+                        value="<%= setor.idSetor%>"><%= setor.descSetor %></option>
+                   <%}) %>
+                </select>
+            </div>
+             <div class="col">
+                <label class="form-label">VELOCIDADE</label>
+                <input type="number" class="form-control"  name="velocidade">
+            </div>
+             <div class="col">
+                <label class="form-label">UNIDADE VELOCIDADE</label>
+                <input type="text" class="form-control"  name="undVelocidade" placeholder="ex: min" maxlength="3">
+            </div>
+            <div class="row g-3">
+                <div class="col-1">
+                    <input type="submit" class="btn btn-success" value="SALVAR">
+                </div>
+                <div class="col-1">
+                    <a class="btn btn-secondary" href="/maquina">CANCELAR</a>
+                </div>
+            </div>
+        </form>
+</main>

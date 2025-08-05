@@ -6,7 +6,7 @@ subMotivoRouter.get('/submotivo', function(req, res){
     subMotivoController.index(req, res);
 });
 
-subMotivoRouter.get('/submotivo/editar/:idMaquina', function(req, res){
+subMotivoRouter.get('/submotivo/editar/:idSubMotivo', function(req, res){
     subMotivoController.edit(req, res);
 });
 
@@ -19,10 +19,10 @@ subMotivoRouter.get('/submotivo/adicionar', function(req, res){
 });
 
 subMotivoRouter.post('/submotivo/novo/salvar', function(req, res){
-    subMotivoController.new(req, res);
+    subMotivoController.newSave(req, res);
 });
 
-subMotivoRouter.delete('/submotivo/delete/:idMaquina', function(req, res){
+subMotivoRouter.get('/submotivo/delete/:idSubMotivo', function(req, res){
     subMotivoController.delete(req, res);
 });
 

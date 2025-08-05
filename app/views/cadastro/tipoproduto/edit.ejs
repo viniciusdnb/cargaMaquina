@@ -1,0 +1,36 @@
+<div class="container text-center">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">INICIO</a></li>
+            <li class="breadcrumb-item"><a href="/operador">LISTA DE TIPO DE PRODUTO</a></li>
+            <li class="breadcrumb-item"><a>EDITAR TIPO DE PRODUTO</a></li>
+            <li class="breadcrumb-item"><a href="/tipoproduto/adicionar">NOVA TIPO DE PRODUTO <img src="img/add-24.png"
+                        alt=""></a>
+            </li>
+        </ol>
+    </nav>
+</div>
+<main class="container">
+    <% var arrTipoProduto=JSON.parse(data); arrTipoProduto.forEach(el=> {
+        tipoProduto = el;
+        });
+
+        %>
+        <form action="/tipoproduto/editar/salvar" method="post" class="row g-3">
+            <input type="hidden" value="<%=tipoProduto.idTipoProduto%>" name="idTipoProduto">
+
+            <div class="col">
+                <label class="form-label">NOME TIPO PRODUTO</label>
+                <input type="text" class="form-control" value="<%=tipoProduto.descTipoProduto%>" name="descTipoProduto">
+            </div>
+
+            <div class="row g-3">
+                <div class="col-1">
+                    <input type="submit" class="btn btn-success" value="SALVAR">
+                </div>
+                <div class="col-1">
+                    <a class="btn btn-secondary" href="/tipoproduto">CANCELAR</a>
+                </div>
+            </div>
+        </form>
+</main>

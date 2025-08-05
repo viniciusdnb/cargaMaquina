@@ -8,3 +8,37 @@
         </ol>
     </nav>
 </div>
+
+<main class="container">
+    
+<%var arrMotivos = JSON.parse(motivos);%>
+        <form action="/submotivo/novo/salvar" method="post" class="row g3">
+             
+             <div class="col">
+                <label class="form-label">CODIGO SUBMOTIVO</label>
+                <input type="number" class="form-control"  name="codigoSubMotivo">
+            </div>
+            <div class="col">
+                <label class="form-label">DESCRIÇÃO SUBMOTIVO</label>
+                <input type="text" class="form-control"name="descSubMotivo">
+            </div>
+             <div class="col">
+                <label class="form-label">MOTIVO</label>
+                <select class="form-select" name="idMotivo">
+                   <% arrMotivos.forEach(motivo=>{%>
+                        <option
+                        
+                        value="<%= motivo.idMotivo%>"><%= motivo.codigoMotivo %>- <%= motivo.descMotivo %></option>
+                   <%}) %>
+                </select>
+            </div>           
+            <div class="row g-3">
+                <div class="col-1">
+                    <input type="submit" class="btn btn-success" value="SALVAR">
+                </div>
+                <div class="col-1">
+                    <a class="btn btn-secondary" href="/submotivo">CANCELAR</a>
+                </div>
+            </div>
+        </form>
+</main>

@@ -1,0 +1,47 @@
+<div class="container text-center">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">INICIO</a></li>
+            <li class="breadcrumb-item"><a href="/produto">LISTA DE PRODUTO</a></li>
+            <li class="breadcrumb-item"><a>NOVO PRODUTO</a>
+            </li>
+        </ol>
+    </nav>
+</div>
+
+<main class="container">
+    <% 
+        var arrTipoProdutos = JSON.parse(tipoProdutos);
+        %>
+
+        <form action="/produto/novo/salvar" method="post" class="row g3">
+             
+            <div class="col">
+                <label class="form-label">DESCRIÇÃO PRODUTO</label>
+                <input type="text" class="form-control"  name="descProduto">
+            </div>
+            <div class="col">
+                <label class="form-label">CODIGO OMIE</label>
+                <input type="text" class="form-control" name="codigoOmei">
+            </div>
+             <div class="col">
+                <label class="form-label">TIPO PRODUTO</label>
+                <select class="form-select" name="idTipoProduto">
+                   <% arrTipoProdutos.forEach(tipoProduto=>{%>
+                        <option
+                       
+                        value="<%= tipoProduto.idTipoProduto%>"><%= tipoProduto.descTipoProduto %></option>
+                   <%}) %>
+                </select>
+            </div>
+           
+            <div class="row g-3">
+                <div class="col-1">
+                    <input type="submit" class="btn btn-success" value="SALVAR">
+                </div>
+                <div class="col-1">
+                    <a class="btn btn-secondary" href="/produto">CANCELAR</a>
+                </div>
+            </div>
+        </form>
+</main>

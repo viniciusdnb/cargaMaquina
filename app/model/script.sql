@@ -7,9 +7,9 @@ CREATE TABLE cliente(
     cliente VARCHAR(50)
 );
 
-CREATE TABLE tipoProduto(
+CREATE TABLE tipo_Produto(
     idTipoProduto INT PRIMARY KEY AUTO_INCREMENT,
-    tipoProduto VARCHAR(50)
+    descTipoProduto VARCHAR(50)
 );
 
 CREATE TABLE produto(
@@ -35,13 +35,9 @@ CREATE TABLE ordem_producao(
 
 CREATE TABLE setor(
     idSetor INT PRIMARY KEY AUTO_INCREMENT,
-    descSetor VARCHAR(10)
+    descSetor VARCHAR(10) utf8_unicode_ci
 );
 
-CREATE TABLE sub_setor(
-    idSetor INT PRIMARY KEY AUTO_INCREMENT,
-    descSubSetor VARCHAR(10)
-);
 
 CREATE TABLE motivo(
     idMotivo INT PRIMARY KEY AUTO_INCREMENT,
@@ -61,6 +57,8 @@ CREATE TABLE maquina(
     idMaquina INT PRIMARY KEY AUTO_INCREMENT,
     descMaquina VARCHAR(50),
     idSetor INT,
+    velocidade INT,
+    undVelocidade VARCHAR(3),
     FOREIGN KEY (idSetor) REFERENCES setor(idSetor)
 );
 

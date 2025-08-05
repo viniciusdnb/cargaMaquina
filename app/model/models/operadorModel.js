@@ -19,4 +19,4 @@ const operadorModel = connect.define(
 
 );
 
-module.exports
+module.exports = operadorModel;

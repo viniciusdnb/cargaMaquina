@@ -6,14 +6,14 @@ module.exports = {
         const clientes = await clienteModel.findAll();
         let data = JSON.stringify(clientes, null);
         let pathName = "main";
-        res.render('cliente/index', {
+        res.render('cadastro/cliente/index', {
             "pathName": pathName,
             "data": data,
             "msg": msg
         });
 
     },
-    editar: async function (req, res) {
+    edit: async function (req, res) {
         const cliente = await clienteModel.findAll({
             where: {
                 idCliente: req.params.idCliente
@@ -22,8 +22,8 @@ module.exports = {
 
         let data = JSON.stringify(cliente, null);
 
-        let pathName = "editar";
-        res.render('cliente/index', {
+        let pathName = "edit";
+        res.render('cadastro/cliente/index', {
             "pathName": pathName,
             "data": data
         });
@@ -42,7 +42,7 @@ module.exports = {
         this.index(req, res, msg);
     },
     new: function (req, res) {
-        res.render('cliente/index', { "pathName": "new" });
+        res.render('cadastro/cliente/index', { "pathName": "new" });
     },
     newSave: async function (req, res) {
 

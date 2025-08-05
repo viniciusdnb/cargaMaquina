@@ -8,22 +8,22 @@
       </div>
       <div class="modal-body">
         deseja realmente exluir ?
-        <p id="cliente"></p>
+        <!-- EDITAR AQUI <p id="text-element"></p>-->
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">FECHAR</button>
-        <a id="deletarCliente" class="btn btn-danger">SIM</a>
+        <!-- EDITAR AQUI <a id="link-delete-elemet" class="btn btn-danger">SIM</a>-->
       </div>
     </div>
   </div>
 </div>
 
 <script>
-
+//editar os elementos
   var cli = ""
   function perguntar(id, value) {
-    document.getElementById("cliente").innerText = value;
-    document.getElementById("deletarCliente").setAttribute('href', `/cliente/delete/${id}`)
+    document.getElementById("text-element").innerText = value;
+    document.getElementById("link-delete-elemet").setAttribute('href', `/cliente/delete/${id}`)
   }
 
  

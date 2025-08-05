@@ -13,7 +13,7 @@
 <main class="container">
 
 
-    <% if(msg !=null){%>
+    <% if(/*msg != null || */typeof msg != 'undefined'){%>
         <div class="alert alert-secondary" role="alert">
             <%= msg %>
         </div>
@@ -36,7 +36,7 @@
                                 <%=cliente.nomeCliente %>
                             </td>
                             <td>
-                                <a href="/clientes/editar/<%= cliente.idCliente %>">
+                                <a href="/cliente/editar/<%= cliente.idCliente %>">
                                     <img src="/img/edit-24.png" alt="">
                                 </a>|
                                 <a id="delete" onclick='perguntar("<%= cliente.idCliente %>", "<%= cliente.nomeCliente %>")' data-bs-toggle="modal" data-bs-target="#staticBackdrop"
@@ -51,4 +51,4 @@
             </table>
 </main>
 
-<%- include('modalDelete') %>
+<%- include('../../layout/modals/modalDelete') %>

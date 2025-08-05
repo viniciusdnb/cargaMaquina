@@ -1,5 +1,5 @@
-const maquinaModel = require('../model/models/maquinaModel');
-const setorModel = require('../model/models/setorModel');
+const maquinaModel = require('../../model/models/cadastro/maquinaModel');
+const setorModel = require('../../model/models/cadastro/setorModel');
 //criando associação entre os models
 //e passando a chave estrangeira
 //a tabela que recebe a chave estrangeira liga com a tabela que manda a chave estrangeira 

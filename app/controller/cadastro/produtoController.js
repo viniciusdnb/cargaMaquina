@@ -1,5 +1,5 @@
-const produtoModel = require('../model/models/produtoModel');
-const tipoProdutoModel = require('../model/models/tipoProdutoModel');
+const produtoModel = require('../../model/models/cadastro/produtoModel');
+const tipoProdutoModel = require('../../model/models/cadastro/tipoProdutoModel');
 
 produtoModel.belongsTo(tipoProdutoModel,{foreignKey:'idTipoProduto'})
 

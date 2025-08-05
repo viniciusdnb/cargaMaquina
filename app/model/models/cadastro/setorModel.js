@@ -1,15 +1,15 @@
-const connect = require('../connect');
+const connect = require('../../connect');
 const {DataTypes} = require('sequelize');
 
-const clienteModel = connect.define(
-    'cliente',
+const setorModel = connect.define(
+    'setor',
     {
-        idCliente:{
+        idSetor:{
             type: DataTypes.INTEGER,
             primaryKey: true
         },
-        nomeCliente:{
-            type: DataTypes.CHAR,
+        descSetor:{
+            type: DataTypes.CHAR
         }
     },
     {
@@ -18,4 +18,4 @@ const clienteModel = connect.define(
     }
 );
 
-module.exports = clienteModel;
+module.exports = setorModel;

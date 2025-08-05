@@ -1,4 +1,4 @@
-const conntec = require('../connect');
+const conntec = require('../../connect');
 const {DataTypes} = require('sequelize');
 
 const subMotivoModel = conntec.define(

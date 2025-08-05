@@ -1,6 +1,6 @@
 const express = require('express');
 const setorRouter = express.Router();
-const setorController = require('../controller/setorController');
+const setorController = require('../../controller/cadastro/setorController');
 
 setorRouter.get('/setor', function(req, res){
     setorController.index(req, res);

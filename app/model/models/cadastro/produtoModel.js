@@ -1,4 +1,4 @@
-const connect = require('../connect');
+const connect = require('../../connect');
 const { DataTypes } = require('sequelize');
 
 const produtoModel = connect.define(

@@ -1,6 +1,6 @@
 const express = require('express');
 const maquinaRouter = express.Router();
-const maquinaController = require('../controller/maquinaController');
+const maquinaController = require('../../controller/cadastro/maquinaController');
 
 maquinaRouter.get('/maquina', function(req, res){
     maquinaController.index(req, res);

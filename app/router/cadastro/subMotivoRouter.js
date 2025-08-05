@@ -1,6 +1,6 @@
 const express = require('express');
 const subMotivoRouter = express.Router();
-const subMotivoController = require('../controller/subMotivoController');
+const subMotivoController = require('../../controller/cadastro/subMotivoController');
 
 subMotivoRouter.get('/submotivo', function(req, res){
     subMotivoController.index(req, res);

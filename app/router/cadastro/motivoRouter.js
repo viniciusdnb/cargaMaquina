@@ -1,6 +1,6 @@
 const express = require('express');
 const motivoRouter = express.Router();
-const motivoController = require('../controller/motivoController');
+const motivoController = require('../../controller/cadastro/motivoController');
 
 motivoRouter.get('/motivo', function(req, res){
     motivoController.index(req, res);

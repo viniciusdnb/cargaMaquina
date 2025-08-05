@@ -1,6 +1,6 @@
 const express = require('express');
 const clienteRouter = express.Router();
-const clienteController = require('../controller/clienteController');
+const clienteController = require('../../controller/cadastro/clienteController');
 
 clienteRouter.get('/cliente', function (req, res) {
     //res.render('cadastro/cliente/index', {pathName: 'main'});

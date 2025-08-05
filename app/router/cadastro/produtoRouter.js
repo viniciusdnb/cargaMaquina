@@ -1,6 +1,6 @@
 const express = require('express');
 const produtoRouter = express.Router();
-const produtoController = require('../controller/produtoController');
+const produtoController = require('../../controller/cadastro/produtoController');
 
 produtoRouter.get('/produto', function(req, res){
     produtoController.index(req, res);

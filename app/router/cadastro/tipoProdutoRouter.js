@@ -1,6 +1,6 @@
 const express = require('express');
 const tipoProdutoRouter = express.Router();
-const tipoProdutoController = require('../controller/tipoProdutoController');
+const tipoProdutoController = require('../../controller/cadastro/tipoProdutoController');
 
 tipoProdutoRouter.get('/tipoproduto', function(req, res){
     tipoProdutoController.index(req, res);

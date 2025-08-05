@@ -1,4 +1,4 @@
-const motivoModel = require('../model/models/motivoModel');
+const motivoModel = require('../../model/models/cadastro/motivoModel');
 
 module.exports = {
     index: async function(req, res, msg = null){

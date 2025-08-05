@@ -1,5 +1,5 @@
-const motivoModel = require('../model/models/motivoModel');
-const subMotivoModel = require('../model/models/subMotivoModel');
+const motivoModel = require('../../model/models/cadastro/motivoModel');
+const subMotivoModel = require('../../model/models/cadastro/subMotivoModel');
 
 subMotivoModel.belongsTo(motivoModel, { foreignKey: "idMotivo" });
 

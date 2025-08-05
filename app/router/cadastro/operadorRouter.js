@@ -1,6 +1,6 @@
 const express = require('express');
 const operadorRouter = express.Router();
-const operadorController = require('../controller/operadorController');
+const operadorController = require('../../controller/cadastro/operadorController');
 
 operadorRouter.get('/operador', function(req, res){
     operadorController.index(req, res);

@@ -1,4 +1,4 @@
-const setorModel = require('../model/models/setorModel');
+const setorModel = require('../../model/models/cadastro/setorModel');
 module.exports = {
     index: async function (req, res, msg = null) {
         const setores = await setorModel.findAll();

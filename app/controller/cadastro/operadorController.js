@@ -1,4 +1,4 @@
-const operadorModel = require('../model/models/operadorModel');
+const operadorModel = require('../../model/models/cadastro/operadorModel');
 
 module.exports = {
     index: async function(req, res, msg = null){

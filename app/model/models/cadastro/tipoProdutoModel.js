@@ -1,19 +1,17 @@
-const connect = require('../connect');
+const connect = require('../../connect');
 const { DataTypes } = require('sequelize');
 
-const motivoModel = connect.define(
-    'motivo',
+const tipoProduoModel = connect.define(
+    'tipo_produto',
     {
-        idMotivo: {
+        idTipoProduto: {
             type: DataTypes.INTEGER,
             primaryKey: true
         },
-        codigoMotivo: {
-            type: DataTypes.CHAR,
-        },
-        descMotivo: {
+        descTipoProduto: {
             type: DataTypes.CHAR
         }
+
     },
     {
         timestamps: false,
@@ -21,4 +19,4 @@ const motivoModel = connect.define(
     }
 );
 
-module.exports = motivoModel;
+module.exports = tipoProduoModel;

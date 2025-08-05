@@ -1,4 +1,4 @@
-const tipoProdutoModel = require('../model/models/tipoProdutoModel');
+const tipoProdutoModel = require('../../model/models/cadastro/tipoProdutoModel');
 
 module.exports = {
     index: async function(req, res, msg = null){

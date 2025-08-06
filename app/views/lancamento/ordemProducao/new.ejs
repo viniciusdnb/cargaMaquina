@@ -1,0 +1,100 @@
+<div class="container text-center">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">INICIO</a></li>
+            <li class="breadcrumb-item"><a href="/setor">LISTA DE ORDEM DE PRODUÇÃO</a></li>
+            <li class="breadcrumb-item"><a>NOVO ORDEM DE PRODUCAO</a>
+            </li>
+        </ol>
+    </nav>
+</div>
+<main class="container">
+
+    <form action="/ordemproducao/novo/salvar" method="post" class="row g-3">
+
+        <div class="col-md-2">
+            <label class="form-label">DATA</label>
+            <input type="date" class="form-control" name="dataLancamento" required>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">CLIENTE</label>
+            <select id="selectClient" name="idCliente"  required>
+                <option value=""></option>
+                <% var arrClientes = JSON.parse(clientes);
+                
+                    arrClientes.forEach(cliente =>{%>
+                    <option value="<%=cliente.idCliente%>"><%=cliente.nomeCliente%></option>
+                <%}); %>        
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">NUMERO</label>
+            <input type="text" class="form-control" name="numeroOrdemProducao" required>
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">LOTE</label>
+            <input type="text" class="form-control" name="loteOrdemProducao" required>
+        </div>
+        <div class="col-md-2">
+            <label class="form-label">DATA ENTREGA</label>
+            <input type="date" class="form-control" name="dataEntrega" required>
+        </div>
+        <div class="col-md-8">
+            <label class="form-label">PRODUTO</label>
+            <select id="produtoSelect"  name="idProduto" required>
+                <option value=""></option>
+                <% var arrProdutos = JSON.parse(produtos);
+                    arrProdutos.forEach(produto =>{%>
+                        <option value="<%=produto.idProduto%>"><%=produto.descProduto%></option>
+                <%})%>
+            </select>
+
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">QUANTIDADE</label>
+            <input type="text" class="form-control" name="quantidade" required>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">TIPO DA ORDEM</label>
+            <select id="tipoOrdemProducao" name="idTipoOrdemProducao" required>
+                <option value=""></option>
+                <% console.log(tipoOrdemProducao);
+                var arrTipoOrdem = JSON.parse(tipoOrdemProducao);
+                    arrTipoOrdem.forEach(tipoOrdem =>{ %>
+                        <option value="<%=tipoOrdem.idTipoOrdemProducao%>"><%=tipoOrdem.descTipoOrdemProducao%></option>
+                <%})%>
+            </select>
+
+        </div>
+
+        <div class="row g-3">
+            <div class="col-1">
+                <input type="submit" class="btn btn-success" required value="SALVAR">
+            </div>
+            <div class="col-1">
+                <a class="btn btn-secondary" href="/ordemproducao">CANCELAR</a>
+            </div>
+        </div>
+    </form>
+</main>
+<script>
+    new TomSelect("#selectClient",{
+        allowEmptyOption: true,
+        sortField:{
+            field:"text"
+        }
+    });
+    new TomSelect("#produtoSelect",{
+        allowEmptyOption: true,
+        sortField:{
+            field:"text"
+        }
+    });
+      new TomSelect("#tipoOrdemProducao",{
+        allowEmptyOption: true,
+        sortField:{
+            field:"text"
+        }
+    });
+</script>

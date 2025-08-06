@@ -42,7 +42,10 @@
                                 <a href="/produto/editar/<%= produto.idProduto %>">
                                     <img src="/img/edit-24.png" alt="">
                                 </a>|
-                                <a id="delete" onclick='perguntar("<%= produto.idProduto %>",  "<%= produto.descProduto %>","produto")' data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                                <a id="delete" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                                    onclick='perguntar("<%= produto.idProduto %>",
+                                    "<%= produto.descProduto %>",
+                                    "produto")' 
                                     href="<%= produto.idMotivo %>">
                                     <img src="/img/trash-24.png" alt="">
                                 </a>

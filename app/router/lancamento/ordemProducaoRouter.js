@@ -20,12 +20,16 @@ ordemProducaoRouter.get('/ordemproducao/adicionar', function(req, res){
     ordemProducaoController.new(req, res);
 });
 
-ordemProducaoRouter.post('/ordemproducao/novo/salvar', function(req, res){
+ordemProducaoRouter.post('/ordemproducao/novo/salvar', function(req, res){   
     ordemProducaoController.newSave(req, res);
 });
 
 ordemProducaoRouter.get('/ordemproducao/delete/:idOrdemProducao', function(req, res){
     ordemProducaoController.delete(req, res);
-})
+});
+
+ordemProducaoRouter.get('/ordemproducao/status/:idOrdemProducao', function(req, res){
+    ordemProducaoController.status(req, res);
+});
 
 module.exports = ordemProducaoRouter;

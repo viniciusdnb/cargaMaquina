@@ -1,36 +1,116 @@
 const ordemProducaoModel = require('../../model/models/lancamento/ordemProducaoModel');
 const clienteModel = require('../../model/models/cadastro/clienteModel');
 const produtoModel = require('../../model/models/cadastro/produtoModel');
-const tipoOrdemProducao = require('../../model/models/cadastro/tipoProdutoModel');
+const tipoOrdemProducaoModel = require('../../model/models/cadastro/tipoOrdemProducaoModel');
 
-ordemProducaoModel.belongsTo(clienteModel, {foreignKey: 'idCliente'});
-ordemProducaoModel.belongsTo(produtoModel, {foreignKey: 'idProduto'});
-ordemProducaoModel.belongsTo(tipoOrdemProducao, {foreignKey: 'idTipoOrdemProducao'});
+
+ordemProducaoModel.belongsTo(clienteModel, { foreignKey: 'idCliente' });
+ordemProducaoModel.belongsTo(produtoModel, { foreignKey: 'idProduto' });
+ordemProducaoModel.belongsTo(tipoOrdemProducaoModel, { foreignKey: 'idTipoOrdemProducao' });
 
 
 module.exports = {
     index: async function (req, res, msg = null) {
-        const ordemProducao = ordemProducaoModel.findAll({
-            order:['idOrdemProducao', 'ACS'],
-            include:[clienteModel, produtoModel, tipoOrdemProducao]
+        const ordemProducao = await ordemProducaoModel.findAll({
+
+            include: [clienteModel, produtoModel, tipoOrdemProducaoModel]
         });
-        
+        res.render('lancamento/ordemproducao/index', {
+            "pathName": "main",
+            "msg": msg,
+            "ordemProducao": JSON.stringify(ordemProducao, null)
+        })
+
     },
     edit: async function (req, res) {
-        
+        const ordemProducao = await ordemProducaoModel.findAll({
+            where: { idOrdemProducao: req.params.idOrdemProducao },
+            include: [clienteModel, produtoModel, tipoOrdemProducaoModel]
+        });
+        let clientes = await clienteModel.findAll();
+        let produtos = await produtoModel.findAll();
+        let tipoOrdemProducao = await tipoOrdemProducaoModel.findAll();
+        res.render('lancamento/ordemproducao/index', {
+            "pathName": "edit",
+            "ordemProducao": JSON.stringify(ordemProducao, null),
+            "clientes": JSON.stringify(clientes, null),
+            "produtos": JSON.stringify(produtos, null),
+            "tipoOrdemProducao": JSON.stringify(tipoOrdemProducao, null)
+        });
     },
     update: async function (req, res) {
-       
+        
+            let dataEntrega = new Date(req.body.dataEntrega);
+            
+            let ordemProducao = await ordemProducaoModel.update({                
+                idCliente: req.body.idCliente,
+                numeroOrdemProducao: req.body.numeroOrdemProducao,
+                loteOrdemProducao: req.body.loteOrdemProducao,
+                dataEntrega: req.body.dataEntrega,
+                idProduto: req.body.idProduto,
+                idTipoOrdemProducao: req.body.idTipoOrdemProducao,
+                quantidade: req.body.quantidade
+            },{
+                where:{
+                    idOrdemProducao: req.body.idOrdemProducao
+                }
+            });
+        
+        res.redirect('/ordemproducao');
     },
-    new: function (req, res) {
-       
+    new: async function (req, res) {
+        let clientes = await clienteModel.findAll();
+        let produtos = await produtoModel.findAll();
+        let tipoOrdemProducao = await tipoOrdemProducaoModel.findAll();
+
+        res.render('lancamento/ordemproducao/index', {
+            "pathName": "new",
+            "clientes": JSON.stringify(clientes, null),
+            "produtos": JSON.stringify(produtos, null),
+            "tipoOrdemProducao": JSON.stringify(tipoOrdemProducao, null)
+        });
     },
     newSave: async function (req, res) {
+        try {
+            const ordemProducao = await ordemProducaoModel.create({
+                dataLancamento: req.body.dataLancamento,
+                idCliente: req.body.idCliente,
+                numeroOrdemProducao: req.body.numeroOrdemProducao,
+                loteOrdemProducao: req.body.loteOrdemProducao,
+                dataEntrega: req.body.dataEntrega,
+                idProduto: req.body.idProduto,
+                idTipoOrdemProducao: req.body.idTipoOrdemProducao,
+                quantidade: req.body.quantidade
+            });
+        } catch (err) {
 
-        
+        }
+
+        res.redirect('/ordemproducao');
+
+
     },
     delete: async function (req, res) {
-        
+        try {
+            const ordemProducao = ordemProducaoModel.destroy({
+                where: {
+                    idOrdemProducao: req.params.idOrdemProducao
+                }
+            });
+           // msg = cliente > 0 ? "CADASTRO DELETADO COM SUCESSO" : "NÃO FOI POSSIVEL DELETAR";
+
+        } catch (err) {
+            //msg = "ERRO, NAO FOI POSSIVEL DELETAR";
+        }
+
+        res.redirect('/ordemproducao');
+
+
+    },
+    status: function (req, res) {
+        //funcao que retorna o status da ordem da producao
+        //indicando quanto que ja foi produzido do item em cada setor
+        //se esta finalizado
 
     }
 }

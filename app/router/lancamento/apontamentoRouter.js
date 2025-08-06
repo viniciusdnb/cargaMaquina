@@ -21,6 +21,7 @@ apontamentoRouter.get('/apontamento/adicionar', function(req, res){
 });
 
 apontamentoRouter.post('/apontamento/novo/salvar', function(req, res){   
+    
     apontamentoController.newSave(req, res);
 });
 

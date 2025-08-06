@@ -9,84 +9,87 @@
     </nav>
 </div>
 <main class="container">
-    <% var subMotivos=JSON.parse(subMotivos);%>
+    <% //var subMotivos=JSON.parse(subMotivos);%>
         <form action="/apontamento/novo/salvar" method="post" class="row g-3">
 
             <div class="col-md-2">
                 <label class="form-label">DATA</label>
-                <input type="date" class="form-control" name="data" required>
+                <input type="date" class="form-control" name="data" >
             </div>
             <div class="col-md-4">
                 <label class="form-label">MAQUINA</label>
-                <select id="selectMaquina" name="idMaquina" required>
+                <select id="selectMaquina" name="idMaquina" >
                     <option value=""></option>
-                    <% var arrMaquinas=JSON.parse(maquinas); arrMaquinas.forEach(maquina=>{%>
-                        <option value="<%=maquina.idMaquina%>">
-                            <%=maquina.descMaquina%>
+                    <% //var arrMaquinas=JSON.parse(maquinas); arrMaquinas.forEach(maquina=>{%>
+                        <option value="<%//=maquina.idMaquina%>">
+                            <%=//maquina.descMaquina%>
                         </option>
-                        <%}); %>
+                        <%//}); %>
                 </select>
             </div>
             <div class="col-md-4">
                 <label class="form-label">ORDEM DE PRODUCAO</label>
-                <select id="selectOrdem" name="idOrdemProducao" required>
+                <select id="selectOrdem" name="idOrdemProducao" >
                     <option value=""></option>
-                    <% var ordemProducao=JSON.parse(ordemProducao); ordemProducao.forEach(ordem=>{%>
-                        <option value="<%=ordem.idOrdemProducao%>">
-                            <%=ordem.loteOrdemProducao%>
+                    <% //var ordemProducao=JSON.parse(ordemProducao); ordemProducao.forEach(ordem=>{%>
+                        <option value="<%=//ordem.idOrdemProducao%>">
+                            <%=//ordem.loteOrdemProducao%>
                         </option>
-                        <%}); %>
+                        <%//}); %>
                 </select>
             </div>
             <div class="col-md-4">
                 <label class="form-label">OPERADOR</label>
-                <select id="selectOperador" name="idOperador" required>
+                <select id="selectOperador" name="idOperador" >
                     <option value=""></option>
-                    <% var operadores=JSON.parse(operadores); operadores.forEach(operador=>{%>
-                        <option value="<%=operador.idOperador%>">
-                            <%=operador.nomeOperador%>
+                    <% //var operadores=JSON.parse(operadores); operadores.forEach(operador=>{%>
+                        <option value="<%=//operador.idOperador%>">
+                            <%=//operador.nomeOperador%>
                         </option>
-                        <%}); %>
+                        <%//}); %>
                 </select>
             </div>
             <div class="col-md-4">
                 <label class="form-label"> NOVA LINHA</label>
-                <div style="cursor: pointer;" id="adicionarLinha"><img src="/img/add-green-24.png"></div>
-
+                <div  style="cursor: pointer;" id="adicionarLinha"><img src="/img/add-green-24.png"></div>
             </div>
+             
 
             <div id="apontamentoGrupo" class="row g-3 border border-secondary">
                 <div id="linha" class="row">
                     <div class="col g-2 row">
                         <label class="col-sm-4 form-label"> STATUS</label>
                         <div class="col-sm-6">
-                            <input type="text" class="form-control" name="codigoSubMotivo" required>
+                            <input type="text" class="form-control" name="codigoSubMotivo[]" required>
                         </div>
                     </div>
                     <div class="col g-2 row">
                         <label class="col-sm-4 col-form-label">HORA INICO</label>
                         <div class="col-sm-6">
-                            <input type="time" class="form-control" name="horaInicial" required>
+                            <input type="time" class="form-control" name="horaInicial[]" required>
                         </div>
                     </div>
                     <div class="col g-2 row">
                         <label class="col-sm-4 col-form-label">HORA FIM</label>
                         <div class="col-sm-6">
-                            <input type="time" class="form-control" name="horaFinal" required>
+                            <input type="time" class="form-control" name="horaFinal[]" required>
                         </div>
                     </div>
                     <div class="col g-2 row">
                         <label class="col-sm-6 col-form-label">QUANTIDADE</label>
                         <div class="col-sm-6">
-                            <input type="number" class="form-control" name="quantidadeProduzido" required>
+                            <input type="number" class="form-control" name="quantidadeProduzido[]" required>
                         </div>
                     </div>
                     <div class="col g-2 row">
                         <label class="col-sm-6 col-form-label">REFUGO</label>
                         <div class="col-sm-6">
-                            <input type="number" class="form-control" name="quantidadeRefugo" required>
+                            <input type="number" class="form-control" name="quantidadeRefugo[]" required>
                         </div>
                     </div>
+                    <!--<div class="col g-2 row">                
+                        <div class="col-sm-6"style="cursor: pointer;" id="removerLinha"><img src="/img/delete-24.png"></div>
+                    </div>-->
 
                 </div>
 
@@ -138,6 +141,8 @@
         linhaOriginal.after(novaLinha);
         
     });
+
+    
 
 
    

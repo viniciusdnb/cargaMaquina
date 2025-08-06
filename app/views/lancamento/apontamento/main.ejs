@@ -1,0 +1,102 @@
+<div class="container text-center">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">INICIO</a></li>
+            <li class="breadcrumb-item"><a>LISTA DE APONTAMENTOS</a></li>
+            <li class="breadcrumb-item"><a href="/apontamento/adicionar">NOVO APONTAMENTO <img
+                        src="/img/add-24.png" alt=""></a>
+            </li>
+        </ol>
+    </nav>
+    <nav class="navbar bg-body-tertiary">
+        <div class="container-fluid">
+            <form class="d-flex" role="search">
+                <input class="form-control me-2" type="search" placeholder="procurar ordem " aria-label="Search" />
+                <button class="btn btn-outline-success" type="submit">PROCURAR</button>
+            </form>
+        </div>
+    </nav>
+</div>
+<main class="container">
+    <% if(msg !=null && typeof msg !='undefined' ){%>
+        <div class="alert alert-secondary" role="alert">
+            <%= msg %>
+        </div>
+        <% } %>
+            <table class="table">
+                <thead class="table-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>DATA</th>
+                        <th>CLIENTE</th>
+                        <th>PRODUTO</th>
+                        <th>NUMERO ORDEM</th>
+                        <th>LOTE</th>
+                        <th>TITPO</th>
+                        <th>QUANTIDADE</th>
+                        <th>DATA ENTREGA</th>
+                        <th>STATUS</th>
+                        <th>OPÇOES</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% //console.log(JSON.parse(ordemProducao)); if(typeof ordemProducao !='undefined' ){ var
+                        //arrOrdemProducao=JSON.parse(ordemProducao); arrOrdemProducao.forEach(ordem=>{ 
+                    %>
+                        <tr>
+                            <td>
+                                <%= //ordem.idOrdemProducao %>
+                            </td>
+                            <td>
+                                <% //var arrDtLanc=ordem.dataLancamento.split('-'); %>
+                                    <%= //`${arrDtLanc[2]}/${arrDtLanc[1]}/${arrDtLanc[0]}` %>
+
+                            </td>
+                            <td>
+                                <%= //ordem.cliente.nomeCliente %>
+                            </td>
+                            <td>
+                                <%= //ordem.produto.descProduto %>
+                            </td>
+                            <td>
+                                <%= //ordem.numeroOrdemProducao %>
+                            </td>
+                            <td>
+                                <%= //ordem.loteOrdemProducao %>
+                            </td>
+                            <td>
+                                <%= //ordem.tipo_ordem_producao.descTipoOrdemProducao %>
+                            </td>
+                            <td>
+                                <%= //ordem.quantidade %>
+                            </td>
+
+                            <td>
+                                <% //var arrDtEnt = ordem.dataEntrega.split('-') %>
+                                    <%= //`${arrDtEnt[2]}/${arrDtEnt[1]}/${arrDtEnt[0]}` %>
+                            </td>
+                            <td></td>
+                            <td>
+                                <a href="/ordemproducao/editar/<%= //ordem.idOrdemProducao %>">
+                                    <img src="/img/edit-24.png" alt="">
+                                </a>|
+                                <a href="<%= //ordem.idOrdemProducao %>" data-bs-toggle="modal"
+                                    data-bs-target="#staticBackdropStatus">
+                                    <img src="/img/view-24.png" alt="">
+                                </a>|
+                                <a id="delete" data-bs-toggle="modal"
+                                    data-bs-target="#staticBackdrop"
+                                    onclick='perguntar("<%= //ordem.idOrdemProducao %>",
+                                    "OP: <%= //ordem.numeroOrdemProducao %> do cliente <%= //ordem.cliente.nomeCliente %>","ordemproducao")'
+                                    href="<%= //ordem.idOrdemProducao %>">
+                                    <img src="/img/trash-24.png" alt="">
+                                </a>
+                            </td>
+                        </tr>
+                        <% //}) }%>
+
+                </tbody>
+            </table>
+</main>
+
+<%- include('../../layout/modals/modalDelete') %>

@@ -76,8 +76,7 @@ CREATE TABLE operdor(
 
 CREATE TABLE apontamento_cabecalho(
     idApontCabecalho INT PRIMARY KEY AUTO_INCREMENT,
-    data DATETIME,
-    finalizado BOOLEAN,
+    data DATE,   
     idMaquina INT,
     idOrdemProducao INT,
     idOperador INT,
@@ -88,8 +87,8 @@ CREATE TABLE apontamento_cabecalho(
 
 CREATE TABLE apontamento_detalhe(
     idApontDetalhe INT PRIMARY KEY AUTO_INCREMENT,
-    horaInicial DATETIME,
-    horaFinal DATETIME,
+    horaInicial TIME,
+    horaFinal TIME,
     quantidadeProduzido INT,
     quantidadeRefugo INT,
     observacoes VARCHAR(250),

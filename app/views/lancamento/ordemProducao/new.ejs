@@ -59,7 +59,7 @@
             <label class="form-label">TIPO DA ORDEM</label>
             <select id="tipoOrdemProducao" name="idTipoOrdemProducao" required>
                 <option value=""></option>
-                <% console.log(tipoOrdemProducao);
+                <% 
                 var arrTipoOrdem = JSON.parse(tipoOrdemProducao);
                     arrTipoOrdem.forEach(tipoOrdem =>{ %>
                         <option value="<%=tipoOrdem.idTipoOrdemProducao%>"><%=tipoOrdem.descTipoOrdemProducao%></option>

@@ -28,7 +28,7 @@
                 </select>
             </div>
             <div class="col-md-4">
-                <label class="form-label">ORDEM DE PRODUCAO</label>
+                <label class="form-label">LOTE</label>
                 <select id="selectOrdem" name="idOrdemProducao" >
                     <option value=""></option>
                     <% var ordemProducao=JSON.parse(ordemProducao); ordemProducao.forEach(ordem=>{%>
@@ -60,7 +60,7 @@
                     <div class="col g-2 row">
                         <label class="col-sm-4 form-label"> STATUS</label>
                         <div class="col-sm-6">
-                            <input type="text" class="form-control" name="codigoSubMotivo[]" required>
+                            <input type="text" class="form-control" name="codigoSubMotivo[]" maxlength="3"   required>
                         </div>
                     </div>
                     <div class="col g-2 row">

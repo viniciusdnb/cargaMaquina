@@ -19,8 +19,9 @@ module.exports = {
         const submotivo = await subMotivoModel.findAll({
             include: motivoModel, where: { idSubMotivo: req.params.idSubMotivo }
         });
-        let data = JSON.stringify(submotivo, null);
 
+        let data = JSON.stringify(submotivo, null);
+        
         const motivos = await motivoModel.findAll();
         res.render('cadastro/submotivo/index', {
             "pathName": "edit",

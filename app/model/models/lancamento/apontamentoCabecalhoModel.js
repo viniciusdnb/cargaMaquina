@@ -6,7 +6,8 @@ const apontamentoCabecalho = connect.define(
     {
         idApontCabecalho:{
             type: DataTypes.INTEGER,
-            primaryKey: true
+            primaryKey: true,
+            autoIncrement: true
         },
         data:{
             type: DataTypes.DATE

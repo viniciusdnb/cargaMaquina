@@ -50,7 +50,7 @@ module.exports = {
             const cliente = await clienteModel.create({
                 nomeCliente: req.body.nomeCliente
             });
-
+            
             //let msg = "CADASTRO INSERIDO COM SUCESSO!";
            
         } catch (err) {

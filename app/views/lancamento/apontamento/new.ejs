@@ -9,7 +9,7 @@
     </nav>
 </div>
 <main class="container">
-    <% //var subMotivos=JSON.parse(subMotivos);%>
+    <% var subMotivos=JSON.parse(subMotivos);%>
         <form action="/apontamento/novo/salvar" method="post" class="row g-3">
 
             <div class="col-md-2">
@@ -20,33 +20,33 @@
                 <label class="form-label">MAQUINA</label>
                 <select id="selectMaquina" name="idMaquina" >
                     <option value=""></option>
-                    <% //var arrMaquinas=JSON.parse(maquinas); arrMaquinas.forEach(maquina=>{%>
-                        <option value="<%//=maquina.idMaquina%>">
-                            <%=//maquina.descMaquina%>
+                    <% var arrMaquinas=JSON.parse(maquinas); arrMaquinas.forEach(maquina=>{%>
+                        <option value="<%=maquina.idMaquina%>">
+                            <%=maquina.descMaquina%>
                         </option>
-                        <%//}); %>
+                        <%}); %>
                 </select>
             </div>
             <div class="col-md-4">
                 <label class="form-label">ORDEM DE PRODUCAO</label>
                 <select id="selectOrdem" name="idOrdemProducao" >
                     <option value=""></option>
-                    <% //var ordemProducao=JSON.parse(ordemProducao); ordemProducao.forEach(ordem=>{%>
-                        <option value="<%=//ordem.idOrdemProducao%>">
-                            <%=//ordem.loteOrdemProducao%>
+                    <% var ordemProducao=JSON.parse(ordemProducao); ordemProducao.forEach(ordem=>{%>
+                        <option value="<%=ordem.idOrdemProducao%>">
+                            <%=ordem.loteOrdemProducao%>
                         </option>
-                        <%//}); %>
+                        <%}); %>
                 </select>
             </div>
             <div class="col-md-4">
                 <label class="form-label">OPERADOR</label>
                 <select id="selectOperador" name="idOperador" >
                     <option value=""></option>
-                    <% //var operadores=JSON.parse(operadores); operadores.forEach(operador=>{%>
-                        <option value="<%=//operador.idOperador%>">
-                            <%=//operador.nomeOperador%>
+                    <% var operadores=JSON.parse(operadores); operadores.forEach(operador=>{%>
+                        <option value="<%=operador.idOperador%>">
+                            <%=operador.nomeOperador%>
                         </option>
-                        <%//}); %>
+                        <%}); %>
                 </select>
             </div>
             <div class="col-md-4">

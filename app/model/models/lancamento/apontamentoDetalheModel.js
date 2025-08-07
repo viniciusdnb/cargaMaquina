@@ -20,9 +20,6 @@ const apontamentoDetalheModel = connect.define(
         quantidadeRefugo: {
             type: DataTypes.INTEGER
         },
-        observacoes: {
-            type: DataTypes.CHAR
-        },
         idSubMotivo: {
             type: DataTypes.INTEGER
         },

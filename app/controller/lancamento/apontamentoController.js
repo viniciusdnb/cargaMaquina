@@ -45,14 +45,8 @@ module.exports = {
         try {
             //verificando se o codigo do submotivo esta cadastrado se nao existir a operação é cancelada
             var result = await this.existCodigoSubMotivo(req);
-
-            if (!result) {
-
-                throw new Error("invalido");
-
-            }
-
-            /*-----------------------------------------------------------------------------------------------------*/
+            if (!result) {throw new Error("invalido");}
+            /*-*/
 
             //dados do cabecalho do formulario e inclusao no db
             let cabecalho = {
@@ -61,27 +55,24 @@ module.exports = {
                 idOrdemProducao: req.body.idOrdemProducao,
                 idOperador: req.body.idOperador
             }
-
-            //pegar o id da inclusao
+            //pegar o id da inclusao do cabecalho do formulario
             const apontamentoCabecalho = await apontamentoCabecalhoModel.create(cabecalho);
-
             const idCabecalho = apontamentoCabecalho.idApontCabecalho;
-            /*-----------------------------------------------------------------------------------------------------*/
+            /*-*/
 
             //dados da detalhe do formulario, sendo o detalhe composta de varias linhas
-
             //de acordo com os codigos vindo do formulario
             //pegar as id do submotivo e gera um array para depoin inclusao no db
-            var arrIdSubMotivo = [];
+            /*var arrIdSubMotivo = [];
             for (const codSub of req.body.codigoSubMotivo) {
                 var subMotivo = await subMotivoModel.findAll({ where: { codigoSubMotivo: codSub } });
                 var arrIdSub = JSON.stringify(subMotivo, null)
                 var jsonIdSub = JSON.parse(arrIdSub);
                 //console.log(jsonIdSub[0].idSubMotivo);
                 arrIdSubMotivo.push(jsonIdSub[0].idSubMotivo);
-
-            }
-            /*-----------------------------------------------------------------------------------------------------*/
+            }*/
+            var arrIdSubMotivo = this.getArrayIdSubMotivo(req);            
+            /*-*/
 
             //dados do formulario mais o array de ids
             let detalhe = [
@@ -91,46 +82,36 @@ module.exports = {
                 req.body.quantidadeProduzido,
                 req.body.quantidadeRefugo
             ]
-
-            /*-----------------------------------------------------------------------------------------------------*/
+            /*-*/
 
             //criando o numero de linhas do idCabecalho de acordo com envio do formulario de detalhe 
-
-            var linhas = 0;
+            /*var linhas = 0;
             var numeroLinhas = detalhe[0].length;
-
-
             var arrIdCabecalho = [];
             while (linhas < numeroLinhas) {
                 arrIdCabecalho.push(idCabecalho);
                 linhas++;
             }
-            detalhe.push(arrIdCabecalho);
+            detalhe.push(arrIdCabecalho);*/
+            detalhe.push(this.getArrayIdCabecalho(idCabecalho, detalhe));
+            /*-*/
 
-            /*-----------------------------------------------------------------------------------------------------*/
-            //criando o objeto json para inclir no banco as linhas do detalhe do formulario
-
-
-            linhas = 0;
-
-
-            var nomeColunas = ["idSubMotivo", "horaInicial", "horaFinal", "quantidadeProduzido", "quantidadeRefugo", "idApontCabecalho"]
-
-            while (linhas < numeroLinhas) {
+            //criando o objeto json para inclir no banco as linhas do detalhe do formulario           
+            this.insertDataDetalhe(detalhe);
+            /*linhas = 0;
+            var nomeColunas = ["idSubMotivo", "horaInicial", "horaFinal", "quantidadeProduzido", "quantidadeRefugo", "idApontCabecalho"];
+            while (linhas < numeroLinhas) 
+            {
                 var linhaInsert = {};
-                for (let nColumn = 0; nColumn < 6; nColumn++) {
+                for (let nColumn = 0; nColumn < 6; nColumn++) 
+                {
                     linhaInsert[nomeColunas[nColumn]] = detalhe[nColumn][linhas];
                 }
                 linhas++
-
                 var strLinhaInsert = JSON.stringify(linhaInsert);
-
-                var apontamentoDetalhe = apontamentoDetalheModel.create(JSON.parse(strLinhaInsert));
-
-                //console.log(apontamentoDetalhe);
-
-
-            }
+                var apontamentoDetalhe = apontamentoDetalheModel.create(JSON.parse(strLinhaInsert)); 
+            }*/
+           
         } catch (error) {
             return res.redirect('/apontamento');
         }
@@ -141,21 +122,83 @@ module.exports = {
 
     },
     existCodigoSubMotivo: async function (req) {
+        /* 
+            logica de negocio
+            se existir algum codigo passado pelo formulario que nao existir o cadastro 
+            é retornado um false para interromper o lançamento do detalhe do formulario
+        */
         var result = true;
         var arrReq = req.body.codigoSubMotivo;
         for (const sub of arrReq) {
             const subMotivo = await subMotivoModel.findAll({ where: { codigoSubMotivo: sub } });
-
             if (subMotivo.length == 0) {
-
                 result = false;
             }
-
         };
         return result;
     },
-
     delete: async function (req, res) {
+
+    },
+    getArrayIdSubMotivo: async function(req)
+    {
+        /*
+            pega os ids referente os codigos passado pelo detalhe do formulario
+            retornadoum array de acordo com a quantidade de linha do form detalhe
+        */
+        let arr = [];
+        for (const codSub of req.body.codigoSubMotivo) 
+        {
+            var subMotivo = await subMotivoModel.findAll({ where: { codigoSubMotivo: codSub } });
+            var arrIdSub = JSON.stringify(subMotivo, null)
+            var jsonIdSub = JSON.parse(arrIdSub);
+            arr.push(jsonIdSub[0].idSubMotivo);
+        }
+
+        return arr;
+    },
+    getArrayIdCabecalho : function(idCabecalho, detalhe)
+    {
+        /*
+            cria um array de ids repedido
+            sendo os ids vindo do insert do cabecalho
+            o numero de repeticao é de acordo como numero de linhas do detalhe
+        */
+        var linhas = 0;
+        var numeroLinhas = detalhe[0].length;
+        var arrIdCabecalho = [];
+        while (linhas < numeroLinhas)
+        {
+            arrIdCabecalho.push(idCabecalho);
+            linhas++;
+        }
+        return arrIdCabecalho
+    },
+    insertDataDetalhe: async function(detalhe)
+    {
+        /*
+            cria um objeto json com os nomes da coluna junto com os valores do detalhe do formulario e inseri no db
+        */
+
+        /*
+            verificar se retona os nomes da tabela para substitir a verbosidade da variavel nomeColunas
+            apontamentoCabecalhoModel.getAttributes()
+        */
+        var linhas = 0;
+        var nomeColunas = ["idSubMotivo", "horaInicial", "horaFinal", "quantidadeProduzido", "quantidadeRefugo", "idApontCabecalho"];
+
+
+        while (linhas < numeroLinhas) 
+        {
+            var linhaInsert = {};
+            for (let nColumn = 0; nColumn < 6; nColumn++) 
+            {
+                linhaInsert[nomeColunas[nColumn]] = detalhe[nColumn][linhas];
+            }            
+            linhas++
+            var strLinhaInsert = JSON.stringify(linhaInsert);
+            await apontamentoDetalheModel.create(JSON.parse(strLinhaInsert)); 
+        }
 
     }
 

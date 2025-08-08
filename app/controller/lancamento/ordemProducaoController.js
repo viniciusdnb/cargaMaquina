@@ -2,23 +2,27 @@ const ordemProducaoModel = require('../../model/models/lancamento/ordemProducaoM
 const clienteModel = require('../../model/models/cadastro/clienteModel');
 const produtoModel = require('../../model/models/cadastro/produtoModel');
 const tipoOrdemProducaoModel = require('../../model/models/cadastro/tipoOrdemProducaoModel');
-
+const statusModel = require('../../model/models/cadastro/statusModel');
+const list_apont_sum_qtd_grop_idOpModelView = require('../../model/models/lancamento/list_apont_sum_qtd_grop_idOpModelView');
 
 ordemProducaoModel.belongsTo(clienteModel, { foreignKey: 'idCliente' });
 ordemProducaoModel.belongsTo(produtoModel, { foreignKey: 'idProduto' });
 ordemProducaoModel.belongsTo(tipoOrdemProducaoModel, { foreignKey: 'idTipoOrdemProducao' });
+ordemProducaoModel.belongsTo(statusModel, {foreignKey:"idStatus"});
 
 
 module.exports = {
     index: async function (req, res, msg = null) {
         const ordemProducao = await ordemProducaoModel.findAll({
-
-            include: [clienteModel, produtoModel, tipoOrdemProducaoModel]
+            order:[["idOrdemProducao", "DESC"]],
+            include: [clienteModel, produtoModel, tipoOrdemProducaoModel, statusModel]
         });
+        const list_apont_sum_qtd_grop_idOp = await list_apont_sum_qtd_grop_idOpModelView.findAll();
         res.render('lancamento/ordemproducao/index', {
             "pathName": "main",
             "msg": msg,
-            "ordemProducao": JSON.stringify(ordemProducao, null)
+            "ordemProducao": JSON.stringify(ordemProducao, null),
+            "list_apont_sum_qtd_grop_idOp": JSON.stringify(list_apont_sum_qtd_grop_idOp, null)
         })
 
     },
@@ -71,6 +75,9 @@ module.exports = {
         });
     },
     newSave: async function (req, res) {
+        
+
+
         try {
             const ordemProducao = await ordemProducaoModel.create({
                 dataLancamento: req.body.dataLancamento,
@@ -89,6 +96,9 @@ module.exports = {
         res.redirect('/ordemproducao');
 
 
+    },
+    ordemProducaoExist: async function(req){
+       //fazer funcao para verificar se ja existe ordem lançada e evitar duplicação
     },
     delete: async function (req, res) {
         try {

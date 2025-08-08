@@ -25,6 +25,11 @@ CREATE TABLE tipo_ordem_producao(
     descTipoOrdemProducao VARCHAR(10)
 );
 
+CREATE TABLE status(
+    idStatus INT PRIMARY KEY AUTO_INCREMENT,
+    descricaoStatus VARCHAR(25)
+)
+
 CREATE TABLE ordem_producao(
     idOrdemProducao INT PRIMARY KEY AUTO_INCREMENT,
     numeroOrdemProducao VARCHAR(10),
@@ -109,5 +114,20 @@ SELECT
 FROM (((apontamento_cabecalho
 INNER JOIN ordem_producao ON apontamento_cabecalho.idOrdemProducao = ordem_producao.idOrdemProducao)
 INNER JOIN cliente ON ordem_producao.idCliente = cliente.idCliente)
-INNER JOIN produto ON ordem_producao.idProduto = produto.idProduto);
+INNER JOIN produto ON ordem_producao.idProduto = produto.idProduto)
+ORDER BY apontamento_cabecalho.idApontCabecalho DESC;
 
+
+-- view que lista todos apontamentos somando a quantidade agrupado pela ordem de producao, trazendo setor, maquina
+CREATE VIEW list_apont_sum_qtd_grop_idOp AS 
+SELECT 
+	apontamento_detalhe.idApontDetalhe, apontamento_detalhe.idApontCabecalho, 
+	apontamento_cabecalho.idApontCabecalho AS idCabecalho, apontamento_cabecalho.idOrdemProducao,
+    SUM(apontamento_detalhe.quantidadeProduzido) AS quantidade,
+    maquina.idMaquina, maquina.idSetor AS maquinaSetor, maquina.descMaquina,
+	setor.idSetor, setor.descSetor
+FROM (((apontamento_detalhe
+INNER JOIN apontamento_cabecalho ON apontamento_detalhe.idApontCabecalho = apontamento_cabecalho.idApontCabecalho)
+INNER JOIN maquina ON apontamento_cabecalho.idMaquina = maquina.idMaquina)
+INNER JOIN setor ON maquina.idSetor = setor.idSetor)
+GROUP BY apontamento_cabecalho.idOrdemProducao;

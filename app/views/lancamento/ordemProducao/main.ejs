@@ -18,7 +18,9 @@
     </nav>
 </div>
 <main class="container">
-    <% if(msg !=null && typeof msg !='undefined' ){%>
+    <%  console.log(JSON.parse(list_apont_sum_qtd_grop_idOp));
+        
+        if(msg !=null && typeof msg !='undefined' ){%>
         <div class="alert alert-secondary" role="alert">
             <%= msg %>
         </div>
@@ -40,8 +42,18 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <% console.log(JSON.parse(ordemProducao)); if(typeof ordemProducao !='undefined' ){ var
-                        arrOrdemProducao=JSON.parse(ordemProducao); arrOrdemProducao.forEach(ordem=>{%>
+                    <% if(typeof ordemProducao !='undefined' ){ var arrOrdemProducao=JSON.parse(ordemProducao);
+                        var arrStatus = list_apont_sum_qtd_grop_idOp;
+                    %>
+                    
+                    <script>
+                        const arrStatus = "<%=arrStatus%>";
+                        console.log(JSON.parse(arrStatus));
+                    </script>
+                      <%  arrOrdemProducao.forEach(ordem=>{
+
+                        %>
+
                         <tr>
                             <td>
                                 <%= ordem.idOrdemProducao %>
@@ -71,10 +83,10 @@
                             </td>
 
                             <td>
-                                <% var arrDtEnt = ordem.dataEntrega.split('-') %>
+                                <% var arrDtEnt=ordem.dataEntrega.split('-') %>
                                     <%= `${arrDtEnt[2]}/${arrDtEnt[1]}/${arrDtEnt[0]}` %>
                             </td>
-                            <td>FILA</td>
+                            <td><%= ordem.status.descricaoStatus %></td>
                             <td>
                                 <a href="/ordemproducao/editar/<%= ordem.idOrdemProducao %>">
                                     <img src="/img/edit-24.png" alt="">
@@ -83,11 +95,9 @@
                                     data-bs-target="#staticBackdropStatus">
                                     <img src="/img/view-24.png" alt="">
                                 </a>|
-                                <a id="delete" data-bs-toggle="modal"
-                                    data-bs-target="#staticBackdrop"
+                                <a id="delete" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
                                     onclick='perguntar("<%= ordem.idOrdemProducao %>",
-                                    "OP: <%= ordem.numeroOrdemProducao %> do cliente <%= ordem.cliente.nomeCliente %>","ordemproducao")'
-                                    href="<%= ordem.idOrdemProducao %>">
+                                    "OP: <%= ordem.numeroOrdemProducao %> do cliente <%= ordem.cliente.nomeCliente %>","ordemproducao")' href="<%= ordem.idOrdemProducao %>">
                                     <img src="/img/trash-24.png" alt="">
                                 </a>
                             </td>

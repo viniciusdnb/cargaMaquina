@@ -12,9 +12,6 @@ const apontamentoCabecalho = connect.define(
         data:{
             type: DataTypes.DATE
         },
-        finalizado:{
-            type: DataTypes.BOOLEAN
-        },
         idMaquina:{
             type: DataTypes.INTEGER
         },

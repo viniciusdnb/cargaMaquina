@@ -32,65 +32,53 @@
                         <th>PRODUTO</th>
                         <th>NUMERO ORDEM</th>
                         <th>LOTE</th>
-                        
+                        <th>OPÇOES</th>
                      
                     </tr>
                 </thead>
                 <tbody>
-                    <% //console.log(JSON.parse(ordemProducao)); if(typeof ordemProducao !='undefined' ){ var
-                        //arrOrdemProducao=JSON.parse(ordemProducao); arrOrdemProducao.forEach(ordem=>{ 
+                    <% 
+                    if(typeof listaApontamentos !='undefined' ){ 
+                        var arrListaApontamentos=JSON.parse(listaApontamentos);
+                         arrListaApontamentos.forEach(lista=>{ 
                     %>
                         <tr>
-                            <td>
-                                <%= //ordem.idOrdemProducao %>
+                             <td>
+                                <%= lista.idApontCabecalho %>
                             </td>
                             <td>
-                                <% //var arrDtLanc=ordem.dataLancamento.split('-'); %>
-                                    <%= //`${arrDtLanc[2]}/${arrDtLanc[1]}/${arrDtLanc[0]}` %>
+                                <% var arrDtLanc=lista.data.split('-'); %>
+                                    <%= `${arrDtLanc[2]}/${arrDtLanc[1]}/${arrDtLanc[0]}` %>
 
                             </td>
                             <td>
-                                <%= //ordem.cliente.nomeCliente %>
+                                <%= lista.nomeCliente %>
+                            </td>
+                           
+                            <td>
+                                <%= lista.descProduto %>
                             </td>
                             <td>
-                                <%= //ordem.produto.descProduto %>
+                                <%= lista.numeroOrdemProducao %>
                             </td>
                             <td>
-                                <%= //ordem.numeroOrdemProducao %>
+                                <%= lista.loteOrdemProducao %>
                             </td>
+                           
                             <td>
-                                <%= //ordem.loteOrdemProducao %>
-                            </td>
-                            <td>
-                                <%= //ordem.tipo_ordem_producao.descTipoOrdemProducao %>
-                            </td>
-                            <td>
-                                <%= //ordem.quantidade %>
-                            </td>
-
-                            <td>
-                                <% //var arrDtEnt = ordem.dataEntrega.split('-') %>
-                                    <%= //`${arrDtEnt[2]}/${arrDtEnt[1]}/${arrDtEnt[0]}` %>
-                            </td>
-                            <td></td>
-                            <td>
-                                <a href="/ordemproducao/editar/<%= //ordem.idOrdemProducao %>">
+                                <a href="/apontamento/editar/<%= lista.idApontCabecalho %>">
                                     <img src="/img/edit-24.png" alt="">
-                                </a>|
-                                <a href="<%= //ordem.idOrdemProducao %>" data-bs-toggle="modal"
-                                    data-bs-target="#staticBackdropStatus">
-                                    <img src="/img/view-24.png" alt="">
                                 </a>|
                                 <a id="delete" data-bs-toggle="modal"
                                     data-bs-target="#staticBackdrop"
-                                    onclick='perguntar("<%= //ordem.idOrdemProducao %>",
-                                    "OP: <%= //ordem.numeroOrdemProducao %> do cliente <%= //ordem.cliente.nomeCliente %>","ordemproducao")'
-                                    href="<%= //ordem.idOrdemProducao %>">
+                                    onclick='perguntar("<%= lista.idApontCabecalho %>",
+                                    "OP: <%= lista.numeroOrdemProducao %> do cliente: <%= lista.nomeCliente %> produto: <%= lista.descProduto %>","apontamento")'
+                                    href="/#">
                                     <img src="/img/trash-24.png" alt="">
                                 </a>
                             </td>
                         </tr>
-                        <% //}) }%>
+                        <% }) }%>
 
                 </tbody>
             </table>

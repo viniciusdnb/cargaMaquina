@@ -12,108 +12,162 @@
     </nav>
 </div>
 <main class="container">
-    <% var arrOrdemProducao=JSON.parse(ordemProducao); arrOrdemProducao.forEach(el=>{
-        ordem = el;
+    <% var arrApontamentos=JSON.parse(apontamentoOrdemProducaoCabecalho); arrApontamentos.forEach(el=>{
+        apontamento = el;
         });
-        %>
-        <form action="/ordemproducao/editar/salvar" method="post" class="row g-3">
-            <input type="hidden" value="<%= ordem.idOrdemProducao%>" name="idOrdemProducao">
+        console.log(apontamento);%>
+        <form action="/apontamento/novo/salvar" method="post" class="row g-3">
+            <input type="hidden" value="<%=apontamento.idApontCabecalho%>" name="idApontCabecalho">
             <div class="col-md-2">
                 <label class="form-label">DATA</label>
-                <% var arrDtLanc=ordem.dataLancamento.split('-'); %>
-
-                    <input type="text" class="form-control" name="dataLancamento" disabled
-                        value="<%=`${arrDtLanc[2]}/${arrDtLanc[1]}/${arrDtLanc[0]}`%>">
-
+                <input type="date" class="form-control" value="<%= apontamento.data %>" name="data">
             </div>
             <div class="col-md-4">
-                <label class="form-label">CLIENTE</label>
-                <select id="selectClient" name="idCliente" required>
+                <label class="form-label">MAQUINA</label>
+                <select id="selectMaquina" name="idMaquina">
                     <option value=""></option>
-                    <% var arrClientes=JSON.parse(clientes); arrClientes.forEach(cliente=>{%>
-                        <option <%=ordem.idCliente==cliente.idCliente ? "selected" : "" ; %>
-                            value="<%=cliente.idCliente%>">
-                                <%=cliente.nomeCliente%>
+                    <% var arrMaquinas=JSON.parse(maquinas); arrMaquinas.forEach(maquina=>{%>
+                        <option <%=apontamento.idMaquina==maquina.idMaquina? "selected" : "" %>
+                            value="<%=maquina.idMaquina%>">
+                                <%=maquina.descMaquina%>
                         </option>
                         <%}); %>
                 </select>
             </div>
-            <div class="col-md-2">
-                <label class="form-label">NUMERO</label>
-                <input type="text" class="form-control" value="<%= ordem.numeroOrdemProducao %>"
-                    name="numeroOrdemProducao" required>
-            </div>
-            <div class="col-md-2">
+            <div class="col-md-4">
                 <label class="form-label">LOTE</label>
-                <input type="text" class="form-control" value="<%= ordem.loteOrdemProducao %>" name="loteOrdemProducao"
-                    required>
-            </div>
-            <div class="col-md-2">
-                <label class="form-label">DATA ENTREGA</label>
-                <% var arrDtEnt=ordem.dataEntrega.split('-') %>
-                <input type="date" class="form-control" name="dataEntrega"
-                        value="<%=`${arrDtEnt[0]}-${arrDtEnt[1]}-${arrDtEnt[2]}`%>">
-            </div>
-            <div class="col-md-8">
-                <label class="form-label">PRODUTO</label>
-                <select id="produtoSelect" name="idProduto" required>
+                <select id="selectOrdem" name="idOrdemProducao">
                     <option value=""></option>
-                    <% var arrProdutos=JSON.parse(produtos); arrProdutos.forEach(produto=>{%>
-                        <option <%=ordem.idProduto==produto.idProduto ? "selected" : "" %>
-                            value="<%=produto.idProduto%>">
-                                <%=produto.descProduto%>
+                    <% var arrOrdemProducao=JSON.parse(ordemProducao); arrOrdemProducao.forEach(ordem=>{%>
+                        <option <%=ordem.idOrdemProducao==apontamento.idOrdemProducao ? "selected" : "" %>
+                            value="<%=ordem.idOrdemProducao%>">
+                                <%=ordem.loteOrdemProducao%>
                         </option>
-                        <%})%>
+                        <%}); %>
                 </select>
-
             </div>
             <div class="col-md-4">
-                <label class="form-label">QUANTIDADE</label>
-                <input type="text" class="form-control" value="<%= ordem.quantidade %>" name="quantidade" required>
-            </div>
-
-            <div class="col-md-4">
-                <label class="form-label">TIPO DA ORDEM</label>
-                <select id="tipoOrdemProducao" name="idTipoOrdemProducao" required>
+                <label class="form-label">OPERADOR</label>
+                <select id="selectOperador" name="idOperador">
                     <option value=""></option>
-                    <% console.log(tipoOrdemProducao); var arrTipoOrdem=JSON.parse(tipoOrdemProducao);
-                        arrTipoOrdem.forEach(tipoOrdem=>{ %>
-                        <option <%=ordem.idTipoOrdemProducao==tipoOrdem.idTipoOrdemProducao ? "selected" : "" ; %>
-                            value="<%=tipoOrdem.idTipoOrdemProducao%>">
-                                <%=tipoOrdem.descTipoOrdemProducao%>
+                    <% var operadores=JSON.parse(operadores); operadores.forEach(operador=>{%>
+                        <option <%=operador.idOperador==apontamento.idOperador ? "selected" : "" %>
+                            value="<%=operador.idOperador%>">
+                                <%=operador.nomeOperador%>
                         </option>
-                        <%})%>
+                        <%}); %>
                 </select>
-
             </div>
 
-            <div class="row g-3">
-                <div class="col-1">
-                    <input type="submit" class="btn btn-success" required value="SALVAR">
+
+            <% console.log(JSON.parse(apontamentoDetalhe)); var arrApontamentoDetalhe=JSON.parse(apontamentoDetalhe); %>
+
+
+
+
+                <div id="apontamentoGrupo" class="row g-3 border border-secondary">
+                    <% arrApontamentoDetalhe.forEach(detalhes=>{
+                        %>
+                        <div id="linha" class="row">
+                            <input type="hidden" value="<%=detalhes.idApontDetalhe%>" name="idApontDetalhe">
+                            <div class="col g-2 row">
+                                <label class="col-sm-4 form-label"> STATUS</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" 
+                                    <%  var arrSubMotivos = JSON.parse(subMotivos);
+                                        var sub = ""
+                                        arrSubMotivos.forEach(subMotivo=>{
+                                            if(subMotivo.idSubMotivo == detalhes.idSubMotivo){
+                                                sub = subMotivo.codigoSubMotivo;
+                                            }
+                                        }); 
+                                    %>
+                                    value="<%=sub%>" name="codigoSubMotivo[]" maxlength="3" required>
+                                </div>
+                            </div>
+                            <div class="col g-2 row">
+                                <label class="col-sm-4 col-form-label">HORA INICO</label>
+                                <div class="col-sm-6">
+                                    <input type="time" class="form-control" value="<%=detalhes.horaInicial %>"
+                                        name="horaInicial[]" required>
+                                </div>
+                            </div>
+                            <div class="col g-2 row">
+                                <label class="col-sm-4 col-form-label">HORA FIM</label>
+                                <div class="col-sm-6">
+                                    <input type="time" class="form-control" value="<%=detalhes.horaFinal %>"
+                                        name="horaFinal[]" required>
+                                </div>
+                            </div>
+                            <div class="col g-2 row">
+                                <label class="col-sm-6 col-form-label">QUANTIDADE</label>
+                                <div class="col-sm-6">
+                                    <input type="number" class="form-control" value="<%=detalhes.quantidadeProduzido %>"
+                                        name="quantidadeProduzido[]" required>
+                                </div>
+                            </div>
+                            <div class="col g-2 row">
+                                <label class="col-sm-6 col-form-label">REFUGO</label>
+                                <div class="col-sm-6">
+                                    <input type="number" class="form-control" value="<%=detalhes.quantidadeRefugo %>"
+                                        name="quantidadeRefugo[]" required>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <%})%>
                 </div>
-                <div class="col-1">
-                    <a class="btn btn-secondary" href="/ordemproducao">CANCELAR</a>
+
+                <div class="row g-3">
+                    <div class="col-1">
+                        <input type="submit" class="btn btn-success" required value="SALVAR">
+                    </div>
+                    <div class="col-1">
+                        <a class="btn btn-secondary" href="/apontamento">CANCELAR</a>
+                    </div>
                 </div>
-            </div>
         </form>
 </main>
 <script>
-    new TomSelect("#selectClient", {
+
+    new TomSelect("#selectMaquina", {
         allowEmptyOption: true,
         sortField: {
             field: "text"
         }
     });
-    new TomSelect("#produtoSelect", {
+    new TomSelect("#selectOrdem", {
         allowEmptyOption: true,
         sortField: {
             field: "text"
         }
     });
-    new TomSelect("#tipoOrdemProducao", {
+    new TomSelect("#selectOperador", {
         allowEmptyOption: true,
         sortField: {
             field: "text"
         }
     });
+
+
+
+    document.getElementById("adicionarLinha").addEventListener("click", function () {
+        //pega a linha original
+        const linhaOriginal = document.querySelector("#linha");
+        //clona a linha
+        const novaLinha = linhaOriginal.cloneNode(true);
+
+        //LIMPA OS DADOS 
+        novaLinha.querySelectorAll("input").forEach(input => { input.value = "" });
+
+        //coloca a nova linha apos a linha original
+        linhaOriginal.after(novaLinha);
+
+    });
+
+
+
+
+
 </script>

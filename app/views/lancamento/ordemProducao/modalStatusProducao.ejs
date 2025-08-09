@@ -1,0 +1,57 @@
+<div class="modal fade" id="staticBackdropStatus" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">ANDAMENTO</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p id="textQuantidadeOrdem"></p>
+        <table class="table">
+          <thead class="table-dark">
+            <tr>
+              <td>#</td>
+              <th>PINTURA</th>
+              <th>SILK</th>
+              <th>HOT</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-success">(+)</td>
+              <td class="text-success" id="tdPintura"></td>
+              <td class="text-success" id="tdSilk">5000</td>
+              <td class="text-success" id="tdHot">2000</td>
+            </tr>
+            
+             <tr>
+              <td class="text-danger">(=)</td>
+              <td class="text-danger" id=""><%= 25000-17960%></td>
+              <td class="text-danger" id=""><%= 25000-5000%></td>
+              <td class="text-danger" id=""><%= 25000-2000%></td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">FECHAR</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function statusProducao() {
+    var quantidadeOrdem = document.getElementById('quantidadeOrdem');
+    document.getElementById('textQuantidadeOrdem').innerText = `Quantidade da ordem de producao: ${quantidadeOrdem.textContent}`;
+
+    var quantidadePintura = document.getElementById('quantidadeProduzidoPintura');
+    
+    document.getElementById('tdPintura').innerText = quantidadePintura.value;
+    
+    console.log(quantidadeOrdem);
+  }
+</script>

@@ -18,7 +18,7 @@
     </nav>
 </div>
 <main class="container">
-    <%  console.log(JSON.parse(list_apont_sum_qtd_grop_idOp));
+    <%  
         
         if(msg !=null && typeof msg !='undefined' ){%>
         <div class="alert alert-secondary" role="alert">
@@ -43,19 +43,27 @@
                 </thead>
                 <tbody>
                     <% if(typeof ordemProducao !='undefined' ){ var arrOrdemProducao=JSON.parse(ordemProducao);
-                        var arrStatus = list_apont_sum_qtd_grop_idOp;
+                        var arrProducao = JSON.parse(list_apont_sum_qtd_grop_idOp);
+                        console.log(arrProducao);
                     %>
                     
-                    <script>
-                        const arrStatus = "<%=arrStatus%>";
-                        console.log(JSON.parse(arrStatus));
-                    </script>
+                
                       <%  arrOrdemProducao.forEach(ordem=>{
-
+                            
                         %>
 
                         <tr>
                             <td>
+                                <% arrProducao.forEach(producao =>{
+                                    var quantidadeProduzidoPintura = 0;
+                                    if(ordem.idOrdemProducao == producao.idOrdemProducao && producao.idSetor == 1)
+                                    {
+                                        quantidadeProduzidoPintura = producao.quantidade;
+                                    }    
+                                %>
+                                    <input type="hidden" value="<%= quantidadeProduzidoPintura %>" id="quantidadeProduzidoPintura">
+                                <%});%>
+
                                 <%= ordem.idOrdemProducao %>
                             </td>
                             <td>
@@ -78,7 +86,7 @@
                             <td>
                                 <%= ordem.tipo_ordem_producao.descTipoOrdemProducao %>
                             </td>
-                            <td>
+                            <td id="quantidadeOrdem">
                                 <%= ordem.quantidade %>
                             </td>
 
@@ -91,8 +99,8 @@
                                 <a href="/ordemproducao/editar/<%= ordem.idOrdemProducao %>">
                                     <img src="/img/edit-24.png" alt="">
                                 </a>|
-                                <a href="<%= ordem.idOrdemProducao %>" data-bs-toggle="modal"
-                                    data-bs-target="#staticBackdropStatus">
+                                <a href="<%= ordem.idOrdemProducao %>" data-bs-toggle="modal"data-bs-target="#staticBackdropStatus"
+                                    onclick="statusProducao()">
                                     <img src="/img/view-24.png" alt="">
                                 </a>|
                                 <a id="delete" data-bs-toggle="modal" data-bs-target="#staticBackdrop"

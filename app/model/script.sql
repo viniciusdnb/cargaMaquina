@@ -4,7 +4,7 @@ USE dbdecor;
 
 CREATE TABLE cliente(
     idCliente INT PRIMARY KEY AUTO_INCREMENT,
-    cliente VARCHAR(50)
+    nomeCliente VARCHAR(50)
 );
 
 CREATE TABLE tipo_Produto(
@@ -17,7 +17,7 @@ CREATE TABLE produto(
     descProduto VARCHAR(100),
     idTipoProduto INT,
     codigoOmie VARCHAR(25),
-    FOREIGN KEY (idTipoProduto) REFERENCES tipoProduto(idTipoProduto)
+    FOREIGN KEY (idTipoProduto) REFERENCES tipo_Produto(idTipoProduto)
 );
 
 CREATE TABLE tipo_ordem_producao(
@@ -28,7 +28,7 @@ CREATE TABLE tipo_ordem_producao(
 CREATE TABLE status(
     idStatus INT PRIMARY KEY AUTO_INCREMENT,
     descricaoStatus VARCHAR(25)
-)
+);
 
 CREATE TABLE ordem_producao(
     idOrdemProducao INT PRIMARY KEY AUTO_INCREMENT,
@@ -40,14 +40,16 @@ CREATE TABLE ordem_producao(
     idProduto INT, 
     idTipoOrdemProducao INT,
     quantidade INT,
+    idStatus INT,
     FOREIGN KEY (idCliente) REFERENCES cliente(idCliente),
     FOREIGN KEY (idProduto) REFERENCES produto(idProduto),
-    FOREIGN KEY (idTipoOrdemProducao) REFERENCES tipo_ordem_producao(idTipoOrdemProducao)
+    FOREIGN KEY (idTipoOrdemProducao) REFERENCES tipo_ordem_producao(idTipoOrdemProducao),
+    FOREIGN KEY (idStatus) REFERENCES status(idStatus)
 );
 
 CREATE TABLE setor(
     idSetor INT PRIMARY KEY AUTO_INCREMENT,
-    descSetor VARCHAR(10) utf8_unicode_ci
+    descSetor VARCHAR(10)
 );
 
 

@@ -52,16 +52,16 @@
                             
                         %>
 
-                        <tr>
+                        <tr id="idLinha<%=ordem.idOrdemProducao%>">
                             <td>
                                 <% arrProducao.forEach(producao =>{
                                     var quantidadeProduzidoPintura = 0;
-                                    if(ordem.idOrdemProducao == producao.idOrdemProducao && producao.idSetor == 1)
+                                    if(ordem.idOrdemProducao == producao.idOrdemProducao && producao.idSetor == 1 && producao.quantidade != 0)
                                     {
-                                        quantidadeProduzidoPintura = producao.quantidade;
-                                    }    
-                                %>
-                                    <input type="hidden" value="<%= quantidadeProduzidoPintura %>" id="quantidadeProduzidoPintura">
+                                        quantidadeProduzidoPintura = producao.quantidade; %>
+                                        <input type="hidden" value="<%= quantidadeProduzidoPintura %>" id="quantidadeProduzidoPintura">
+                                    <%}%>
+                                    
                                 <%});%>
 
                                 <%= ordem.idOrdemProducao %>
@@ -100,7 +100,7 @@
                                     <img src="/img/edit-24.png" alt="">
                                 </a>|
                                 <a href="<%= ordem.idOrdemProducao %>" data-bs-toggle="modal"data-bs-target="#staticBackdropStatus"
-                                    onclick="statusProducao()">
+                                    onclick="statusProducao(document.querySelector('#idLinha<%=ordem.idOrdemProducao%>'))">
                                     <img src="/img/view-24.png" alt="">
                                 </a>|
                                 <a id="delete" data-bs-toggle="modal" data-bs-target="#staticBackdrop"

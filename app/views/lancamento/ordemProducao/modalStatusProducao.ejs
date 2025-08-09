@@ -19,17 +19,17 @@
           </thead>
           <tbody>
             <tr>
-              <td class="text-success">(+)</td>
+              <td class="text-success">(produzido)</td>
               <td class="text-success" id="tdPintura"></td>
-              <td class="text-success" id="tdSilk">5000</td>
-              <td class="text-success" id="tdHot">2000</td>
+              <td class="text-success" id="tdSilk"></td>
+              <td class="text-success" id="tdHot"></td>
             </tr>
-            
+
              <tr>
-              <td class="text-danger">(=)</td>
-              <td class="text-danger" id=""><%= 25000-17960%></td>
-              <td class="text-danger" id=""><%= 25000-5000%></td>
-              <td class="text-danger" id=""><%= 25000-2000%></td>
+              <td class="text-danger">(saldo)</td>
+              <td class="text-danger" id="saldoPintura"></td>
+              <td class="text-danger" id="saldoSilk"></td>
+              <td class="text-danger" id="saldoHot"></td>
             </tr>
           </tbody>
         </table>
@@ -44,14 +44,20 @@
 </div>
 
 <script>
-  function statusProducao() {
-    var quantidadeOrdem = document.getElementById('quantidadeOrdem');
+  function statusProducao(element) {
+    
+    
+   
+    var quantidadeOrdem = element.querySelector('#quantidadeOrdem');
+     
     document.getElementById('textQuantidadeOrdem').innerText = `Quantidade da ordem de producao: ${quantidadeOrdem.textContent}`;
 
-    var quantidadePintura = document.getElementById('quantidadeProduzidoPintura');
-    
+    var quantidadePintura = element.querySelector('#quantidadeProduzidoPintura');
     document.getElementById('tdPintura').innerText = quantidadePintura.value;
+
+    var saldo = Number(quantidadeOrdem.textContent) - Number(quantidadePintura.value);
+    document.getElementById('saldoPintura').innerText = saldo;
     
-    console.log(quantidadeOrdem);
+    
   }
 </script>

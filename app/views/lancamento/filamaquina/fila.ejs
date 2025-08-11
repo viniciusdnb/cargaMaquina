@@ -8,6 +8,7 @@
 </div>
 <main class="container-fluid">
     <% console.log(prevision) %>
+    <form action="/filamaquina/recalcular" method="post">
         <table class="table table-hover">
             <thead class="table-dark">
                 <tr>
@@ -36,6 +37,9 @@
                         <td class="text-center"><%= prevision[key].quantityProduced %></td>
                         <td><%= prevision[key].previsionStart.toLocaleString() == "" ? new Date().toLocaleString():prevision[key].previsionStart.toLocaleString() %></td>
                         <td><%= prevision[key].previsionEnd.toLocaleString() %></td>
+                        <td><a href="" data-bs-toggle="modal"data-bs-target="#staticBackdropProduzir"
+                            onclick='transferir("<%=prevision[key].idFilaMaquina%>")'><img src="/img/trasnfer-24.png"></a></td>
+                        <td><a href=""><img src="/img/delete-24.png"></a></td>
                     </tr>
                     
                <%
@@ -43,6 +47,10 @@
             })%>
             </tbody>
         </table>
+
+        <input type="submit" class="btn btn-success" value="CALCULAR">
+    </form>
+    
 
 
 </main>

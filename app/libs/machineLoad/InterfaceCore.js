@@ -20,6 +20,12 @@ class InterfaceCore {
             var newDateTimeStart = this.Core.setStartWork(newDateTimeAfterLimit.dateTime, newTimeResidual);
             //arrumar logica de verificar se o horario esta dentro de meio dia se estiver
             //acresentar + 1 hora
+
+            if(newDateTimeStart.getHours() >= 12 && newDateBeforeStart.getHours() <= 13)
+            {
+                newDateTimeStart.setHours(newDateTimeStart.getHours()+1);
+            }
+
             var newPrevision = this.Core.verifyWeekend(newDateTimeStart);
         }else
         {
@@ -34,9 +40,6 @@ class InterfaceCore {
         }
 
         
-
-        
-
         return  newPrevision
 
     }

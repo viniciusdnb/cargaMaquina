@@ -9,13 +9,13 @@ const maquinaModel = require('../../model/models/cadastro/maquinaModel');
 ordemProducaoModel.belongsTo(clienteModel, { foreignKey: 'idCliente' });
 ordemProducaoModel.belongsTo(produtoModel, { foreignKey: 'idProduto' });
 ordemProducaoModel.belongsTo(tipoOrdemProducaoModel, { foreignKey: 'idTipoOrdemProducao' });
-ordemProducaoModel.belongsTo(status_ordem_producaoModel, {foreignKey:"idStatus"});
+ordemProducaoModel.belongsTo(status_ordem_producaoModel, { foreignKey: "idStatus" });
 
 
 module.exports = {
     index: async function (req, res, msg = null) {
         const ordemProducao = await ordemProducaoModel.findAll({
-            order:[["idOrdemProducao", "DESC"]],
+            order: [["idOrdemProducao", "DESC"]],
             include: [clienteModel, produtoModel, tipoOrdemProducaoModel, status_ordem_producaoModel]
         });
         const list_apont_sum_qtd_grop_idOp = await list_apont_sum_qtd_grop_idOpModelView.findAll();
@@ -46,23 +46,23 @@ module.exports = {
         });
     },
     update: async function (req, res) {
-        
-            let dataEntrega = new Date(req.body.dataEntrega);
-            
-            let ordemProducao = await ordemProducaoModel.update({                
-                idCliente: req.body.idCliente,
-                numeroOrdemProducao: req.body.numeroOrdemProducao,
-                loteOrdemProducao: req.body.loteOrdemProducao,
-                dataEntrega: req.body.dataEntrega,
-                idProduto: req.body.idProduto,
-                idTipoOrdemProducao: req.body.idTipoOrdemProducao,
-                quantidade: req.body.quantidade
-            },{
-                where:{
-                    idOrdemProducao: req.body.idOrdemProducao
-                }
-            });
-        
+
+        let dataEntrega = new Date(req.body.dataEntrega);
+
+        let ordemProducao = await ordemProducaoModel.update({
+            idCliente: req.body.idCliente,
+            numeroOrdemProducao: req.body.numeroOrdemProducao,
+            loteOrdemProducao: req.body.loteOrdemProducao,
+            dataEntrega: req.body.dataEntrega,
+            idProduto: req.body.idProduto,
+            idTipoOrdemProducao: req.body.idTipoOrdemProducao,
+            quantidade: req.body.quantidade
+        }, {
+            where: {
+                idOrdemProducao: req.body.idOrdemProducao
+            }
+        });
+
         res.redirect('/ordemproducao');
     },
     new: async function (req, res) {
@@ -78,7 +78,7 @@ module.exports = {
         });
     },
     newSave: async function (req, res) {
-        
+
 
 
         try {
@@ -101,8 +101,8 @@ module.exports = {
 
 
     },
-    ordemProducaoExist: async function(req){
-       //fazer funcao para verificar se ja existe ordem lançada e evitar duplicação
+    ordemProducaoExist: async function (req) {
+        //fazer funcao para verificar se ja existe ordem lançada e evitar duplicação
     },
     delete: async function (req, res) {
         try {
@@ -111,7 +111,7 @@ module.exports = {
                     idOrdemProducao: req.params.idOrdemProducao
                 }
             });
-           // msg = cliente > 0 ? "CADASTRO DELETADO COM SUCESSO" : "NÃO FOI POSSIVEL DELETAR";
+            // msg = cliente > 0 ? "CADASTRO DELETADO COM SUCESSO" : "NÃO FOI POSSIVEL DELETAR";
 
         } catch (err) {
             //msg = "ERRO, NAO FOI POSSIVEL DELETAR";
@@ -127,20 +127,19 @@ module.exports = {
         //se esta finalizado
 
     },
-    pesquisaOrdem: async function(req, res)
-    {
-        const {Op} = require('sequelize');
+    pesquisaOrdem: async function (req, res) {
+        const { Op } = require('sequelize');
         const textoPesquisa = req.body.textopesquisa;
-        
+
         const ordemProducao = await ordemProducaoModel.findAll({
-            where:{
-                
-               [Op.or]:[{numeroOrdemProducao: textoPesquisa}, {loteOrdemProducao: textoPesquisa}]
+            where: {
+
+                [Op.or]: [{ numeroOrdemProducao: textoPesquisa }, { loteOrdemProducao: textoPesquisa }]
             },
             include: [clienteModel, produtoModel, tipoOrdemProducaoModel, status_ordem_producaoModel],
-            order:[["idOrdemProducao", "DESC"]],
+            order: [["idOrdemProducao", "DESC"]],
         });
-         const maquinas = await maquinaModel.findAll();
+        const maquinas = await maquinaModel.findAll();
         const list_apont_sum_qtd_grop_idOp = await list_apont_sum_qtd_grop_idOpModelView.findAll();
         res.render('lancamento/ordemproducao/index', {
             "pathName": "main",
@@ -150,7 +149,7 @@ module.exports = {
             "maquinas": JSON.stringify(maquinas, null)
         });
 
-        
+
     }
-  
+
 }

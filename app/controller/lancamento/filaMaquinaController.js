@@ -74,13 +74,16 @@ module.exports = {
     verFila: async function (req, res) {
         console.log(req.body)
 
+        //tras todas as maquinas cadastrada e verifica se é para considerar velocidade da maquina
         var maquina = await maquinaModel.findAll({
             where: { idMaquina: req.body.idMaquina }
         });
-        maquina = JSON.parse(JSON.stringify(maquina, null))
+        maquina = JSON.parse(JSON.stringify(maquina, null));
         maquina = maquina[0];
         var considerBPMMachine = "considerBPMMachine" in req.body ? true : false;
 
+
+        //tras os dados da fila
         const filaMaquina = await filaMaquinaModel.findAll({
             where: {
                 idMaquina: req.body.idMaquina,
@@ -92,15 +95,15 @@ module.exports = {
                     include: [clienteModel, produtoModel]
                 }
             ]
-
-
         });
+
+
         var arrFilaMaquina = JSON.parse(JSON.stringify(filaMaquina));
 
-        const list_apont_sum_qtd_grop_idOp = await list_apont_sum_qtd_grop_idOpModelView.findAll()
-        var arrListaPontamentos = JSON.parse(JSON.stringify(list_apont_sum_qtd_grop_idOp, null))
+        const list_apont_sum_qtd_grop_idOp = await list_apont_sum_qtd_grop_idOpModelView.findAll();
+        var arrListaPontamentos = JSON.parse(JSON.stringify(list_apont_sum_qtd_grop_idOp, null));
 
-        var data = {}
+        var data = {};
         arrFilaMaquina.forEach(fila => {
             var quantidade = 0
             arrListaPontamentos.forEach(lista => {
@@ -120,10 +123,7 @@ module.exports = {
                 "previsionStart": "",
                 "previsionEnd": ""
             }
-
-
-        }
-        );
+        });
 
 
         var dataDB = {
@@ -144,5 +144,30 @@ module.exports = {
             "prevision": prevision.queue[descMaquina].queueProducts
         })
 
+    },
+    trasnfer: async function(req, res)
+    {
+        const fimaMaquin = await filaMaquinaModel.update({idMaquina:req.body.idMaquina},{where:{
+            idFilaMaquina: req.body.idFilaMaquina
+        }});
+    }, 
+    delete: async function(req, res){
+        try {
+            const fimaMaquin = await filaMaquinaModel.destroy({
+                where: {
+                    idFilaMaquina: req.params.idFilaMaquina
+                }
+            });
+           
+
+        } catch (err) {
+            
+        }
+
+        res.redirect('/filamaquina');
+    }, 
+    calcule: async function(req, res)
+    {
+        
     }
 }

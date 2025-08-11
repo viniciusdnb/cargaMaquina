@@ -1,8 +1,8 @@
 const connect = require('../../connect');
 const {DataTypes} = require('sequelize');
 
-const statusModel = connect.define(
-    'status',
+const status_ordem_producao = connect.define(
+    'status_ordem_producao',
     {
         idStatus:{
             type: DataTypes.INTEGER,
@@ -19,4 +19,4 @@ const statusModel = connect.define(
 
 );
 
-module.exports = statusModel;
+module.exports = status_ordem_producao;

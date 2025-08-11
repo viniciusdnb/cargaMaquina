@@ -1,0 +1,48 @@
+<div class="container-fluid text-center">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">INICIO</a></li>
+            <li class="breadcrumb-item"><a>FILA</a></li>
+        </ol>
+    </nav>
+</div>
+<main class="container-fluid">
+    <% console.log(prevision) %>
+        <table class="table table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <td>#</td>
+                    <td>OP</td>
+                    <td>CLIENTE</td>
+                    <td>PRODUTO</td>
+                    <td>QTD PEDIDO</td>
+                    <td>QTD PRODUZIDO</td>
+                    <td>COMEÇA</td>
+                    <td>TERMINA</td>
+                    <td>opções</td>
+                </tr>
+            </thead>
+            <tbody>
+                <% var i = 0;
+                    Object.keys(prevision).forEach(key =>{
+                        
+                        %>
+                    <tr>
+                        <td><%= i%></td>
+                        <td><%= prevision[key].ordemProducao %></td>
+                        <td><%= prevision[key].cliente %></td>
+                        <td><%= prevision[key].produto %></td>
+                        <td class="text-center"><%= prevision[key].orderQuantity %></td>
+                        <td class="text-center"><%= prevision[key].quantityProduced %></td>
+                        <td><%= prevision[key].previsionStart.toLocaleString() == "" ? new Date().toLocaleString():prevision[key].previsionStart.toLocaleString() %></td>
+                        <td><%= prevision[key].previsionEnd.toLocaleString() %></td>
+                    </tr>
+                    
+               <%
+                    i++;
+            })%>
+            </tbody>
+        </table>
+
+
+</main>

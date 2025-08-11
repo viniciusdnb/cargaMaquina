@@ -1,0 +1,38 @@
+<div class="modal fade" id="staticBackdropProduzir" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">ENVIAR PARA QUAL MAQUINA</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p id="text"></p>
+        <form class="" method="post" action="/filamaquina/adicionar">
+          <input type="hidden" name="idOrdemProducao" id="ordemProducao" />
+          <select class="form-select" name="idMaquina" id="">
+
+            <option>Selecione ...</option>
+            <% if(typeof maquinas !='undefined' ){ var arrMaquinas=JSON.parse(maquinas); arrMaquinas.forEach(maquina=>{%>
+              <option value="<%= maquina.idMaquina %>">
+                <%= maquina.descMaquina %>
+              </option>
+              <%})}%>
+          </select>
+          <input type="submit" name="ENVIAR" class="btn btn-success" />
+        </form>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">FECHAR</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function injetIdOrdemProducao(id, text) {
+      var idOrdemProducao = document.getElementById('ordemProducao');
+      idOrdemProducao.setAttribute("value", id);
+      document.getElementById("text").innerText = text;
+    }
+
+  </script>

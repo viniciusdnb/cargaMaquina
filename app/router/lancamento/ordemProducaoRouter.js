@@ -9,8 +9,7 @@ ordemProducaoRouter.get('/ordemproducao', function (req, res) {
 
 ordemProducaoRouter.get('/ordemproducao/editar/:idOrdemProducao', function (req, res) {
     ordemProducaoController.edit(req, res);
-});
-
+}); 
 
 ordemProducaoRouter.post('/ordemproducao/editar/salvar', function (req, res) {
     ordemProducaoController.update(req, res);
@@ -31,5 +30,11 @@ ordemProducaoRouter.get('/ordemproducao/delete/:idOrdemProducao', function(req, 
 ordemProducaoRouter.get('/ordemproducao/status/:idOrdemProducao', function(req, res){
     ordemProducaoController.status(req, res);
 });
+
+ordemProducaoRouter.post('/ordemproducao/pesquisaOrdem', function(req, res){
+    ordemProducaoController.pesquisaOrdem(req, res);
+});
+
+
 
 module.exports = ordemProducaoRouter;

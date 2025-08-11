@@ -1,0 +1,39 @@
+<div class="container text-center">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">INICIO</a></li>
+            <li class="breadcrumb-item"><a>SELECIONE UMA MAQUINA</a></li>
+
+        </ol>
+    </nav>
+</div>
+
+<main class="container">
+    <form action="/filamaquina/verfila" method="post" class="row g-3">
+        <div class="col form-check form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault" name="considerBPMMachine">
+            <label class="form-check-label" for="switchCheckDefault">CONSIDERAR VELOCIDADE DO PRODUTO</label>
+        </div>
+        <div class="row">
+          <select class="" id="selectMaquina" name="idMaquina">
+            <% var arrMaquinas=JSON.parse(maquinas); arrMaquinas.forEach(maquina=>{%>
+                <option value="<%=maquina.idMaquina%>"><%=maquina.descMaquina%></option>
+                <% }) %>
+        </select>   
+        </div>
+       
+        <div class="g-3">
+            <input type="submit" class="btn btn-success" value="VER FILA">
+        </div>
+        
+    </form>
+</main>
+
+<script>
+    new TomSelect("#selectMaquina", {
+        allowEmptyOption: true,
+        sortField: {
+            field: "text"
+        }
+    });
+</script>

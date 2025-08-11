@@ -1,0 +1,53 @@
+<div class="container text-center">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">INICIO</a></li>
+            <li class="breadcrumb-item"><a href="/maquina">LISTA DE MAQUINA</a></li>
+            <li class="breadcrumb-item"><a>EDITAR MAQUINA</a></li>
+            <li class="breadcrumb-item"><a href="/maquina/adicionar">NOVA MAQUINA <img src="img/add-24.png" alt=""></a>
+            </li>
+        </ol>
+    </nav>
+</div>
+
+<main class="container">
+    <% var arrMaquinas=JSON.parse(data); arrMaquinas.forEach(el=>{
+        maquina = el
+        });
+        var arrSetores = JSON.parse(setores);
+        %>
+
+        <form action="/maquina/editar/salvar" method="post" class="row g3">
+             <input type="hidden" value="<%=maquina.idMaquina%>" name="idMaquina">
+            <div class="col">
+                <label class="form-label">DESCRIÇÃO MAQUINA</label>
+                <input type="text" class="form-control" value="<%=maquina.descMaquina%>" name="descMaquina">
+            </div>
+             <div class="col">
+                <label class="form-label">SETOR</label>
+                <select class="form-select" name="idSetor">
+                   <% arrSetores.forEach(setor=>{%>
+                        <option
+                        <%= maquina.idSetor == setor.idSetor ? "selected": "" %>
+                        value="<%= setor.idSetor%>"><%= setor.descSetor %></option>
+                   <%}) %>
+                </select>
+            </div>
+            <div class="col">
+                <label class="form-label">VELOCIDADE</label>
+                <input type="number" class="form-control" value="<%= maquina.velocidade%>"  name="velocidade">
+            </div>
+             <div class="col">
+                <label class="form-label">UNIDADE VELOCIDADE</label>
+                <input type="text" class="form-control" value="<%= maquina.undVelocidade%>" name="undVelocidade" placeholder="ex: min" maxlength="3">
+            </div>
+            <div class="row g-3">
+                <div class="col-1">
+                    <input type="submit" class="btn btn-success" value="SALVAR">
+                </div>
+                <div class="col-1">
+                    <a class="btn btn-secondary" href="/maquina">CANCELAR</a>
+                </div>
+            </div>
+        </form>
+</main>

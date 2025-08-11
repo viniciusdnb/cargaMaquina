@@ -25,7 +25,7 @@ CREATE TABLE tipo_ordem_producao(
     descTipoOrdemProducao VARCHAR(10)
 );
 
-CREATE TABLE status(
+CREATE TABLE status_ordem_producao(
     idStatus INT PRIMARY KEY AUTO_INCREMENT,
     descricaoStatus VARCHAR(25)
 );
@@ -44,7 +44,7 @@ CREATE TABLE ordem_producao(
     FOREIGN KEY (idCliente) REFERENCES cliente(idCliente),
     FOREIGN KEY (idProduto) REFERENCES produto(idProduto),
     FOREIGN KEY (idTipoOrdemProducao) REFERENCES tipo_ordem_producao(idTipoOrdemProducao),
-    FOREIGN KEY (idStatus) REFERENCES status(idStatus)
+    FOREIGN KEY (idStatus) REFERENCES status_ordem_producao(idStatus)
 );
 
 CREATE TABLE setor(
@@ -133,3 +133,13 @@ INNER JOIN apontamento_cabecalho ON apontamento_detalhe.idApontCabecalho = apont
 INNER JOIN maquina ON apontamento_cabecalho.idMaquina = maquina.idMaquina)
 INNER JOIN setor ON maquina.idSetor = setor.idSetor)
 GROUP BY apontamento_cabecalho.idOrdemProducao;
+
+CREATE TABLE fila_maquina (
+    idFilaMaquina INT PRIMARY KEY AUTO_INCREMENT,
+    idMaquina INT,
+    idOrdemProducao INT,
+    finalizado BOOLEAN,
+    ordenacao INT,
+    FOREIGN KEY (idOrdemProducao) REFERENCES ordem_producao(idOrdemProducao),
+    FOREIGN key (idMaquina) REFERENCES maquina(idMaquina)
+);

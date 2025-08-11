@@ -1,5 +1,5 @@
 const connect = require('../../connect');
-const { DataTypes, Model } = require('sequelize');
+const { DataTypes } = require('sequelize');
 
 const apontamentoDetalheModel = connect.define(
     'apontamento_detalhe',

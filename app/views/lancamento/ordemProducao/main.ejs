@@ -1,17 +1,17 @@
-<div class="container text-center">
+<div class="container-fluid text-center">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/">INICIO</a></li>
-            <li class="breadcrumb-item"><a>LISTA DE ORDENS DE PRODUCAO</a></li>
+            <li class="breadcrumb-item"><a href="/ordemproducao">LISTA DE ORDENS DE PRODUCAO</a></li>
             <li class="breadcrumb-item"><a href="/ordemproducao/adicionar">NOVO ORDEM PRODUCAO <img
                         src="/img/add-24.png" alt=""></a>
             </li>
         </ol>
     </nav>
-    <nav class="navbar bg-body-tertiary">
+    <nav class="navbar  bg-body-tertiary">
         <div class="container-fluid">
-            <form class="d-flex" role="search">
-                <input class="form-control me-2" type="search" placeholder="procurar ordem " aria-label="Search" />
+            <form class="d-flex" role="search" action="/ordemproducao/pesquisaOrdem", method="post">
+                <input class="form-control me-2" type="search" placeholder="somente ordem ou lote" aria-label="Search" name="textopesquisa" />
                 <button class="btn btn-outline-success" type="submit">PROCURAR</button>
             </form>
             
@@ -20,11 +20,12 @@
                 <li class="list-group-item"><img src="/img/edit-24.png" alt="">EDITRA</li>
                 <li class="list-group-item"><img src="/img/trash-24.png" alt="">EXCLUIR</li>
                 <li class="list-group-item"><img src="/img/view-24.png" alt="">VER PRODUÇÃO</li>
+                <li class="list-group-item"><img src="/img/send-24.png" alt="">PRODUZIR</li>
             </ul>
         </div>
     </nav>
 </div>
-<main class="container">
+<main class="container-fluid">
     <%  
         
         if(msg !=null && typeof msg !='undefined' ){%>
@@ -32,18 +33,18 @@
             <%= msg %>
         </div>
         <% } %>
-            <table class="table">
+            <table class="table table-hover table-striped table-bordered ">
                 <thead class="table-dark">
                     <tr>
                         <th>#</th>
-                        <th>DATA</th>
+                        <th>DT LANC.</th>
                         <th>CLIENTE</th>
                         <th>PRODUTO</th>
-                        <th>NUMERO ORDEM</th>
+                        <th>Nº ORDEM</th>
                         <th>LOTE</th>
                         <th>TITPO</th>
                         <th>QUANTIDADE</th>
-                        <th>DATA ENTREGA</th>
+                        <th>DT ENTREGA</th>
                         <th>STATUS</th>
                         <th>OPÇOES</th>
                     </tr>
@@ -51,7 +52,7 @@
                 <tbody>
                     <% if(typeof ordemProducao !='undefined' ){ var arrOrdemProducao=JSON.parse(ordemProducao);
                         var arrProducao = JSON.parse(list_apont_sum_qtd_grop_idOp);
-                        console.log(arrProducao);
+                       
                     %>
                     
                 
@@ -93,7 +94,7 @@
                             <td>
                                 <%= ordem.tipo_ordem_producao.descTipoOrdemProducao %>
                             </td>
-                            <td id="quantidadeOrdem">
+                            <td id="quantidadeOrdem" class="text-center">
                                 <%= ordem.quantidade %>
                             </td>
 
@@ -101,19 +102,24 @@
                                 <% var arrDtEnt=ordem.dataEntrega.split('-') %>
                                     <%= `${arrDtEnt[2]}/${arrDtEnt[1]}/${arrDtEnt[0]}` %>
                             </td>
-                            <td><%= ordem.status.descricaoStatus %></td>
+                            <td><%= ordem.status_ordem_producao.descricaoStatus %></td>
                             <td>
                                 <a href="/ordemproducao/editar/<%= ordem.idOrdemProducao %>">
                                     <img src="/img/edit-24.png" alt="">
-                                </a>|
+                                </a>
                                 <a href="<%= ordem.idOrdemProducao %>" data-bs-toggle="modal"data-bs-target="#staticBackdropStatus"
                                     onclick="statusProducao(document.querySelector('#idLinha<%=ordem.idOrdemProducao%>'))">
                                     <img src="/img/view-24.png" alt="">
-                                </a>|
+                                </a>
                                 <a id="delete" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
                                     onclick='perguntar("<%= ordem.idOrdemProducao %>",
                                     "OP: <%= ordem.numeroOrdemProducao %> do cliente <%= ordem.cliente.nomeCliente %>","ordemproducao")' href="<%= ordem.idOrdemProducao %>">
                                     <img src="/img/trash-24.png" alt="">
+                                </a>
+                                <a href="<%= ordem.idOrdemProducao %>" data-bs-toggle="modal"data-bs-target="#staticBackdropProduzir"
+                                    onclick='injetIdOrdemProducao("<%= ordem.idOrdemProducao %>","OP: <%= ordem.numeroOrdemProducao %> do cliente <%= ordem.cliente.nomeCliente %>" )'
+                                    >
+                                    <img src="/img/send-24.png" alt="">
                                 </a>
                             </td>
                         </tr>

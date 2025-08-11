@@ -2,27 +2,30 @@ const ordemProducaoModel = require('../../model/models/lancamento/ordemProducaoM
 const clienteModel = require('../../model/models/cadastro/clienteModel');
 const produtoModel = require('../../model/models/cadastro/produtoModel');
 const tipoOrdemProducaoModel = require('../../model/models/cadastro/tipoOrdemProducaoModel');
-const statusModel = require('../../model/models/cadastro/statusModel');
+const status_ordem_producaoModel = require('../../model/models/cadastro/status_ordem_producaoModel');
 const list_apont_sum_qtd_grop_idOpModelView = require('../../model/models/lancamento/list_apont_sum_qtd_grop_idOpModelView');
+const maquinaModel = require('../../model/models/cadastro/maquinaModel');
 
 ordemProducaoModel.belongsTo(clienteModel, { foreignKey: 'idCliente' });
 ordemProducaoModel.belongsTo(produtoModel, { foreignKey: 'idProduto' });
 ordemProducaoModel.belongsTo(tipoOrdemProducaoModel, { foreignKey: 'idTipoOrdemProducao' });
-ordemProducaoModel.belongsTo(statusModel, {foreignKey:"idStatus"});
+ordemProducaoModel.belongsTo(status_ordem_producaoModel, {foreignKey:"idStatus"});
 
 
 module.exports = {
     index: async function (req, res, msg = null) {
         const ordemProducao = await ordemProducaoModel.findAll({
             order:[["idOrdemProducao", "DESC"]],
-            include: [clienteModel, produtoModel, tipoOrdemProducaoModel, statusModel]
+            include: [clienteModel, produtoModel, tipoOrdemProducaoModel, status_ordem_producaoModel]
         });
         const list_apont_sum_qtd_grop_idOp = await list_apont_sum_qtd_grop_idOpModelView.findAll();
+        const maquinas = await maquinaModel.findAll();
         res.render('lancamento/ordemproducao/index', {
             "pathName": "main",
             "msg": msg,
             "ordemProducao": JSON.stringify(ordemProducao, null),
-            "list_apont_sum_qtd_grop_idOp": JSON.stringify(list_apont_sum_qtd_grop_idOp, null)
+            "list_apont_sum_qtd_grop_idOp": JSON.stringify(list_apont_sum_qtd_grop_idOp, null),
+            "maquinas": JSON.stringify(maquinas, null)
         })
 
     },
@@ -87,7 +90,8 @@ module.exports = {
                 dataEntrega: req.body.dataEntrega,
                 idProduto: req.body.idProduto,
                 idTipoOrdemProducao: req.body.idTipoOrdemProducao,
-                quantidade: req.body.quantidade
+                quantidade: req.body.quantidade,
+                idStatus: 3
             });
         } catch (err) {
 
@@ -122,5 +126,31 @@ module.exports = {
         //indicando quanto que ja foi produzido do item em cada setor
         //se esta finalizado
 
+    },
+    pesquisaOrdem: async function(req, res)
+    {
+        const {Op} = require('sequelize');
+        const textoPesquisa = req.body.textopesquisa;
+        
+        const ordemProducao = await ordemProducaoModel.findAll({
+            where:{
+                
+               [Op.or]:[{numeroOrdemProducao: textoPesquisa}, {loteOrdemProducao: textoPesquisa}]
+            },
+            include: [clienteModel, produtoModel, tipoOrdemProducaoModel, status_ordem_producaoModel],
+            order:[["idOrdemProducao", "DESC"]],
+        });
+         const maquinas = await maquinaModel.findAll();
+        const list_apont_sum_qtd_grop_idOp = await list_apont_sum_qtd_grop_idOpModelView.findAll();
+        res.render('lancamento/ordemproducao/index', {
+            "pathName": "main",
+            "msg": null,
+            "ordemProducao": JSON.stringify(ordemProducao, null),
+            "list_apont_sum_qtd_grop_idOp": JSON.stringify(list_apont_sum_qtd_grop_idOp, null),
+            "maquinas": JSON.stringify(maquinas, null)
+        });
+
+        
     }
+  
 }

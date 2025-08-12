@@ -10,7 +10,7 @@ var configWork = {
         "saturday": false
     },
     "setup": {
-        "SetupItem": true,
+        "SetupItem": false,
         "intTimeMinutesSetupDefault": 60
     },
     "lunch": {

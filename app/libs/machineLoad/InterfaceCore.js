@@ -4,6 +4,7 @@ const Core = require('./Core');
 class InterfaceCore {
     constructor(config) {
         this.Core = new Core(config);
+        this.config = config;
     }
 
     getNewPrevision(dateTime) {
@@ -20,8 +21,8 @@ class InterfaceCore {
             var newDateTimeStart = this.Core.setStartWork(newDateTimeAfterLimit.dateTime, newTimeResidual);
             //arrumar logica de verificar se o horario esta dentro de meio dia se estiver
             //acresentar + 1 hora
-
-            if(newDateTimeStart.getHours() >= 12 && newDateBeforeStart.getHours() <= 13)
+            
+            if(newDateTimeStart.getHours() >= 12 && newDateTimeStart.getHours() <= 13 &&  this.config.lunchBreak.considerLunchBreak)
             {
                 newDateTimeStart.setHours(newDateTimeStart.getHours()+1);
             }

@@ -8,6 +8,7 @@ const machineLoad = require('../../libs/machineLoad/MachineLoad');
 const configWork = require('../../model/machineLoadModel/configWork');
 
 
+
 filaMaquinaModel.belongsTo(ordemProducaoModel, { foreignKey: "idOrdemProducao" });
 ordemProducaoModel.belongsTo(clienteModel, { foreignKey: "idCliente" });
 ordemProducaoModel.belongsTo(produtoModel, { foreignKey: "idProduto" });
@@ -23,57 +24,80 @@ module.exports = {
             'pathName': 'main'
         });
     },
+    getOrdenacao: function(ultimoLinhaMaquina)
+    {
+
+       
+        var ordenacao = JSON.parse(JSON.stringify(ultimoLinhaMaquina, null));
+
+        return ordenacao != null ? JSON.parse(JSON.stringify(ultimoLinhaMaquina, null)).ordenacao + 1 : 0;
+    },
     insert: async function (req, res) {
 
+        const maquinas = await maquinaModel.findAll();
 
-        //PEGA O ULTIMO NUMERO DA ORDEM DE ACORDO COM A MAQUINA
+        //FUNCAO PARA INSERIR UMA ORDEM EM UMA FILA DE MAQUINA
+
+        //PEGA O A ULTIMA ORDEM DA FILA ATRAVEZ DA CLASSIFICACAO DESC DO SQL
+        //sendo somente ordens de producao nao finalizado
         var ultimoLinhaMaquina = await filaMaquinaModel.findOne({
-            order: [['idFilaMaquina', 'DESC']],
+            order: [['ordenacao', 'DESC']],
             where: { idMaquina: req.body.idMaquina, finalizado: 0 }
         });
-        
-        var ordenacao = JSON.parse(JSON.stringify(ultimoLinhaMaquina, null))
-        var novaOrdenacao = ordenacao != null ? JSON.parse(JSON.stringify(ultimoLinhaMaquina, null)).ordenacao+1:0;
+
+   
+
+         //adiciona mais um na sequecia de ordens ou 0 se a fila da maquina estiver vazia       
+        var novaOrdenacao = this.getOrdenacao(ultimoLinhaMaquina);
 
         //VERIFICA SE JA EXISTE ORDEM CADASTRADA
         // e inser na tabela da fila
         let result = await this.idOrdemProducaoExist(req.body.idOrdemProducao);
-        if (result == 0) {
 
-            //insere na tabela da fila
-            await filaMaquinaModel.create({
-                idMaquina: req.body.idMaquina,
-                idOrdemProducao: req.body.idOrdemProducao,
-                finalizado: false,
-                ordenacao: novaOrdenacao
+        //se o resultado for diferente de 0 
+        //finaliza a funcao insert redirecionando para o index 
+        if (result != 0) {            
+            return res.render('lancamento/filamaquina/index', {
+                'msg': "ORDEM CADASTRADA NA FILA COM SUCESSO",
+                'maquinas': JSON.stringify(maquinas, null),
+                'pathName': 'main'
             });
-
-            //atualiza o status da ordem de producao para em fila
-            await ordemProducaoModel.update({ idStatus: 6 }, {
-                where: {
-                    idOrdemProducao: req.body.idOrdemProducao
-                }
-            })
-
-        };
-
-        const maquinas = await maquinaModel.findAll();
-
-        res.render('lancamento/filamaquina/index', {
-            'msg': "",
-            'maquinas': JSON.stringify(maquinas, null),
-            'pathName': 'main'
+        }
+ 
+        //insere na tabela da fila
+        await filaMaquinaModel.create({
+            idMaquina: req.body.idMaquina,
+            idOrdemProducao: req.body.idOrdemProducao,
+            finalizado: false,
+            ordenacao: novaOrdenacao
         });
 
+        //atualiza o status da ordem de producao para em fila
+        await ordemProducaoModel.update({ idStatus: 6 }, {
+            where: {
+                idOrdemProducao: req.body.idOrdemProducao
+            }
+        })
+
+        return res.render('lancamento/filamaquina/index', {
+                'msg': "ORDEM CADASTRADA NA FILA COM SUCESSO",
+                'maquinas': JSON.stringify(maquinas, null),
+                'pathName': 'main'
+            });
+ 
     },
     idOrdemProducaoExist: async function (id) {
+        //verifica se o id da ordem ja existe na fila
+        //retornanado o tamanho do resultado da consulta
+
         const fila = await filaMaquinaModel.findAll({ where: { idOrdemProducao: id } });
         return JSON.parse(JSON.stringify(fila, null)).length
 
     },
     verFila: async function (req, res) {
-        console.log(req.body)
 
+        const maquinas = await maquinaModel.findAll();
+    
         //tras todas as maquinas cadastrada e verifica se é para considerar velocidade da maquina
         var maquina = await maquinaModel.findAll({
             where: { idMaquina: req.body.idMaquina }
@@ -84,90 +108,245 @@ module.exports = {
 
 
         //tras os dados da fila
+        //de acordo com a maquina da requisicao e nao finalizado
         const filaMaquina = await filaMaquinaModel.findAll({
             where: {
                 idMaquina: req.body.idMaquina,
-                finalizado: false
+                finalizado: 0
             },
             include: [
                 {
                     model: ordemProducaoModel,
                     include: [clienteModel, produtoModel]
                 }
-            ]
+            ], 
+             order: [['ordenacao', 'ASC']]
         });
+        console.log(JSON.parse(JSON.stringify(filaMaquina)));
+        //verifica se tem ordem cadastrada na maquina de acordo com o id da maquina passado pela req
+        if (filaMaquina.length !== 0) {
 
+            var arrFilaMaquina = JSON.parse(JSON.stringify(filaMaquina));
+            //tras todo os lancamentos de apontamento da ordem
+            const list_apont_sum_qtd_grop_idOp = await list_apont_sum_qtd_grop_idOpModelView.findAll();
+            var arrListaPontamentos = JSON.parse(JSON.stringify(list_apont_sum_qtd_grop_idOp, null));
 
-        var arrFilaMaquina = JSON.parse(JSON.stringify(filaMaquina));
-
-        const list_apont_sum_qtd_grop_idOp = await list_apont_sum_qtd_grop_idOpModelView.findAll();
-        var arrListaPontamentos = JSON.parse(JSON.stringify(list_apont_sum_qtd_grop_idOp, null));
-
-        var data = {};
-        arrFilaMaquina.forEach(fila => {
-            var quantidade = 0
-            arrListaPontamentos.forEach(lista => {
-                if (fila.idOrdemProducao == lista.idOrdemProducao) {
-                    quantidade = lista.quantidade;
+            var data = {};
+        
+            arrFilaMaquina.forEach(fila => {
+                var quantidade = 0
+                //verifica se o id da ordem que esta na fila é igual ao id da lista de apontamentos
+                //e passa o valor de quantidade da lista para colocar no corpo de dados para ser
+                //calculado nas horas da carga maquina
+                arrListaPontamentos.forEach(lista => {
+                    if (fila.idOrdemProducao == lista.idOrdemProducao) {
+                        quantidade = lista.quantidade;
+                    }
+                });
+                //corpo
+                data[fila.ordenacao] = {
+                    "cliente": fila.ordem_producao.cliente.nomeCliente,
+                    "produto": fila.ordem_producao.produto.descProduto,
+                    "ordemProducao": fila.ordem_producao.numeroOrdemProducao,
+                    "orderQuantity": fila.ordem_producao.quantidade,
+                    "bpmProduct": 33,
+                    "setup": 60,
+                    "quantityProduced": quantidade,
+                    "previsionStart": "",
+                    "previsionEnd": "",
+                    "idFilaMaquina": fila.idFilaMaquina,
+                    "idOrdemProducao":fila.idOrdemProducao,
+                    "idMaquina":fila.idMaquina
                 }
             });
 
-            data[fila.ordenacao] = {
-                "cliente": fila.ordem_producao.cliente.nomeCliente,
-                "produto": fila.ordem_producao.produto.descProduto,
-                "ordemProducao": fila.ordem_producao.numeroOrdemProducao,
-                "orderQuantity": fila.ordem_producao.quantidade,
-                "bpmProduct": 33,
-                "setup": 60,
-                "quantityProduced": quantidade,
-                "previsionStart": "",
-                "previsionEnd": ""
-            }
-        });
 
+            var dataDB = {
+                //cabeçalho
+                "queue": {
+                    [maquina.descMaquina]: {
+                        "bpm": maquina.velocidade,
+                        "considerBPMMachine": considerBPMMachine,
+                        "queueProducts": data
 
-        var dataDB = {
-            "queue": {
-                [maquina.descMaquina]: {
-                    "bpm": maquina.velocidade,
-                    "considerBPMMachine": considerBPMMachine,
-                    "queueProducts": data
-
+                    }
                 }
             }
+
+            var descMaquina = maquina.descMaquina
+            //o calculo de carga maquina só funciona se passar o nome da maquina
+            var prevision = new machineLoad(dataDB, configWork).getPrevision(descMaquina);
+
+            return res.render('lancamento/filamaquina/index', {
+                "pathName": "fila",
+                "prevision": prevision.queue[descMaquina].queueProducts,
+                "idMaquina": req.body.idMaquina,
+                "maquinas":  JSON.stringify(maquinas, null)
+            })
         }
-        var descMaquina = maquina.descMaquina
-        var prevision = new machineLoad(dataDB, configWork).getPrevision(descMaquina);
+        
         
         res.render('lancamento/filamaquina/index', {
-            "pathName": "fila",
-            "prevision": prevision.queue[descMaquina].queueProducts
-        })
+            'msg': "",
+            'maquinas': JSON.stringify(maquinas, null),
+            'pathName': 'main',
+            
+        });
 
     },
-    trasnfer: async function(req, res)
-    {
-        const fimaMaquin = await filaMaquinaModel.update({idMaquina:req.body.idMaquina},{where:{
-            idFilaMaquina: req.body.idFilaMaquina
-        }});
-    }, 
-    delete: async function(req, res){
-        try {
-            const fimaMaquin = await filaMaquinaModel.destroy({
+    trasnfer: async function (req, res) {
+        //transferi a ordem de producao para outra maquina
+
+        //id da nova maquina
+        var idNovaMaquina = req.body.idMaquina;
+        
+        //id do lancamento da tabela 
+        var idFilaMaquina = req.body.idFilaMaquina;
+
+        //pega o ultimo numero da ordenacao da nova maquina
+        var ultimoLinhaMaquina = await filaMaquinaModel.findOne({
+            order: [['ordenacao', 'DESC']],
+            where: { idMaquina: idNovaMaquina, finalizado: 0 }
+        });
+        var ordem = this.getOrdenacao(ultimoLinhaMaquina);
+
+        //console.log(JSON.stringify(ultimoLinhaMaquina),null);
+        
+        //transferir a ordem de producao de maquina
+        //atualiza o id da maquina,
+        //atualiza a ordem de acordo com a ultima ordenacao 
+        //referente ao id lancamento da tabela
+        const filaMaquina = await filaMaquinaModel.update({
+                idMaquina: idNovaMaquina,
+                ordenacao: ordem 
+            },{
+                where:{
+                    idFilaMaquina: idFilaMaquina
+                }
+            }
+        );
+
+        
+    },
+    delete: async function (req, res) {
+        try { 
+           const fimaMaquin = await filaMaquinaModel.destroy({
                 where: {
                     idFilaMaquina: req.params.idFilaMaquina
                 }
             });
-           
+
+            this.reeordenar(req.params.idMaquina)
+
+            const ordemPorducao = ordemProducaoModel.update({
+                idStatus:3
+            },{
+                where:{
+                    idOrdemProducao:req.params.idOrdemProducao
+                }
+            })
+
 
         } catch (err) {
-            
+            console.log(err);
         }
 
-        res.redirect('/filamaquina');
-    }, 
-    calcule: async function(req, res)
-    {
+        const maquinas = await maquinaModel.findAll();
+
+        res.render('lancamento/filamaquina/index', {
+            'msg': "",
+            'maquinas': JSON.stringify(maquinas, null),
+            'pathName': 'main'
+        });
+
         
+    },
+    calcule: async function (req, res) {
+        console.log("Iniciando cálculo...");
+        const dataform = req.body;
+        const idMaquina = dataform.idMaquina
+        const ordens = dataform.ordem
+
+        console.log("Ordens recebidas:", ordens);
+
+        try {
+            for (const item of ordens) {
+                console.log("Atualizando item:", item);
+
+                await filaMaquinaModel.update(
+                    { ordenacao: item.ordem },
+                    {
+                        where: {
+                            idFilaMaquina: item.idFilaMaquina,
+                            idMaquina: idMaquina
+                        }
+                    }
+                );
+            }
+
+
+            console.log("Buscando máquinas...");
+
+
+
+            const maquinas = await maquinaModel.findAll();
+
+            console.log("Renderizando página...");
+            return res.render('lancamento/filamaquina/index', {
+                msg: "",
+                maquinas: JSON.stringify(maquinas, null),
+                pathName: 'main'
+            });
+
+        } catch (error) {
+            console.error("Erro ao atualizar fila:", error);
+            return res.status(500).send("Erro interno ao processar a requisição.");
+        }
+
+
+    },
+    finalizar: async function(req, res){
+
+        //funcao que reoderna os registros da fila
+
+        const idMaquina = req.params.idMaquina;
+        const idFilaMaquina = req.params.idFilaMaquina;
+        const idOrdemProducao = req.params.idOrdemProducao;
+       
+        //atualiza o somente o registro passado pelo parametro
+        const updateFilaMaquina = await filaMaquinaModel.update({finalizado:1},{where:{idFilaMaquina: idFilaMaquina}});
+       
+        this.reeordenar(idMaquina);
+
+        //atualiza o status da ordem de prodcuao
+        const odemProducao = await ordemProducaoModel.update({idStatus:2},{where:{idOrdemProducao:idOrdemProducao}});
+        
+        const maquinas = await maquinaModel.findAll();
+        res.render('lancamento/filamaquina/index', {
+            'msg': "",
+            'maquinas': JSON.stringify(maquinas, null),
+            'pathName': 'main'
+        });
+    },
+    reeordenar:async function(idMaquina)
+    {
+        //pega todos os registro da tabela com o id da maquina e o finalizado 0
+        const findAllFilaMaquina = await filaMaquinaModel.findAll({order: [['ordenacao', 'ASC']],where:{idMaquina:idMaquina,finalizado:0}});
+        
+        const arrFilaMaquina = JSON.parse(JSON.stringify(findAllFilaMaquina))
+        
+        //reoderna os registro
+        var ordem = 0;
+        for(item of arrFilaMaquina)
+        {
+            await filaMaquinaModel.update({ordenacao:ordem},{where:{
+                idFilaMaquina:item.idFilaMaquina,
+              
+            }});
+
+            //console.log(item.idFilaMaquina + " " + ordem);
+            ordem++;
+        }
     }
+    
 }

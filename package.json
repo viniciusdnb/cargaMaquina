@@ -24,6 +24,7 @@
     "express": "^5.1.0",
     "mysql2": "^3.14.3",
     "sequelize": "^6.37.7",
+    "sortablejs": "^1.15.6",
     "tom-select": "^2.4.3"
   },
   "devDependencies": {

@@ -2,55 +2,82 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/">INICIO</a></li>
-            <li class="breadcrumb-item"><a>FILA</a></li>
+            <li class="breadcrumb-item"><a href="/filamaquina">FILA</a></li>
         </ol>
     </nav>
 </div>
 <main class="container-fluid">
-    <% console.log(prevision) %>
-    <form action="/filamaquina/recalcular" method="post">
-        <table class="table table-hover">
-            <thead class="table-dark">
-                <tr>
-                    <td>#</td>
-                    <td>OP</td>
-                    <td>CLIENTE</td>
-                    <td>PRODUTO</td>
-                    <td>QTD PEDIDO</td>
-                    <td>QTD PRODUZIDO</td>
-                    <td>COMEÇA</td>
-                    <td>TERMINA</td>
-                    <td>opções</td>
-                </tr>
-            </thead>
-            <tbody>
-                <% var i = 0;
-                    Object.keys(prevision).forEach(key =>{
-                        
-                        %>
+    <%  %>
+        <form action="" method="post" id="form-fila">
+            <input type="hidden" value="<%= idMaquina %>" id="idMaquina"/>
+            <table class="table table-hover">
+                <thead class="table-dark">
                     <tr>
-                        <td><%= i%></td>
-                        <td><%= prevision[key].ordemProducao %></td>
-                        <td><%= prevision[key].cliente %></td>
-                        <td><%= prevision[key].produto %></td>
-                        <td class="text-center"><%= prevision[key].orderQuantity %></td>
-                        <td class="text-center"><%= prevision[key].quantityProduced %></td>
-                        <td><%= prevision[key].previsionStart.toLocaleString() == "" ? new Date().toLocaleString():prevision[key].previsionStart.toLocaleString() %></td>
-                        <td><%= prevision[key].previsionEnd.toLocaleString() %></td>
-                        <td><a href="" data-bs-toggle="modal"data-bs-target="#staticBackdropProduzir"
-                            onclick='transferir("<%=prevision[key].idFilaMaquina%>")'><img src="/img/trasnfer-24.png"></a></td>
-                        <td><a href=""><img src="/img/delete-24.png"></a></td>
+                        <td>#</td>
+                        <td>OP</td>
+                        <td>CLIENTE</td>
+                        <td>PRODUTO</td>
+                        <td>QTD PEDIDO</td>
+                        <td>QTD PRODUZIDO</td>
+                        <td>COMEÇA</td>
+                        <td>TERMINA</td>
+                        <td>opções</td>
                     </tr>
-                    
-               <%
-                    i++;
-            })%>
-            </tbody>
-        </table>
+                </thead>
+                <tbody id="tbody">
+                    <% var i=0; Object.keys(prevision).forEach(key=>{
 
-        <input type="submit" class="btn btn-success" value="CALCULAR">
-    </form>
-    
+                        %>
+                        <tr class="linha">
+                            <td style="display: none;" class="idFilaMaquina"><%=prevision[key].idFilaMaquina%></td>
+                            <td class="ordem">
+                                <%=i%>
+                            </td>
+                            <td>
+                                <%= prevision[key].ordemProducao %>
+                            </td>
+                            <td>
+                                <%= prevision[key].cliente %>
+                            </td>
+                            <td>
+                                <%= prevision[key].produto %>
+                            </td>
+                            <td class="text-center">
+                                <%= prevision[key].orderQuantity %>
+                            </td>
+                            <td class="text-center">
+                                <%= prevision[key].quantityProduced %>
+                            </td>
+                            <td>
+                                <%= prevision[key].previsionStart.toLocaleString()=="" ? new
+                                    Date().toLocaleString():prevision[key].previsionStart.toLocaleString() %>
+                            </td>
+                            <td>
+                                <%= prevision[key].previsionEnd.toLocaleString() %>
+                            </td>
+                            <td><a href="" data-bs-toggle="modal" data-bs-target="#staticBackdropTransfer"
+                                    onclick='transferir("<%=prevision[key].idFilaMaquina%>")'><img
+                                        src="/img/transfer-24.png"></a>
+                                <a href="/filamaquina/delete/<%=prevision[key].idFilaMaquina%>/<%= prevision[key].idOrdemProducao %>/<%=prevision[key].idMaquina%>"><img src="/img/delete-24.png"></a>
+                                <a href="/filamaquina/finalizar/<%=prevision[key].idFilaMaquina%>/<%=prevision[key].idMaquina%>/<%= prevision[key].idOrdemProducao %>"><img src="/img/check-24.png"></a>
+                                
+                                </td>
+                        </tr>
 
+                        <% i++; })%>
+                </tbody>
+            </table>
+
+            <input type="submit" class="btn btn-success" value="CALCULAR">
+        </form>
 
 </main>
+
+<script>
+   document.addEventListener('DOMContentLoaded', function(){
+    new Sortable(document.querySelector('.table tbody'),{
+        animation: 150,
+        ghostClass: "ghost"
+    })
+   })
+</script>

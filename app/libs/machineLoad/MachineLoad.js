@@ -20,7 +20,7 @@ class MachineLoad
         let lunchBreak = this.verifyLanchBreak();
         //INCLUIR TEMPO DE SETUP
         //converte os minutos para inteiro de timestamp
-        return (minutesRemainig + 60 + lunchBreak) * 60 * 1000;
+        return (minutesRemainig) * 60 * 1000;
         
     }
 
@@ -57,7 +57,14 @@ class MachineLoad
     {
         var timeRemainingProduction = this.timeStampRemainigProduction(machine, queueKey);
         var dateTimeNowSimulation = this.getDateTimeNowSimulation(dateTimeNow);
-        var newDateTimePrevision = new Date(dateTimeNowSimulation.getTime()+timeRemainingProduction);
+
+         var tempoAdicional = 0
+         //console.log((timeRemainingProduction / (1000 * 60 * 60)))
+        if((timeRemainingProduction / (1000 * 60 * 60)) > 10)
+            {
+                 tempoAdicional = ((((timeRemainingProduction / (1000 * 60 * 60))/10)*15)*60)*60*1000
+            }
+        var newDateTimePrevision = new Date(dateTimeNowSimulation.getTime()+timeRemainingProduction + tempoAdicional);
         
         //arrumar uma forma de verificar se nao esta contando com horario da noite
         return this.InterfaceCore.getNewPrevision(newDateTimePrevision);
@@ -94,11 +101,12 @@ class MachineLoad
     {
         if(this.dataDB.queue[machine].considerBPMMachine)
         {
-            var bpm = this.dataDB.queue[machine].bpm;
+             var bpm = this.dataDB.queue[machine].queueProducts[sequence].bpmProduct;
+            
 
         }else{
 
-            var bpm = this.dataDB.queue[machine].queueProducts[sequence].bpmProduct;
+            var bpm = this.dataDB.queue[machine].bpm;
     
         }
         

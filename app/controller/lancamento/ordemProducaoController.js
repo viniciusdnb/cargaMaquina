@@ -32,17 +32,19 @@ module.exports = {
     edit: async function (req, res) {
         const ordemProducao = await ordemProducaoModel.findAll({
             where: { idOrdemProducao: req.params.idOrdemProducao },
-            include: [clienteModel, produtoModel, tipoOrdemProducaoModel]
+            include: [clienteModel, produtoModel, tipoOrdemProducaoModel, status_ordem_producaoModel]
         });
         let clientes = await clienteModel.findAll();
         let produtos = await produtoModel.findAll();
         let tipoOrdemProducao = await tipoOrdemProducaoModel.findAll();
+        let statusOrdemProducao = await status_ordem_producaoModel.findAll();
         res.render('lancamento/ordemproducao/index', {
             "pathName": "edit",
             "ordemProducao": JSON.stringify(ordemProducao, null),
             "clientes": JSON.stringify(clientes, null),
             "produtos": JSON.stringify(produtos, null),
-            "tipoOrdemProducao": JSON.stringify(tipoOrdemProducao, null)
+            "tipoOrdemProducao": JSON.stringify(tipoOrdemProducao, null),
+            "statusOrdemProducao": JSON.stringify(statusOrdemProducao, null)
         });
     },
     update: async function (req, res) {
@@ -56,7 +58,8 @@ module.exports = {
             dataEntrega: req.body.dataEntrega,
             idProduto: req.body.idProduto,
             idTipoOrdemProducao: req.body.idTipoOrdemProducao,
-            quantidade: req.body.quantidade
+            quantidade: req.body.quantidade,
+            idStatus: req.body.idStatusOrdemProducao
         }, {
             where: {
                 idOrdemProducao: req.body.idOrdemProducao

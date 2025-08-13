@@ -56,7 +56,7 @@
                                 <%= prevision[key].previsionEnd.toLocaleString() %>
                             </td>
                             <td><a href="" data-bs-toggle="modal" data-bs-target="#staticBackdropTransfer"
-                                    onclick='transferir("<%=prevision[key].idFilaMaquina%>")'><img
+                                    onclick='transferir("<%=prevision[key].idFilaMaquina%>","<%=prevision[key].idMaquina%>")'><img
                                         src="/img/transfer-24.png"></a>
                                 <a href="/filamaquina/delete/<%=prevision[key].idFilaMaquina%>/<%= prevision[key].idOrdemProducao %>/<%=prevision[key].idMaquina%>"><img src="/img/delete-24.png"></a>
                                 <a href="/filamaquina/finalizar/<%=prevision[key].idFilaMaquina%>/<%=prevision[key].idMaquina%>/<%= prevision[key].idOrdemProducao %>"><img src="/img/check-24.png"></a>

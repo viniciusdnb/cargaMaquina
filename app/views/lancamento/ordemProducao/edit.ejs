@@ -86,6 +86,22 @@
                 </select>
 
             </div>
+            <div class="col-md-4">
+                <label class="form-label">TIPO DA ORDEM</label>
+                <select id="statusOrdemProducao" name="idStatusOrdemProducao" required>
+                    <option value=""></option>
+                    <% 
+                        
+                    var arrStatus=JSON.parse(statusOrdemProducao);
+                        arrStatus.forEach(status=>{ %>
+                        <option <%=ordem.idStatus==status.idStatus ? "selected" : "" ; %>
+                            value="<%=status.idStatus%>">
+                                <%=status.descricaoStatus%>
+                        </option>
+                        <%})%>
+                </select>
+
+            </div>
 
             <div class="row g-3">
                 <div class="col-1">
@@ -116,4 +132,11 @@
             field: "text"
         }
     });
+
+    new TomSelect("#statusOrdemProducao",{
+         allowEmptyOption: true,
+        sortField: {
+            field: "text"
+        }
+    })
 </script>

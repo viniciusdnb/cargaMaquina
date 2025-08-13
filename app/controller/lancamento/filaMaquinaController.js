@@ -95,7 +95,7 @@ module.exports = {
 
     },
     verFila: async function (req, res) {
-
+        
         const maquinas = await maquinaModel.findAll();
     
         //tras todas as maquinas cadastrada e verifica se é para considerar velocidade da maquina
@@ -104,7 +104,14 @@ module.exports = {
         });
         maquina = JSON.parse(JSON.stringify(maquina, null));
         maquina = maquina[0];
-        var considerBPMMachine = "considerBPMMachine" in req.body ? true : false;
+        var considerBPMMachine = false
+        if("considerBPMMachine" in req.body)
+        {
+            considerBPMMachine = true
+        }
+
+        
+        //var considerBPMMachine = "considerBPMMachine" in req.body ? true : false;
 
 
         //tras os dados da fila
@@ -122,7 +129,7 @@ module.exports = {
             ], 
              order: [['ordenacao', 'ASC']]
         });
-        console.log(JSON.parse(JSON.stringify(filaMaquina)));
+        //console.log(JSON.parse(JSON.stringify(filaMaquina)));
         //verifica se tem ordem cadastrada na maquina de acordo com o id da maquina passado pela req
         if (filaMaquina.length !== 0) {
 
@@ -149,14 +156,14 @@ module.exports = {
                     "produto": fila.ordem_producao.produto.descProduto,
                     "ordemProducao": fila.ordem_producao.numeroOrdemProducao,
                     "orderQuantity": fila.ordem_producao.quantidade,
-                    "bpmProduct": 33,
+                    "bpmProduct": 34,
                     "setup": 60,
                     "quantityProduced": quantidade,
                     "previsionStart": "",
                     "previsionEnd": "",
                     "idFilaMaquina": fila.idFilaMaquina,
                     "idOrdemProducao":fila.idOrdemProducao,
-                    "idMaquina":fila.idMaquina
+                    "idMaquina":fila.idMaquina 
                 }
             });
 
@@ -203,6 +210,7 @@ module.exports = {
         //id do lancamento da tabela 
         var idFilaMaquina = req.body.idFilaMaquina;
 
+        var idMaquinaAntiga = req.body.idMaquinaAntiga;
         //pega o ultimo numero da ordenacao da nova maquina
         var ultimoLinhaMaquina = await filaMaquinaModel.findOne({
             order: [['ordenacao', 'DESC']],
@@ -226,6 +234,15 @@ module.exports = {
             }
         );
 
+        this.reeordenar(idMaquinaAntiga);
+
+        const maquinas = await maquinaModel.findAll();
+
+        res.render('lancamento/filamaquina/index', {
+            'msg': "",
+            'maquinas': JSON.stringify(maquinas, null),
+            'pathName': 'main'
+        });
         
     },
     delete: async function (req, res) {

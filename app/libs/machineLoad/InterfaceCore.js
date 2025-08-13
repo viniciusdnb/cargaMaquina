@@ -37,7 +37,14 @@ class InterfaceCore {
             //soma com o totat da diferenca entre o total de horas até a previsao menos a hora de inicio
             var newDateBeforeStart = this.Core.verifyBeforeTimeStart(dateTime);
 
+            if(newDateBeforeStart.getHours() >= 12 && newDateBeforeStart.getHours() <= 13 &&  this.config.lunchBreak.considerLunchBreak)
+            {
+                newDateBeforeStart.setHours(newDateBeforeStart.getHours()+1);
+            }
+
             var newPrevision = this.Core.verifyWeekend(newDateBeforeStart);
+
+             
         }
 
         

@@ -9,6 +9,7 @@
       <div class="modal-body">
        
         <form class="" method="post" action="/filamaquina/transferir">
+          <input type="hidden" name="idMaquinaAntiga" id="idMaquinaAntiga" />
           <input type="hidden" name="idFilaMaquina" id="idFilaMaquina" />
           <select class="form-select" name="idMaquina" id="">
 
@@ -31,10 +32,13 @@
   </div>
 
   <script>
-    function transferir(id) {
-      console.log(id)
+    function transferir(id, idMaquinaAntiga) {
+      
       var idFilaMaquina = document.getElementById('idFilaMaquina');
       idFilaMaquina.setAttribute("value", id);      
+ 
+      var idMaquina = document.getElementById('idMaquinaAntiga');
+      idMaquina.setAttribute("value", idMaquinaAntiga);
     }
 
   </script>

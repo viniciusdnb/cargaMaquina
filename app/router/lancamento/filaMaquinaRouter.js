@@ -14,8 +14,8 @@ filaMaquinaRouter.post('/filamaquina/verfila', function(req, res){
     filaMaquinaController.verFila(req, res);
 });
 
-filaMaquinaRouter.post('/filamaquina/transferir', function(req, res){
-    filaMaquinaController.trasnfer(req, res)
+filaMaquinaRouter.post('/filamaquina/transferir', function(req, res){    
+    filaMaquinaController.trasnfer(req, res);
 });
 
 filaMaquinaRouter.get('/filamaquina/delete/:idfilamaqina', function(req, res){

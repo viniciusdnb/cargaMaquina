@@ -8,12 +8,13 @@ const apontamentoDetalheModel = require("../../model/models/lancamento/apontamen
 const listaApontamentosModelView = require("../../model/models/lancamento/listaApontamentosModelView");
 
 
-
-
-
+listaApontamentosModelView.belongsTo(maquinaModel,{foreignKey: "idMaquina"});
+ 
 module.exports = {
     index: async function (req, res, msg = null) {
-       const listaApontamentos = await listaApontamentosModelView.findAll();
+       const listaApontamentos = await listaApontamentosModelView.findAll({
+        include:[maquinaModel] 
+       });
         
         res.render('lancamento/apontamento/index', {
             "pathName": "main",

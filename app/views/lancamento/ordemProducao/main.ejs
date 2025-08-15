@@ -8,13 +8,41 @@
             </li>
         </ol>
     </nav>
+    <style>
+        .seta-baixo {
+            display: inline-block;
+            width: 0;
+            height: 0;
+            margin-left: 6px;
+            vertical-align: middle;
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-top: 12px solid #ff0000;
+        }
+
+        .seta-cima {
+            display: inline-block;
+            width: 0;
+            height: 0;
+            margin-left: 6px;
+            vertical-align: middle;
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-bottom: 12px solid #ff0000;
+        }
+    </style>
     <nav class="navbar  bg-body-tertiary">
         <div class="container-fluid">
-            <form class="d-flex" role="search" action="/ordemproducao/pesquisaOrdem", method="post">
-                <input class="form-control me-2" type="search" placeholder="somente ordem ou lote" aria-label="Search" name="textopesquisa" />
-                <button class="btn btn-outline-success" type="submit">PROCURAR</button>
-            </form>
-            
+            <div class="d-flex mb-3" role="search">
+                <label class="form-label">PESQUISAR:</label>
+                <input type="text" class="form-control" id="filtroGlobal" placeholder="Buscar conteúdo..." />
+            </div>
+            <div class="d-flex mb-3" role="search">
+                <label class="form-label text-danger">EXCETO:</label>
+                <input type="text" class="form-control text-danger" id="filtroExclusao" value="FINALIZADO"
+                    placeholder="exceto ..." />
+            </div>
+
             <ul class="d-flex list-gropu">
                 <div class="navbar-brand text-center">LEGENDA:</div>
                 <li class="list-group-item"><img src="/img/edit-24.png" alt="">EDITRA</li>
@@ -26,107 +54,207 @@
     </nav>
 </div>
 <main class="container-fluid">
-    <%  
-        
-        if(msg !=null && typeof msg !='undefined' ){%>
+    <% if(msg !=null && typeof msg !='undefined' ){%>
         <div class="alert alert-secondary" role="alert">
             <%= msg %>
         </div>
         <% } %>
-            <table class="table table-hover table-striped table-bordered ">
+            <table id="tabelaLancamentos" class="table table-hover table-striped table-bordered ">
                 <thead class="table-dark">
                     <tr>
-                        <th>#</th>
-                        <th>DT LANC.</th>
-                        <th>CLIENTE</th>
-                        <th>PRODUTO</th>
-                        <th>Nº ORDEM</th>
-                        <th>LOTE</th>
-                        <th>TITPO</th>
-                        <th>QUANTIDADE</th>
-                        <th>DT ENTREGA</th>
-                        <th>STATUS</th>
-                        <th>OPÇOES</th>
+                        <th style="cursor: pointer;" data-tipo="numero">#</th>
+                        <th style="cursor: pointer;" data-tipo="data">DT LANC.</th>
+                        <th style="cursor: pointer;" data-tipo="texto">CLIENTE</th>
+                        <th style="cursor: pointer;" data-tipo="texto">PRODUTO</th>
+                        <th style="cursor: pointer;" data-tipo="texto">Nº ORDEM</th>
+                        <th style="cursor: pointer;" data-tipo="texto">LOTE</th>
+                        <th style="cursor: pointer;" data-tipo="texto">TITPO PRODUTO</th>
+                        <th style="cursor: pointer;" data-tipo="numero">QUANTIDADE</th>
+                        <th style="cursor: pointer;" data-tipo="data">DT ENTREGA</th>
+                        <th style="cursor: pointer;" data-tipo="texto">STATUS</th>
+                        <th style="cursor: pointer;" data-tipo="texto">OPÇOES</th>
+
                     </tr>
                 </thead>
                 <tbody>
-                    <% if(typeof ordemProducao !='undefined' ){ var arrOrdemProducao=JSON.parse(ordemProducao);
-                        var arrProducao = JSON.parse(list_apont_sum_qtd_grop_idOp);
-                       
-                    %>
-                    
-                
-                      <%  arrOrdemProducao.forEach(ordem=>{
-                            
-                        %>
+                    <% if(typeof ordemProducao !='undefined' ){ var arrOrdemProducao=JSON.parse(ordemProducao); var
+                        arrProducao=JSON.parse(list_apont_sum_qtd_grop_idOp);
+                        
+                        console.log(arrOrdemProducao)%>
 
-                        <tr id="idLinha<%=ordem.idOrdemProducao%>">
-                            <td>
-                                <% arrProducao.forEach(producao =>{
-                                    var quantidadeProduzidoPintura = 0;
-                                    if(ordem.idOrdemProducao == producao.idOrdemProducao && producao.idSetor == 1 && producao.quantidade != 0)
-                                    {
-                                        quantidadeProduzidoPintura = producao.quantidade; %>
-                                        <input type="hidden" value="<%= quantidadeProduzidoPintura %>" id="quantidadeProduzidoPintura">
-                                    <%}%>
+
+                        <% arrOrdemProducao.forEach(ordem=>{
+
+                            %>
+
+                            <tr id="idLinha<%=ordem.idOrdemProducao%>">
+                                <td>
+                                    <% arrProducao.forEach(producaoPintura=>{
+                                        var quantidadeProduzidoPintura = 0;
+                                        
+                                        if(ordem.idOrdemProducao == producaoPintura.idOrdemProducao && producaoPintura.idSetor == 1 &&
+                                        producaoPintura.quantidade != 0)
+                                        {
+                                            quantidadeProduzidoPintura = producaoPintura.quantidade;
+                                    %>
+                                           <input type="hidden" value="<%= quantidadeProduzidoPintura %>" id="quantidadeProduzidoPintura"> 
+                                        <%}%>
+                                    <%});%>
                                     
-                                <%});%>
+                                    <%//console.log(arrProducao); 
+                                    arrProducao.forEach(producaoSilk =>{
+                                        var quantidadeProduzidoSilk = 0;
 
-                                <%= ordem.idOrdemProducao %>
-                            </td>
-                            <td>
-                                <% var arrDtLanc=ordem.dataLancamento.split('-'); %>
-                                    <%= `${arrDtLanc[2]}/${arrDtLanc[1]}/${arrDtLanc[0]}` %>
+                                        if(ordem.idOrdemProducao == producaoSilk.idOrdemProducao && producaoSilk.idSetor == 2 && producaoSilk.quantidade != 0 ){
+                                            if(producaoSilk.idTipoProduto == 3 || producaoSilk.idTipoProduto == 6)
+                                            {
+                                                quantidadeProduzidoSilk = producaoSilk.quantidade;
+                                            }
+                                        %>
+                                            <input type="hidden" value="<%= quantidadeProduzidoSilk %>"  id="quantidadeProduzidoSilk" />
+                                        <%}%>
+                                    <%}); %>
+                                    <%= ordem.idOrdemProducao %>
+                                </td>
+                                <td>
+                                    <% var arrDtLanc=ordem.dataLancamento.split('-'); %>
+                                        <%= `${arrDtLanc[2]}/${arrDtLanc[1]}/${arrDtLanc[0]}` %>
 
-                            </td>
-                            <td>
-                                <%= ordem.cliente.nomeCliente %>
-                            </td>
-                            <td>
-                                <%= ordem.produto.descProduto %>
-                            </td>
-                            <td>
-                                <%= ordem.numeroOrdemProducao %>
-                            </td>
-                            <td>
-                                <%= ordem.loteOrdemProducao %>
-                            </td>
-                            <td>
-                                <%= ordem.tipo_ordem_producao.descTipoOrdemProducao %>
-                            </td>
-                            <td id="quantidadeOrdem" class="text-center">
-                                <%= ordem.quantidade %>
-                            </td>
+                                </td>
+                                <td>
+                                    <%= ordem.cliente.nomeCliente %>
+                                </td>
+                                <td>
+                                    <%= ordem.produto.descProduto %>
+                                </td>
+                                <td>
+                                    <%= ordem.numeroOrdemProducao %>
+                                </td>
+                                <td>
+                                    <%= ordem.loteOrdemProducao %>
+                                </td>
+                                <td>
+                                    <%= ordem.produto.tipo_produto.descTipoProduto %>
+                                </td>
+                                <td class="text-center">
+                                    <input type="hidden" value="<%=ordem.quantidade; %>" id="quantidadeOrdem">
+                                    <% var numero=ordem.quantidade; %>
+                                        <%= Number(numero).toLocaleString('pt-BR') %>
+                                </td>
 
-                            <td>
-                                <% var arrDtEnt=ordem.dataEntrega.split('-') %>
-                                    <%= `${arrDtEnt[2]}/${arrDtEnt[1]}/${arrDtEnt[0]}` %>
-                            </td>
-                            <td><%= ordem.status_ordem_producao.descricaoStatus %></td>
-                            <td>
-                                <a href="/ordemproducao/editar/<%= ordem.idOrdemProducao %>">
-                                    <img src="/img/edit-24.png" alt="">
-                                </a>
-                                <a href="<%= ordem.idOrdemProducao %>" data-bs-toggle="modal"data-bs-target="#staticBackdropStatus"
-                                    onclick="statusProducao(document.querySelector('#idLinha<%=ordem.idOrdemProducao%>'))">
-                                    <img src="/img/view-24.png" alt="">
-                                </a>
-                                <a id="delete" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
-                                    onclick='perguntar("<%= ordem.idOrdemProducao %>",
+                                <td>
+                                    <% var arrDtEnt=ordem.dataEntrega.split('-') %>
+                                        <%= `${arrDtEnt[2]}/${arrDtEnt[1]}/${arrDtEnt[0]}` %>
+                                </td>
+                                <td>
+                                    <%= ordem.status_ordem_producao.descricaoStatus %>
+                                </td>
+                                <td>
+                                    <a href="/ordemproducao/editar/<%= ordem.idOrdemProducao %>">
+                                        <img src="/img/edit-24.png" alt="">
+                                    </a>
+                                    <a href="<%= ordem.idOrdemProducao %>" data-bs-toggle="modal"
+                                        data-bs-target="#staticBackdropStatus"
+                                        onclick="statusProducao(document.querySelector('#idLinha<%=ordem.idOrdemProducao%>'))">
+                                        <img src="/img/view-24.png" alt="">
+                                    </a>
+                                    <a id="delete" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                                        onclick='perguntar("<%= ordem.idOrdemProducao %>",
                                     "OP: <%= ordem.numeroOrdemProducao %> do cliente <%= ordem.cliente.nomeCliente %>","ordemproducao")' href="<%= ordem.idOrdemProducao %>">
-                                    <img src="/img/trash-24.png" alt="">
-                                </a>
-                                <a href="<%= ordem.idOrdemProducao %>" data-bs-toggle="modal"data-bs-target="#staticBackdropProduzir"
-                                    onclick='injetIdOrdemProducao("<%= ordem.idOrdemProducao %>","OP: <%= ordem.numeroOrdemProducao %> do cliente <%= ordem.cliente.nomeCliente %>" )'
-                                    >
-                                    <img src="/img/send-24.png" alt="">
-                                </a>
-                            </td>
-                        </tr>
-                        <% }) }%>
+                                        <img src="/img/trash-24.png" alt="">
+                                    </a>
+                                    <a href="<%= ordem.idOrdemProducao %>" data-bs-toggle="modal"
+                                        data-bs-target="#staticBackdropProduzir"
+                                        onclick='injetIdOrdemProducao("<%= ordem.idOrdemProducao %>","OP: <%= ordem.numeroOrdemProducao %> do cliente <%= ordem.cliente.nomeCliente %>" )'>
+                                        <img src="/img/send-24.png" alt="">
+                                    </a>
+                                </td>
+                            </tr>
+                            <% }) }%>
 
                 </tbody>
             </table>
 </main>
+<script>
+    /*$("#filtroGlobal").on("keyup", function () {
+        const termo = $(this).val().toLowerCase();
+        $("#tabelaLancamentos tbody tr").each(function () {
+            const linha = $(this);
+            const textoLinha = linha.text().toLowerCase();
+            linha.toggle(textoLinha.includes(termo));
+        });
+    });*/
 
+    $("#filtroGlobal, #filtroExclusao").on("keyup", aplicarFiltros);
+    function aplicarFiltros() {
+        const termoInclusao = $("#filtroGlobal").val().toLowerCase();
+        const termoExclusao = $("#filtroExclusao").val().toLowerCase();
+
+        $("#tabelaLancamentos tbody tr").each(function () {
+            const linha = $(this);
+            const textoLinha = linha.text().toLowerCase();
+
+            const contemInclusao = termoInclusao === "" || textoLinha.includes(termoInclusao);
+            const contemExclusao = termoExclusao !== "" && textoLinha.includes(termoExclusao);
+
+            // Mostrar apenas se passar nos dois filtros
+            linha.toggle(contemInclusao && !contemExclusao);
+        });
+    }
+
+    // Eventos de digitação
+    $("#filtroGlobal, #filtroExclusao").on("keyup", aplicarFiltros);
+    $("#filtroExclusao").ready(aplicarFiltros);
+
+
+    //ordenacao por coluna
+    let ordemAscendente = true;
+    let colunaAtiva = null;
+
+    $("th").on("click", function () {
+        const coluna = $(this).index();
+        const tipo = $(this).data("tipo");
+
+        // Se clicou na mesma coluna, inverte a ordem
+        if (coluna === colunaAtiva) {
+            ordemAscendente = !ordemAscendente;
+        } else {
+            ordemAscendente = true;
+            colunaAtiva = coluna;
+        }
+
+        const tabela = $(this).closest("table");
+        const linhas = tabela.find("tbody > tr").toArray().sort(comparar(coluna, tipo));
+
+        if (!ordemAscendente) {
+            linhas.reverse();
+        }
+
+        tabela.find("tbody").empty().append(linhas);
+
+        // Limpa estilos anteriores
+        $("th").removeClass("ativo").find(".seta-baixo, .seta-cima").remove();
+
+        // Adiciona estilo e seta correspondente
+        $(this).addClass("ativo").append(`<span class="${ordemAscendente ? 'seta-baixo' : 'seta-cima'}"></span>`);
+    });
+
+
+    function comparar(coluna, tipo) {
+        return function (a, b) {
+            const valorA = $(a).find("td").eq(coluna).text().trim();
+            const valorB = $(b).find("td").eq(coluna).text().trim();
+
+            if (tipo === "numero") {
+                return parseFloat(valorA) - parseFloat(valorB);
+            } else if (tipo === "data") {
+                return new Date(valorA) - new Date(valorB);
+            } else {
+                return valorA.localeCompare(valorB);
+            }
+        };
+    }
+
+
+</script>
 <%- include('../../layout/modals/modalDelete') %>

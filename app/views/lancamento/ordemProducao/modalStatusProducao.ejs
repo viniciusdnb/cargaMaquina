@@ -45,19 +45,29 @@
 
 <script>
   function statusProducao(element) {
-    
-    
-   
     var quantidadeOrdem = element.querySelector('#quantidadeOrdem');
-     
-    document.getElementById('textQuantidadeOrdem').innerText = `Quantidade da ordem de producao: ${quantidadeOrdem.textContent}`;
-
+    document.getElementById('textQuantidadeOrdem').innerText = `Quantidade da ordem de producao: ${quantidadeOrdem.value}`;
+    
+    //coluna pintura
     var quantidadePintura = element.querySelector('#quantidadeProduzidoPintura');
-    document.getElementById('tdPintura').innerText = quantidadePintura.value;
-
-    var saldo = Number(quantidadeOrdem.textContent) - Number(quantidadePintura.value);
-    document.getElementById('saldoPintura').innerText = saldo;
+    var quantidadePintado = 0;
+    if(quantidadePintura !== null)
+    {
+       quantidadePintado = quantidadePintura.value;
+    }
+    document.getElementById('tdPintura').innerText = quantidadePintado;
+    var saldoPintura = Number(quantidadeOrdem.value) - Number(quantidadePintado);
+    document.getElementById('saldoPintura').innerText = saldoPintura;
     
-    
+    //coluna silk
+    var quantidadeSilkProduzido = element.querySelector("#quantidadeProduzidoSilk");
+    var quantidadeSilk = 0;
+    if(quantidadeSilkProduzido !==null)
+    {
+      quantidadeSilk = quantidadeSilkProduzido.value;
+    }
+    document.getElementById('tdSilk').innerText = quantidadeSilk;
+    var saldoSilk = Number(quantidadeOrdem.value) - Number(quantidadeSilk);
+    document.getElementById('saldoSilk').innerText = saldoSilk;
   }
 </script>

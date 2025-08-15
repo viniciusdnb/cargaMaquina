@@ -35,6 +35,12 @@ const list_apont_sum_qtd_grop_idOpModelView = connect.define(
         },
 	    descSetor:{
             type:DataTypes.INTEGER
+        },
+        idProduto:{
+             type:DataTypes.INTEGER
+        },
+        idTipoProduto:{
+            type:DataTypes.INTEGER
         }
     },
     {

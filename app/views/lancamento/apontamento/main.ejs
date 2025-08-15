@@ -18,7 +18,9 @@
     </nav>
 </div>
 <main class="container">
-    <% if(msg !=null && typeof msg !='undefined' ){%>
+    <% console.log(listaApontamentos);
+        
+        if(msg !=null && typeof msg !='undefined' ){%>
         <div class="alert alert-secondary" role="alert">
             <%= msg %>
         </div>
@@ -32,6 +34,7 @@
                         <th>PRODUTO</th>
                         <th>NUMERO ORDEM</th>
                         <th>LOTE</th>
+                        <th>MAQUINA</th>
                         <th>OPÇOES</th>
                      
                     </tr>
@@ -40,6 +43,7 @@
                     <% 
                     if(typeof listaApontamentos !='undefined' ){ 
                         var arrListaApontamentos=JSON.parse(listaApontamentos);
+                        console.log(arrListaApontamentos);
                          arrListaApontamentos.forEach(lista=>{ 
                     %>
                         <tr>
@@ -64,7 +68,7 @@
                             <td>
                                 <%= lista.loteOrdemProducao %>
                             </td>
-                           
+                           <td class="text-center"> <%= lista.maquina.descMaquina %></td>
                             <td>
                                 <a href="/apontamento/editar/<%= lista.idApontCabecalho %>">
                                     <img src="/img/edit-24.png" alt="">

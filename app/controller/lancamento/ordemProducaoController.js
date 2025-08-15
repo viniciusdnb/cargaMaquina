@@ -5,18 +5,20 @@ const tipoOrdemProducaoModel = require('../../model/models/cadastro/tipoOrdemPro
 const status_ordem_producaoModel = require('../../model/models/cadastro/status_ordem_producaoModel');
 const list_apont_sum_qtd_grop_idOpModelView = require('../../model/models/lancamento/list_apont_sum_qtd_grop_idOpModelView');
 const maquinaModel = require('../../model/models/cadastro/maquinaModel');
+const tipoProdutoModel = require('../../model/models/cadastro/tipoProdutoModel');
 
 ordemProducaoModel.belongsTo(clienteModel, { foreignKey: 'idCliente' });
 ordemProducaoModel.belongsTo(produtoModel, { foreignKey: 'idProduto' });
 ordemProducaoModel.belongsTo(tipoOrdemProducaoModel, { foreignKey: 'idTipoOrdemProducao' });
 ordemProducaoModel.belongsTo(status_ordem_producaoModel, { foreignKey: "idStatus" });
-
+produtoModel.belongsTo(tipoProdutoModel, {foreignKey:"idTipoProduto"})
 
 module.exports = {
     index: async function (req, res, msg = null) {
         const ordemProducao = await ordemProducaoModel.findAll({
-            order: [["idOrdemProducao", "DESC"]],
-            include: [clienteModel, produtoModel, tipoOrdemProducaoModel, status_ordem_producaoModel]
+            order: [["numeroOrdemProducao", "ASC"]],
+            //includes com relacionamentos de segundo nivel e teceiro nivel
+            include: [clienteModel, {model:produtoModel,include:[{model:tipoProdutoModel}]}, tipoOrdemProducaoModel, status_ordem_producaoModel]
         });
         const list_apont_sum_qtd_grop_idOp = await list_apont_sum_qtd_grop_idOpModelView.findAll();
         const maquinas = await maquinaModel.findAll();

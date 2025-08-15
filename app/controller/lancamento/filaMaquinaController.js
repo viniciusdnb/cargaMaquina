@@ -335,6 +335,7 @@ module.exports = {
        
         this.reeordenar(idMaquina);
 
+        //criar formas de atualizar o status da ordem de acordo com o tipo de produto
         //atualiza o status da ordem de prodcuao
         const odemProducao = await ordemProducaoModel.update({idStatus:2},{where:{idOrdemProducao:idOrdemProducao}});
         

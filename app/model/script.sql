@@ -109,14 +109,16 @@ CREATE TABLE apontamento_detalhe(
 /*GERA A TABELA DA LISTA DE APONTAMENTOS FEITO*/
 CREATE VIEW lista_apontamento AS
 SELECT 
-	apontamento_cabecalho.idApontCabecalho, apontamento_cabecalho.idOrdemProducao AS idOrdemProducaoCabecalho, apontamento_cabecalho.data, 
+	apontamento_cabecalho.idApontCabecalho, apontamento_cabecalho.idOrdemProducao AS idOrdemProducaoCabecalho, 		  apontamento_cabecalho.data,
     ordem_producao.idOrdemProducao, ordem_producao.numeroOrdemProducao, ordem_producao.loteOrdemProducao, 
     cliente.idCliente, cliente.nomeCliente, 
-    produto.idProduto, produto.descProduto
-FROM (((apontamento_cabecalho
+    produto.idProduto, produto.descProduto,
+    maquina.idMaquina, maquina.descMaquina
+FROM ((((apontamento_cabecalho
 INNER JOIN ordem_producao ON apontamento_cabecalho.idOrdemProducao = ordem_producao.idOrdemProducao)
 INNER JOIN cliente ON ordem_producao.idCliente = cliente.idCliente)
 INNER JOIN produto ON ordem_producao.idProduto = produto.idProduto)
+INNER JOIN maquina ON apontamento_cabecalho.idMaquina = maquina.idMaquina)
 ORDER BY apontamento_cabecalho.idApontCabecalho DESC;
 
 
@@ -127,12 +129,17 @@ SELECT
 	apontamento_cabecalho.idApontCabecalho AS idCabecalho, apontamento_cabecalho.idOrdemProducao,
     SUM(apontamento_detalhe.quantidadeProduzido) AS quantidade,
     maquina.idMaquina, maquina.idSetor AS maquinaSetor, maquina.descMaquina,
-	setor.idSetor, setor.descSetor
-FROM (((apontamento_detalhe
+	setor.idSetor, setor.descSetor, ordem_producao.idOrdemProducao AS idOrdemProdcao2, ordem_producao.idProduto AS idProdutoOrdemProducao,
+    produto.idProduto, produto.idTipoProduto
+FROM (((((apontamento_detalhe
 INNER JOIN apontamento_cabecalho ON apontamento_detalhe.idApontCabecalho = apontamento_cabecalho.idApontCabecalho)
 INNER JOIN maquina ON apontamento_cabecalho.idMaquina = maquina.idMaquina)
 INNER JOIN setor ON maquina.idSetor = setor.idSetor)
+INNER JOIN ordem_producao ON apontamento_cabecalho.idOrdemProducao = ordem_producao.idOrdemProducao)
+INNER JOIN produto ON ordem_producao.idProduto = produto.idProduto)
 GROUP BY apontamento_cabecalho.idOrdemProducao;
+
+
 
 CREATE TABLE fila_maquina (
     idFilaMaquina INT PRIMARY KEY AUTO_INCREMENT,

@@ -24,10 +24,13 @@ class MachineLoad
         
     }
 
-    getPrevision(machine)
+    getPrevision(machine, horaInicial = null)
     {
         //seta o horario atual para o primeiro item da simulação
-        this.setPrevisionFirstItem(machine);
+    
+        this.setPrevisionFirstItem(machine, horaInicial);
+        
+       
         
         //pega a quantidade de objetos dentro do objeto
         //a forma é diferente do array
@@ -69,9 +72,12 @@ class MachineLoad
         //arrumar uma forma de verificar se nao esta contando com horario da noite
         return this.InterfaceCore.getNewPrevision(newDateTimePrevision);
     }
-    setPrevisionFirstItem(machine)
+    setPrevisionFirstItem(machine, horaInicial)
     {
-        var dateTimeNowSimulation = this.getDateTimeNowSimulation()
+       
+        var dateTimeNowSimulation = this.getDateTimeNowSimulation();
+        
+       
        
         this.dataDB.queue[machine].queueProducts[0].previsionEnd = this.setPrevisions(machine, 0, dateTimeNowSimulation);
         

@@ -60,7 +60,7 @@
         </div>
         <% } %>
             <table id="tabelaLancamentos" class="table table-hover table-striped table-bordered ">
-                <thead class="table-dark">
+                <thead class="table-dark sticky-top">
                     <tr>
                         <th style="cursor: pointer;" data-tipo="numero">#</th>
                         <th style="cursor: pointer;" data-tipo="data">DT LANC.</th>
@@ -79,9 +79,9 @@
                 <tbody>
                     <% if(typeof ordemProducao !='undefined' ){ var arrOrdemProducao=JSON.parse(ordemProducao); var
                         arrProducao=JSON.parse(list_apont_sum_qtd_grop_idOp);
+                        //console.log(arrOrdemProducao[0].idOrdemProducao)
+                        //console.log(arrProducao[0].idOrdemProducao)%>
                         
-                        console.log(arrOrdemProducao)%>
-
 
                         <% arrOrdemProducao.forEach(ordem=>{
 
@@ -106,7 +106,7 @@
                                         var quantidadeProduzidoSilk = 0;
 
                                         if(ordem.idOrdemProducao == producaoSilk.idOrdemProducao && producaoSilk.idSetor == 2 && producaoSilk.quantidade != 0 ){
-                                            if(producaoSilk.idTipoProduto == 3 || producaoSilk.idTipoProduto == 6)
+                                            if(producaoSilk.idTipoProduto == 3 || producaoSilk.idTipoProduto == 4 || producaoSilk.idTipoProduto == 6 ||  producaoSilk.idTipoProduto == 7)
                                             {
                                                 quantidadeProduzidoSilk = producaoSilk.quantidade;
                                             }

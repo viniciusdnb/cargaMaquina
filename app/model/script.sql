@@ -109,18 +109,23 @@ CREATE TABLE apontamento_detalhe(
 /*GERA A TABELA DA LISTA DE APONTAMENTOS FEITO*/
 CREATE VIEW lista_apontamento AS
 SELECT 
-	apontamento_cabecalho.idApontCabecalho, apontamento_cabecalho.idOrdemProducao AS idOrdemProducaoCabecalho, 		  apontamento_cabecalho.data,
+	apontamento_cabecalho.idApontCabecalho, apontamento_cabecalho.idOrdemProducao AS idOrdemProducaoCabecalho, 		  
+    apontamento_cabecalho.data, apontamento_cabecalho.idOperador AS idOperadorCabecalho,
     ordem_producao.idOrdemProducao, ordem_producao.numeroOrdemProducao, ordem_producao.loteOrdemProducao, 
     cliente.idCliente, cliente.nomeCliente, 
     produto.idProduto, produto.descProduto,
-    maquina.idMaquina, maquina.descMaquina
-FROM ((((apontamento_cabecalho
+    maquina.idMaquina, maquina.descMaquina, 
+    operdor.idOperador, operdor.nomeOperador,
+    apontamento_detalhe.idApontDetalhe, apontamento_detalhe.idApontCabecalho AS idApontCabe_detalhe, apontamento_detalhe.quantidadeProduzido
+FROM ((((((apontamento_cabecalho
 INNER JOIN ordem_producao ON apontamento_cabecalho.idOrdemProducao = ordem_producao.idOrdemProducao)
 INNER JOIN cliente ON ordem_producao.idCliente = cliente.idCliente)
 INNER JOIN produto ON ordem_producao.idProduto = produto.idProduto)
 INNER JOIN maquina ON apontamento_cabecalho.idMaquina = maquina.idMaquina)
+INNER JOIN operdor ON apontamento_cabecalho.idOperador = operdor.idOperador)
+INNER JOIN apontamento_detalhe ON apontamento_cabecalho.idApontCabecalho = apontamento_detalhe.idApontCabecalho)
+WHERE apontamento_detalhe.quantidadeProduzido <> 0
 ORDER BY apontamento_cabecalho.idApontCabecalho DESC;
-
 
 -- view que lista todos apontamentos somando a quantidade agrupado pela ordem de producao, trazendo setor, maquina
 CREATE VIEW list_apont_sum_qtd_grop_idOp AS 
@@ -137,7 +142,7 @@ INNER JOIN maquina ON apontamento_cabecalho.idMaquina = maquina.idMaquina)
 INNER JOIN setor ON maquina.idSetor = setor.idSetor)
 INNER JOIN ordem_producao ON apontamento_cabecalho.idOrdemProducao = ordem_producao.idOrdemProducao)
 INNER JOIN produto ON ordem_producao.idProduto = produto.idProduto)
-GROUP BY apontamento_cabecalho.idOrdemProducao;
+GROUP BY apontamento_cabecalho.idOrdemProducao, apontamento_cabecalho.idMaquina;
 
 
 

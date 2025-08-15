@@ -21,6 +21,7 @@ module.exports = {
             include: [clienteModel, {model:produtoModel,include:[{model:tipoProdutoModel}]}, tipoOrdemProducaoModel, status_ordem_producaoModel]
         });
         const list_apont_sum_qtd_grop_idOp = await list_apont_sum_qtd_grop_idOpModelView.findAll();
+        
         const maquinas = await maquinaModel.findAll();
         res.render('lancamento/ordemproducao/index', {
             "pathName": "main",

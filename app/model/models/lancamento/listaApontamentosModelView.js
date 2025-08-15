@@ -41,6 +41,15 @@ const listaApontamentosModelView = connect.define(
         },
         descProduto: {
             type: DataTypes.CHAR
+        },
+        idOperador:{
+            type:DataTypes.INTEGER
+        },
+        nomeOperador:{
+            type:DataTypes.CHAR
+        },
+        quantidadeProduzido:{
+            type:DataTypes.INTEGER
         }
     },{
         tableName: "lista_apontamento",

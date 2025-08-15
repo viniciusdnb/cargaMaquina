@@ -6,13 +6,13 @@ const produtoModel = require('../../model/models/cadastro/produtoModel');
 const list_apont_sum_qtd_grop_idOpModelView = require('../../model/models/lancamento/list_apont_sum_qtd_grop_idOpModelView');
 const machineLoad = require('../../libs/machineLoad/MachineLoad');
 const configWork = require('../../model/machineLoadModel/configWork');
-
+const setorModel = require('../../model/models/cadastro/setorModel');
 
 
 filaMaquinaModel.belongsTo(ordemProducaoModel, { foreignKey: "idOrdemProducao" });
 ordemProducaoModel.belongsTo(clienteModel, { foreignKey: "idCliente" });
 ordemProducaoModel.belongsTo(produtoModel, { foreignKey: "idProduto" });
-
+maquinaModel.belongsTo(setorModel, {foreignKey: "idSetor"});
 
 module.exports = {
     index: async function (req, res) {
@@ -50,19 +50,23 @@ module.exports = {
          //adiciona mais um na sequecia de ordens ou 0 se a fila da maquina estiver vazia       
         var novaOrdenacao = this.getOrdenacao(ultimoLinhaMaquina);
 
-        //VERIFICA SE JA EXISTE ORDEM CADASTRADA
+        //**RESOLVER NO FUTUTO***//
+        //VERIFICA SE JA EXISTE ORDEM CADASTRADA - CANCELADO
+        //LOGICA CORRETA É
+        //VERIFICAR SE JA EXISTE ORDEM CADASTRADA EM UMA DETERMINADA MAQUINA
+        //para nao deixa dado duplicado
         // e inser na tabela da fila
-        let result = await this.idOrdemProducaoExist(req.body.idOrdemProducao);
+        //let result = await this.idOrdemProducaoExist(req.body.idOrdemProducao);
 
         //se o resultado for diferente de 0 
         //finaliza a funcao insert redirecionando para o index 
-        if (result != 0) {            
+        /*if (result != 0) {            
             return res.render('lancamento/filamaquina/index', {
                 'msg': "ORDEM CADASTRADA NA FILA COM SUCESSO",
                 'maquinas': JSON.stringify(maquinas, null),
                 'pathName': 'main'
             });
-        }
+        }*/
  
         //insere na tabela da fila
         await filaMaquinaModel.create({
@@ -100,7 +104,8 @@ module.exports = {
     
         //tras todas as maquinas cadastrada e verifica se é para considerar velocidade da maquina
         var maquina = await maquinaModel.findAll({
-            where: { idMaquina: req.body.idMaquina }
+            where: { idMaquina: req.body.idMaquina },
+            include:[setorModel]
         });
         maquina = JSON.parse(JSON.stringify(maquina, null));
         maquina = maquina[0];
@@ -188,8 +193,9 @@ module.exports = {
                 "pathName": "fila",
                 "prevision": prevision.queue[descMaquina].queueProducts,
                 "idMaquina": req.body.idMaquina,
-                "maquinas":  JSON.stringify(maquinas, null)
-            })
+                "maquinas":  JSON.stringify(maquinas, null),
+                "maquinaAtual":maquina
+            });
         }
         
         
@@ -246,6 +252,8 @@ module.exports = {
         
     },
     delete: async function (req, res) {
+        
+        console.log(req.params.idFilaMaquina);
         try { 
            const fimaMaquin = await filaMaquinaModel.destroy({
                 where: {

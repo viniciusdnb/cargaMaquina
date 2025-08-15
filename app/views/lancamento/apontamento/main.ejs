@@ -18,7 +18,7 @@
     </nav>
 </div>
 <main class="container">
-    <% console.log(listaApontamentos);
+    <% //console.log(listaApontamentos);
         
         if(msg !=null && typeof msg !='undefined' ){%>
         <div class="alert alert-secondary" role="alert">
@@ -34,6 +34,8 @@
                         <th>PRODUTO</th>
                         <th>NUMERO ORDEM</th>
                         <th>LOTE</th>
+                        <th>QUANTIDADE</th>
+                        <th>OPERADOR</th>
                         <th>MAQUINA</th>
                         <th>OPÇOES</th>
                      
@@ -51,7 +53,8 @@
                                 <%= lista.idApontCabecalho %>
                             </td>
                             <td>
-                                <% var arrDtLanc=lista.data.split('-'); %>
+                                <% 
+                                var arrDtLanc=lista.data.split('-'); %>
                                     <%= `${arrDtLanc[2]}/${arrDtLanc[1]}/${arrDtLanc[0]}` %>
 
                             </td>
@@ -65,9 +68,11 @@
                             <td>
                                 <%= lista.numeroOrdemProducao %>
                             </td>
-                            <td>
+                            <td >
                                 <%= lista.loteOrdemProducao %>
                             </td>
+                            <td class="text-center"><%= lista.quantidadeProduzido %></td>
+                            <td class="text-center"><%= lista.nomeOperador %></td>
                            <td class="text-center"> <%= lista.maquina.descMaquina %></td>
                             <td>
                                 <a href="/apontamento/editar/<%= lista.idApontCabecalho %>">

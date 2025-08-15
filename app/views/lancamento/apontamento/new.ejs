@@ -78,13 +78,13 @@
                     <div class="col g-2 row">
                         <label class="col-sm-6 col-form-label">QUANTIDADE</label>
                         <div class="col-sm-6">
-                            <input type="number" class="form-control" name="quantidadeProduzido[]" required>
+                            <input type="number" class="form-control" name="quantidadeProduzido[]" value="0" required>
                         </div>
                     </div>
                     <div class="col g-2 row">
                         <label class="col-sm-6 col-form-label">REFUGO</label>
                         <div class="col-sm-6">
-                            <input type="number" class="form-control" name="quantidadeRefugo[]" required>
+                            <input type="number" class="form-control" name="quantidadeRefugo[]" value="0" required>
                         </div>
                     </div>
                     <!--<div class="col g-2 row">                
@@ -135,7 +135,7 @@
         const novaLinha = linhaOriginal.cloneNode(true);
         
         //LIMPA OS DADOS 
-        novaLinha.querySelectorAll("input").forEach(input => { input.value = "" });
+        novaLinha.querySelectorAll("input").forEach(input => { input.value = "0" });
         
         //coloca a nova linha apos a linha original
         linhaOriginal.after(novaLinha);

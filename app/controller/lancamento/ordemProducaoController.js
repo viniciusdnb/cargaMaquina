@@ -97,7 +97,7 @@ module.exports = {
                 idProduto: req.body.idProduto,
                 idTipoOrdemProducao: req.body.idTipoOrdemProducao,
                 quantidade: req.body.quantidade,
-                idStatus: 3
+                idStatus: 1
             });
         } catch (err) {
 

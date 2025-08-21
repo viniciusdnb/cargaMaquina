@@ -109,6 +109,7 @@ module.exports = {
         });
         maquina = JSON.parse(JSON.stringify(maquina, null));
         maquina = maquina[0];
+        var idSetorMaquina = maquina.idSetor;
         var considerBPMMachine = false
         if("considerBPMMachine" in req.body)
         {
@@ -118,7 +119,7 @@ module.exports = {
         
         //var considerBPMMachine = "considerBPMMachine" in req.body ? true : false;
 
-
+        
         //tras os dados da fila
         //de acordo com a maquina da requisicao e nao finalizado
         const filaMaquina = await filaMaquinaModel.findAll({
@@ -140,9 +141,14 @@ module.exports = {
 
             var arrFilaMaquina = JSON.parse(JSON.stringify(filaMaquina));
             //tras todo os lancamentos de apontamento da ordem
-            const list_apont_sum_qtd_grop_idOp = await list_apont_sum_qtd_grop_idOpModelView.findAll();
+            //separado por setor da maquina vindo na requisição
+            const list_apont_sum_qtd_grop_idOp = await list_apont_sum_qtd_grop_idOpModelView.findAll(
+                {where:{
+                    idSetor: idSetorMaquina
+                }}
+            );
             var arrListaPontamentos = JSON.parse(JSON.stringify(list_apont_sum_qtd_grop_idOp, null));
-
+         
             var data = {};
         
             arrFilaMaquina.forEach(fila => {
@@ -188,7 +194,7 @@ module.exports = {
             var descMaquina = maquina.descMaquina
             //o calculo de carga maquina só funciona se passar o nome da maquina
             var prevision = new machineLoad(dataDB, configWork).getPrevision(descMaquina);
-
+            
             return res.render('lancamento/filamaquina/index', {
                 "pathName": "fila",
                 "prevision": prevision.queue[descMaquina].queueProducts,

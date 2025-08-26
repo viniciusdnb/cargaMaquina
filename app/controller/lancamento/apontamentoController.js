@@ -40,7 +40,23 @@ module.exports = {
         });
     },
     update: async function (req, res) {
+        
+        try {
+           
+            const apontamentoCabecalho = await apontamentoCabecalhoModel.update({
+                data: req.body.data,
+                idMaquina: req.body.idMaquina,
+                idOrdemProducao: req.body.idOrdemProducao,
+                idOperador: req.body.idOperador
+            },
+            {where:{idApontCabecalho: req.body.idApontCabecalho}});
 
+           
+            res.redirect('/apontamento');
+        } catch (error) {
+            
+        }
+        
     },
     new: async function (req, res) {
         const maquinas = await maquinaModel.findAll();
@@ -129,7 +145,27 @@ module.exports = {
         return result;
     },
     delete: async function (req, res) {
+        try {
+            const apontamentoDetalhe =  await apontamentoDetalheModel.destroy({
+                where:{
+                    idApontCabecalho: req.params.idApontCabecalho
+                }
+            });
+        
+            const apontamentoCabecalho = await  apontamentoCabecalhoModel.destroy({
+                where:{
+                    idApontCabecalho: req.params.idApontCabecalho
+                }
+            });
 
+           
+
+            res.redirect('/apontamento');
+
+        } catch (error) {
+            console.log(`erro ao delatar: ${error}` );
+            res.redirect('/apontamento');
+        }
     },
     getArrayIdSubMotivo: async function (req) {
         /*
@@ -160,6 +196,10 @@ module.exports = {
             linhas++;
         }
         return arrIdCabecalho
+    },
+    updateDetalhe(detalhe)
+    {
+        
     },
     insertDataDetalhe: async function (detalhe) {
         /*

@@ -25,7 +25,7 @@ apontamentoRouter.post('/apontamento/novo/salvar', function(req, res){
     apontamentoController.newSave(req, res);
 });
 
-apontamentoRouter.get('/apontamento/delete/:idApontamento', function(req, res){
+apontamentoRouter.get('/apontamento/delete/:idApontCabecalho', function(req, res){
     apontamentoController.delete(req, res);
 });
 

@@ -2,9 +2,9 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/">INICIO</a></li>
-            <li class="breadcrumb-item"><a href="/apontamento">LISTA DE ORDEM DE PRODUCAO</a></li>
-            <li class="breadcrumb-item"><a>EDITAR ORDEM DE PRODUCAO</a></li>
-            <li class="breadcrumb-item"><a href="/apontamento/adicionar">NOVO ORDEM PRODUCAO <img
+            <li class="breadcrumb-item"><a href="/apontamento">LISTA DE APONTAMENTOS</a></li>
+            <li class="breadcrumb-item"><a>EDITAR APONTAMENTO</a></li>
+            <li class="breadcrumb-item"><a href="/apontamento/adicionar">NOVO APONTAMENTO <img
                         src="/img/add-24.png" alt=""></a>
             </li>
             </li>
@@ -15,8 +15,8 @@
     <% var arrApontamentos=JSON.parse(apontamentoOrdemProducaoCabecalho); arrApontamentos.forEach(el=>{
         apontamento = el;
         });
-        console.log(apontamento);%>
-        <form action="/apontamento/novo/salvar" method="post" class="row g-3">
+        //console.log(apontamento);%>
+        <form action="/apontamento/editar/salvar" method="post" class="row g-3">
             <input type="hidden" value="<%=apontamento.idApontCabecalho%>" name="idApontCabecalho">
             <div class="col-md-2">
                 <label class="form-label">DATA</label>
@@ -60,7 +60,8 @@
             </div>
 
 
-            <% console.log(JSON.parse(apontamentoDetalhe)); var arrApontamentoDetalhe=JSON.parse(apontamentoDetalhe); %>
+            <% //console.log(JSON.parse(apontamentoDetalhe)); 
+                var arrApontamentoDetalhe=JSON.parse(apontamentoDetalhe); %>
 
 
 

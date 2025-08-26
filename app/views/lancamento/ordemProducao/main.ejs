@@ -80,7 +80,7 @@
                     <% if(typeof ordemProducao !='undefined' ){ var arrOrdemProducao=JSON.parse(ordemProducao); var
                         arrProducao=JSON.parse(list_apont_sum_qtd_grop_idOp);
                         //console.log(arrOrdemProducao[0].idOrdemProducao)
-                        console.log(arrProducao)%>
+                        //console.log(arrProducao)%>
                         
 
                         <% arrOrdemProducao.forEach(ordem=>{
@@ -101,14 +101,24 @@
                                         <%}%>
                                     <%});%>
                                     
-                                    <%//console.log(arrProducao); 
+                                    <%//console.log(arrProducao);
+                                    
                                     arrProducao.forEach(producaoSilk =>{
-                                        var quantidadeProduzidoSilk = 0;
-
+                                        var quantidadeProduzidoSilk = 0; 
+                                        
                                         if(ordem.idOrdemProducao == producaoSilk.idOrdemProducao && producaoSilk.idSetor == 2 && producaoSilk.quantidade != 0 ){
-                                            if(producaoSilk.idTipoProduto == 3 || producaoSilk.idTipoProduto == 4 || producaoSilk.idTipoProduto == 6 ||  producaoSilk.idTipoProduto == 7)
+                                            if(producaoSilk.idTipoProduto == 3 || producaoSilk.idTipoProduto == 4 || producaoSilk.idTipoProduto == 5 ||  producaoSilk.idTipoProduto == 6 ||  producaoSilk.idTipoProduto == 7)
                                             {
-                                                quantidadeProduzidoSilk = producaoSilk.quantidade;
+                                                arrProducao.forEach(producao => {
+                                                    if(ordem.idOrdemProducao == producao.idOrdemProducao)
+                                                    {
+                                                        
+                                                         quantidadeProduzidoSilk += Number(producao.quantidade);
+                                                    }
+                                                })
+                                                   
+
+                                                console.log(producaoSilk.idOrdemProducao == 42 ? quantidadeProduzidoSilk:"")
                                             }
                                         %>
                                             <input type="hidden" value="<%= quantidadeProduzidoSilk %>"  id="quantidadeProduzidoSilk" />

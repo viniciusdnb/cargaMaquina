@@ -30,6 +30,9 @@
             border-right: 12px solid transparent;
             border-bottom: 12px solid #ff0000;
         }
+        .widthImg{
+            width: 16px;
+        }
     </style>
     <nav class="navbar  bg-body-tertiary">
         <div class="container-fluid">
@@ -76,7 +79,7 @@
 
                     </tr>
                 </thead>
-                <tbody>
+                <tbody style="font-size: 12px;">
                     <% if(typeof ordemProducao !='undefined' ){ var arrOrdemProducao=JSON.parse(ordemProducao); var
                         arrProducao=JSON.parse(list_apont_sum_qtd_grop_idOp);
                         //console.log(arrOrdemProducao[0].idOrdemProducao)
@@ -161,22 +164,22 @@
                                 </td>
                                 <td>
                                     <a href="/ordemproducao/editar/<%= ordem.idOrdemProducao %>">
-                                        <img src="/img/edit-24.png" alt="">
+                                        <img  class="widthImg" src="/img/edit-24.png" alt="">
                                     </a>
                                     <a href="<%= ordem.idOrdemProducao %>" data-bs-toggle="modal"
                                         data-bs-target="#staticBackdropStatus"
                                         onclick="statusProducao(document.querySelector('#idLinha<%=ordem.idOrdemProducao%>'))">
-                                        <img src="/img/view-24.png" alt="">
+                                        <img  class="widthImg" src="/img/view-24.png" alt="">
                                     </a>
                                     <a id="delete" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
                                         onclick='perguntar("<%= ordem.idOrdemProducao %>",
                                     "OP: <%= ordem.numeroOrdemProducao %> do cliente <%= ordem.cliente.nomeCliente %>","ordemproducao")' href="<%= ordem.idOrdemProducao %>">
-                                        <img src="/img/trash-24.png" alt="">
+                                        <img  class="widthImg" src="/img/trash-24.png" alt="">
                                     </a>
                                     <a href="<%= ordem.idOrdemProducao %>" data-bs-toggle="modal"
                                         data-bs-target="#staticBackdropProduzir"
                                         onclick='injetIdOrdemProducao("<%= ordem.idOrdemProducao %>","OP: <%= ordem.numeroOrdemProducao %> do cliente <%= ordem.cliente.nomeCliente %>" )'>
-                                        <img src="/img/send-24.png" alt="">
+                                        <img class="widthImg" src="/img/send-24.png" alt="">
                                     </a>
                                 </td>
                             </tr>

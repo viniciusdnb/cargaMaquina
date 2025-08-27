@@ -190,10 +190,18 @@ module.exports = {
                     }
                 }
             }
-
+            
             var descMaquina = maquina.descMaquina
             //o calculo de carga maquina só funciona se passar o nome da maquina
-            var prevision = new machineLoad(dataDB, configWork).getPrevision(descMaquina);
+
+            var considerarHoraInicial = false;
+
+            if("considerarHoraInicial" in req.body)
+            {
+                considerarHoraInicial = true
+            }
+
+            var prevision = new machineLoad(dataDB, configWork).getPrevision(descMaquina, considerarHoraInicial);
             
             return res.render('lancamento/filamaquina/index', {
                 "pathName": "fila",

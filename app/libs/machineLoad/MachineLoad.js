@@ -24,16 +24,25 @@ class MachineLoad
         
     }
 
-    getPrevision(machine, horaInicial = null)
+    getPrevision(machine, considerarHoraInicial)
     {
         //seta o horario atual para o primeiro item da simulação
-    
-        this.setPrevisionFirstItem(machine, horaInicial);
+        
+        //seta o horario inicial padrao para simulação 
+        if(considerarHoraInicial)
+        {   
+            var dateTimeNow = new Date('2025-08-27T07:12:00');
+            this.dataDB.queue[machine].queueProducts[0].previsionStart = new Date('2025-08-27T07:12:00');
+        }
+
+        this.setPrevisionFirstItem(machine, dateTimeNow);
         
        
-        
-        //pega a quantidade de objetos dentro do objeto
+         //pega a quantidade de objetos dentro do objeto
         //a forma é diferente do array
+      
+       
+       
 
         var numbersQueueProducts = Object.keys(this.dataDB.queue[machine].queueProducts).length;
         var queueKey = 0;
@@ -52,7 +61,7 @@ class MachineLoad
             queueKey++;
 
         }
-
+       
        return this.dataDB;
     }
 
@@ -72,10 +81,14 @@ class MachineLoad
         //arrumar uma forma de verificar se nao esta contando com horario da noite
         return this.InterfaceCore.getNewPrevision(newDateTimePrevision);
     }
-    setPrevisionFirstItem(machine, horaInicial)
+
+
+    setPrevisionFirstItem(machine,dateTimeNow)
     {
-       
-        var dateTimeNowSimulation = this.getDateTimeNowSimulation();
+       //funcao que cria a primeira simulção dos horarios da fila,
+       //levando em consideração se é pra inicial a simulação com horario padriao do sistema ou inicio 
+       //do horario de trabalho
+        var dateTimeNowSimulation = this.getDateTimeNowSimulation(dateTimeNow);
         
        
        

@@ -3,25 +3,30 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/">INICIO</a></li>
             <li class="breadcrumb-item"><a>SELECIONE UMA MAQUINA</a></li>
-
         </ol>
     </nav>
 </div>
-
+<br>
 <main class="container">
-    <form action="/filamaquina/verfila" method="post" class="row g-3">       
+    <form action="/filamaquina/verfila" method="post" class="row g-3">
         <div class="row">
-          <select class="" id="selectMaquina" name="idMaquina">
-            <% var arrMaquinas=JSON.parse(maquinas); arrMaquinas.forEach(maquina=>{%>
-                <option value="<%=maquina.idMaquina%>"><%=maquina.descMaquina%></option>
-                <% }) %>
-        </select>   
-        </div> 
-       
+             <div class="form-check form-switch col-sm">
+                <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault"  name="considerarHoraInicial">
+                <label class="form-check-label" for="switchCheckDefault">CONSIDERAR HORA INICIAL 07:12</label>
+            </div>
+            <select class="col" id="selectMaquina" name="idMaquina">
+                <% var arrMaquinas=JSON.parse(maquinas); arrMaquinas.forEach(maquina=>{%>
+                    <option value="<%=maquina.idMaquina%>">
+                        <%=maquina.descMaquina%>
+                    </option>
+                    <% }) %>
+            </select>
+        </div>
+
         <div class="g-3">
             <input type="submit" class="btn btn-success" value="VER FILA">
         </div>
-        
+
     </form>
 </main>
 

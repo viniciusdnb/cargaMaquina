@@ -11,6 +11,7 @@ filaMaquinaRouter.post('/filamaquina/adicionar', function(req, res){
 });
 
 filaMaquinaRouter.post('/filamaquina/verfila', function(req, res){
+    
     filaMaquinaController.verFila(req, res);
 });
 

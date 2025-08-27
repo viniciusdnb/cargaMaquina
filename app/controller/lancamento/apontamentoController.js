@@ -8,14 +8,16 @@ const apontamentoDetalheModel = require("../../model/models/lancamento/apontamen
 const listaApontamentosModelView = require("../../model/models/lancamento/listaApontamentosModelView");
 
 
-listaApontamentosModelView.belongsTo(maquinaModel,{foreignKey: "idMaquina"});
- 
+listaApontamentosModelView.belongsTo(maquinaModel, { foreignKey: "idMaquina" });
+
 module.exports = {
     index: async function (req, res, msg = null) {
-       const listaApontamentos = await listaApontamentosModelView.findAll({
-        include:[maquinaModel] 
-       });
-        
+
+        const listaApontamentos = await listaApontamentosModelView.findAll({
+            include: [maquinaModel]
+        });
+
+        res.set('Cache-Control', 'no-store');
         res.render('lancamento/apontamento/index', {
             "pathName": "main",
             "msg": msg,
@@ -23,14 +25,14 @@ module.exports = {
         });
     },
     edit: async function (req, res) {
-        const apontamentoCabecalho = await apontamentoCabecalhoModel.findAll({where:{idApontCabecalho:req.params.idApontamento}});
-        const apontamentoDetalhe = await apontamentoDetalheModel.findAll({where:{idApontCabecalho:req.params.idApontamento}});
+        const apontamentoCabecalho = await apontamentoCabecalhoModel.findAll({ where: { idApontCabecalho: req.params.idApontamento } });
+        const apontamentoDetalhe = await apontamentoDetalheModel.findAll({ where: { idApontCabecalho: req.params.idApontamento } });
         const maquinas = await maquinaModel.findAll();
         const ordemProducao = await ordemProducaoModel.findAll();
         const operadores = await operadorModel.findAll();
         const subMotivos = await subMotivoModel.findAll()
-        res.render('lancamento/apontamento/index',{
-            "pathName":"edit",
+        res.render('lancamento/apontamento/index', {
+            "pathName": "edit",
             "apontamentoOrdemProducaoCabecalho": JSON.stringify(apontamentoCabecalho, null),
             "apontamentoDetalhe": JSON.stringify(apontamentoDetalhe, null),
             "maquinas": JSON.stringify(maquinas, null),
@@ -40,23 +42,36 @@ module.exports = {
         });
     },
     update: async function (req, res) {
-        
+
         try {
-           
+
             const apontamentoCabecalho = await apontamentoCabecalhoModel.update({
                 data: req.body.data,
                 idMaquina: req.body.idMaquina,
                 idOrdemProducao: req.body.idOrdemProducao,
                 idOperador: req.body.idOperador
             },
-            {where:{idApontCabecalho: req.body.idApontCabecalho}});
+                { where: { idApontCabecalho: req.body.idApontCabecalho } });
 
-           
-            res.redirect('/apontamento');
+            var arrIdSubMotivo = await this.getArrayIdSubMotivo(req);
+
+            let detalhe = [
+                arrIdSubMotivo,
+                req.body.horaInicial,
+                req.body.horaFinal,
+                req.body.quantidadeProduzido,
+                req.body.quantidadeRefugo
+            ]
+
+
+            this.updateDetalhe(detalhe, req.body.idApontDetalhe, req.body.idApontCabecalho);
+            
+            
         } catch (error) {
+            console.log(`erro ao atualizar ${error}`);
             
         }
-        
+        res.redirect('/apontamento');
     },
     new: async function (req, res) {
         const maquinas = await maquinaModel.findAll();
@@ -146,24 +161,24 @@ module.exports = {
     },
     delete: async function (req, res) {
         try {
-            const apontamentoDetalhe =  await apontamentoDetalheModel.destroy({
-                where:{
-                    idApontCabecalho: req.params.idApontCabecalho
-                }
-            });
-        
-            const apontamentoCabecalho = await  apontamentoCabecalhoModel.destroy({
-                where:{
+            const apontamentoDetalhe = await apontamentoDetalheModel.destroy({
+                where: {
                     idApontCabecalho: req.params.idApontCabecalho
                 }
             });
 
-           
+            const apontamentoCabecalho = await apontamentoCabecalhoModel.destroy({
+                where: {
+                    idApontCabecalho: req.params.idApontCabecalho
+                }
+            });
+
+
 
             res.redirect('/apontamento');
 
         } catch (error) {
-            console.log(`erro ao delatar: ${error}` );
+            console.log(`erro ao delatar: ${error}`);
             res.redirect('/apontamento');
         }
     },
@@ -197,9 +212,35 @@ module.exports = {
         }
         return arrIdCabecalho
     },
-    updateDetalhe(detalhe)
-    {
-        
+    updateDetalhe: async function (detalhes, idApontDetalhe, idApontCabecalho) {
+
+        var linhas = 0;
+        var nomeColunas = ["idSubMotivo", "horaInicial", "horaFinal", "quantidadeProduzido", "quantidadeRefugo"];
+        var numeroLinhas = detalhes[0].length;
+
+        while (linhas < numeroLinhas) {
+            var linhaInsert = {};
+            for (let nColumn = 0; nColumn < 5; nColumn++) {
+
+                linhaInsert[nomeColunas[nColumn]] = detalhes[nColumn][linhas];
+            }
+
+            var strLinhaUpdate = JSON.stringify(linhaInsert);
+
+            var jsonLinhaUpdate = JSON.parse(strLinhaUpdate)
+
+
+            await apontamentoDetalheModel.update(jsonLinhaUpdate, {
+                where: {
+                    idApontDetalhe: idApontDetalhe[linhas],
+                    idApontCabecalho: idApontCabecalho
+                }
+            });
+
+            linhas++
+        }
+
+
     },
     insertDataDetalhe: async function (detalhe) {
         /*

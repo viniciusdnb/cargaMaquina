@@ -63,15 +63,15 @@
         </div>
         <% } %>
             <table id="tabelaLancamentos" class="table table-hover table-striped table-bordered ">
-                <thead class="table-dark sticky-top">
+                <thead style="font-size: 12px;" class="table-dark sticky-top">
                     <tr>
                         <th style="cursor: pointer;" data-tipo="numero">#</th>
                         <th style="cursor: pointer;" data-tipo="data">DT LANC.</th>
-                        <th style="cursor: pointer;" data-tipo="texto">CLIENTE</th>
+                        <th style="cursor: pointer; width: 150px;" data-tipo="texto">CLIENTE</th>
                         <th style="cursor: pointer;" data-tipo="texto">PRODUTO</th>
-                        <th style="cursor: pointer;" data-tipo="texto">Nº ORDEM</th>
+                        <th style="cursor: pointer; width: 50px;" class="text-center" data-tipo="texto">Nº ORDEM</th>
                         <th style="cursor: pointer;" data-tipo="texto">LOTE</th>
-                        <th style="cursor: pointer;" data-tipo="texto">TITPO PRODUTO</th>
+                        <th style="cursor: pointer; " data-tipo="texto">TITPO PRODUTO</th>
                         <th style="cursor: pointer;" data-tipo="numero">QUANTIDADE</th>
                         <th style="cursor: pointer;" data-tipo="data">DT ENTREGA</th>
                         <th style="cursor: pointer;" data-tipo="texto">STATUS</th>
@@ -80,15 +80,13 @@
                     </tr>
                 </thead>
                 <tbody style="font-size: 12px;">
-                    <% if(typeof ordemProducao !='undefined' ){ var arrOrdemProducao=JSON.parse(ordemProducao); var
-                        arrProducao=JSON.parse(list_apont_sum_qtd_grop_idOp);
-                        //console.log(arrOrdemProducao[0].idOrdemProducao)
-                        //console.log(arrProducao)%>
-                        
+                    <% if(typeof ordemProducao !='undefined' )
+                        {   var arrOrdemProducao=JSON.parse(ordemProducao);
+                            var arrProducao=JSON.parse(list_apont_sum_qtd_grop_idOp);
+                  
+                            
 
-                        <% arrOrdemProducao.forEach(ordem=>{
-
-                            %>
+                        arrOrdemProducao.forEach(ordem=>{%>
 
                             <tr id="idLinha<%=ordem.idOrdemProducao%>">
                                 <td>
@@ -104,24 +102,26 @@
                                         <%}%>
                                     <%});%>
                                     
-                                    <%//console.log(arrProducao);
+                                    <% 
                                     
                                     arrProducao.forEach(producaoSilk =>{
                                         var quantidadeProduzidoSilk = 0; 
                                         
+                                       
                                         if(ordem.idOrdemProducao == producaoSilk.idOrdemProducao && producaoSilk.idSetor == 2 && producaoSilk.quantidade != 0 ){
                                             if(producaoSilk.idTipoProduto == 3 || producaoSilk.idTipoProduto == 4 || producaoSilk.idTipoProduto == 5 ||  producaoSilk.idTipoProduto == 6 ||  producaoSilk.idTipoProduto == 7)
                                             {
                                                 arrProducao.forEach(producao => {
-                                                    if(ordem.idOrdemProducao == producao.idOrdemProducao)
+                                                    if(ordem.idOrdemProducao == producao.idOrdemProducao && producao.idSetor == 2)
                                                     {
                                                         
+                                                      
                                                          quantidadeProduzidoSilk += Number(producao.quantidade);
                                                     }
                                                 })
                                                    
 
-                                                console.log(producaoSilk.idOrdemProducao == 42 ? quantidadeProduzidoSilk:"")
+                                                
                                             }
                                         %>
                                             <input type="hidden" value="<%= quantidadeProduzidoSilk %>"  id="quantidadeProduzidoSilk" />
@@ -134,19 +134,19 @@
                                         <%= `${arrDtLanc[2]}/${arrDtLanc[1]}/${arrDtLanc[0]}` %>
 
                                 </td>
-                                <td>
+                                <td >
                                     <%= ordem.cliente.nomeCliente %>
                                 </td>
                                 <td>
                                     <%= ordem.produto.descProduto %>
                                 </td>
-                                <td>
+                                <td class="text-center">
                                     <%= ordem.numeroOrdemProducao %>
                                 </td>
                                 <td>
                                     <%= ordem.loteOrdemProducao %>
                                 </td>
-                                <td>
+                                <td class="text-center">
                                     <%= ordem.produto.tipo_produto.descTipoProduto %>
                                 </td>
                                 <td class="text-center">

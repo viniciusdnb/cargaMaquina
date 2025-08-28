@@ -31,8 +31,12 @@ class MachineLoad
         //seta o horario inicial padrao para simulação 
         if(considerarHoraInicial)
         {   
-            var dateTimeNow = new Date('2025-08-27T07:12:00');
-            this.dataDB.queue[machine].queueProducts[0].previsionStart = new Date('2025-08-27T07:12:00');
+            
+            var dateTimeNow = new Date();
+            dateTimeNow.setHours(7,12,0);
+            
+            this.dataDB.queue[machine].queueProducts[0].previsionStart =new Date(dateTimeNow);
+            console.log( this.dataDB.queue[machine].queueProducts[0].previsionStart);
         }
 
         this.setPrevisionFirstItem(machine, dateTimeNow);

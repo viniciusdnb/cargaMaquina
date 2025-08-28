@@ -83,14 +83,27 @@
                     <% if(typeof ordemProducao !='undefined' )
                         {   var arrOrdemProducao=JSON.parse(ordemProducao);
                             var arrProducao=JSON.parse(list_apont_sum_qtd_grop_idOp);
-                  
+                            console.log(arrOrdemProducao);
                             
 
-                        arrOrdemProducao.forEach(ordem=>{%>
+                        arrOrdemProducao.forEach(ordem=>{
+                            var bg = "";
+                            if(ordem.status_ordem_producao.idStatus == 3 || ordem.status_ordem_producao.idStatus == 6 )
+                            {
+                                bg = "style=background-color:#FE9900;"
+                            }else if(ordem.status_ordem_producao.idStatus == 7)
+                            {
+                                bg = "style=background-color:#48FC01"
+                            }else if(ordem.status_ordem_producao.idStatus == 8){
+                               
+                                 bg = "style=background-color:#E4080A"
+                            }
+                            %>
 
                             <tr id="idLinha<%=ordem.idOrdemProducao%>">
-                                <td>
+                                <td <%=bg%>>
                                     <% arrProducao.forEach(producaoPintura=>{
+                                        
                                         var quantidadeProduzidoPintura = 0;
                                         
                                         if(ordem.idOrdemProducao == producaoPintura.idOrdemProducao && producaoPintura.idSetor == 1 &&
@@ -129,37 +142,37 @@
                                     <%}); %>
                                     <%= ordem.idOrdemProducao %>
                                 </td>
-                                <td>
+                                <td <%=bg%>>
                                     <% var arrDtLanc=ordem.dataLancamento.split('-'); %>
                                         <%= `${arrDtLanc[2]}/${arrDtLanc[1]}/${arrDtLanc[0]}` %>
 
                                 </td>
-                                <td >
+                                <td <%=bg%> >
                                     <%= ordem.cliente.nomeCliente %>
                                 </td>
-                                <td>
+                                <td <%=bg%>>
                                     <%= ordem.produto.descProduto %>
                                 </td>
-                                <td class="text-center">
+                                <td <%=bg%> class="text-center">
                                     <%= ordem.numeroOrdemProducao %>
                                 </td>
-                                <td>
+                                <td <%=bg%>>
                                     <%= ordem.loteOrdemProducao %>
                                 </td>
-                                <td class="text-center">
+                                <td <%=bg%> class="text-center">
                                     <%= ordem.produto.tipo_produto.descTipoProduto %>
                                 </td>
-                                <td class="text-center">
+                                <td <%=bg%> class="text-center">
                                     <input type="hidden" value="<%=ordem.quantidade; %>" id="quantidadeOrdem">
                                     <% var numero=ordem.quantidade; %>
                                         <%= Number(numero).toLocaleString('pt-BR') %>
                                 </td>
 
-                                <td>
+                                <td <%=bg%>>
                                     <% var arrDtEnt=ordem.dataEntrega.split('-') %>
                                         <%= `${arrDtEnt[2]}/${arrDtEnt[1]}/${arrDtEnt[0]}` %>
                                 </td>
-                                <td>
+                                <td <%=bg%>>
                                     <%= ordem.status_ordem_producao.descricaoStatus %>
                                 </td>
                                 <td>

@@ -15,7 +15,7 @@ ordemProducaoModel.belongsTo(produtoModel, { foreignKey: "idProduto" });
 maquinaModel.belongsTo(setorModel, {foreignKey: "idSetor"});
 
 module.exports = {
-    index: async function (req, res) {
+    index: async function (req, res, next) {
         const maquinas = await maquinaModel.findAll();
 
         res.render('lancamento/filamaquina/index', {
@@ -83,11 +83,8 @@ module.exports = {
             }
         })
 
-        return res.render('lancamento/filamaquina/index', {
-                'msg': "ORDEM CADASTRADA NA FILA COM SUCESSO",
-                'maquinas': JSON.stringify(maquinas, null),
-                'pathName': 'main'
-            });
+       //res.redirect('/ordemproducao');
+            
  
     },
     idOrdemProducaoExist: async function (id) {

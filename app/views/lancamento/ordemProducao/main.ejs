@@ -83,7 +83,7 @@
                     <% if(typeof ordemProducao !='undefined' )
                         {   var arrOrdemProducao=JSON.parse(ordemProducao);
                             var arrProducao=JSON.parse(list_apont_sum_qtd_grop_idOp);
-                            console.log(arrOrdemProducao);
+                           // console.log(arrOrdemProducao);
                             
 
                         arrOrdemProducao.forEach(ordem=>{
@@ -97,24 +97,26 @@
                             }else if(ordem.status_ordem_producao.idStatus == 8){
                                
                                  bg = "style=background-color:#E4080A"
+                            }else if(ordem.status_ordem_producao.idStatus == 2|| ordem.status_ordem_producao.idStatus == 5 || ordem.status_ordem_producao.idStatus == 4)
+                            {
+                                bg = "style=background-color:#7570FE"
                             }
                             %>
 
                             <tr id="idLinha<%=ordem.idOrdemProducao%>">
                                 <td <%=bg%>>
-                                    <% arrProducao.forEach(producaoPintura=>{
-                                        
+                                    <% 
                                         var quantidadeProduzidoPintura = 0;
-                                        
-                                        if(ordem.idOrdemProducao == producaoPintura.idOrdemProducao && producaoPintura.idSetor == 1 &&
-                                        producaoPintura.quantidade != 0)
-                                        {
-                                            quantidadeProduzidoPintura = producaoPintura.quantidade;
+                                        arrProducao.forEach(producaoPintura=>{                                 
+                                            if(ordem.idOrdemProducao == producaoPintura.idOrdemProducao && producaoPintura.idSetor == 1 &&
+                                            producaoPintura.quantidade != 0)
+                                            {
+                                                quantidadeProduzidoPintura += Number(producaoPintura.quantidade); console.log(quantidadeProduzidoPintura);
                                     %>
-                                           <input type="hidden" value="<%= quantidadeProduzidoPintura %>" id="quantidadeProduzidoPintura"> 
-                                        <%}%>
-                                    <%});%>
-                                    
+                                            <%}%>
+                                       
+                                        <%});%>
+                                                <input type="hidden" value="<%= quantidadeProduzidoPintura %>" id="quantidadeProduzidoPintura"> 
                                     <% 
                                     
                                     arrProducao.forEach(producaoSilk =>{

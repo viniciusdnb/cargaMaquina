@@ -154,8 +154,11 @@ module.exports = {
                 //e passa o valor de quantidade da lista para colocar no corpo de dados para ser
                 //calculado nas horas da carga maquina
                 arrListaPontamentos.forEach(lista => {
+                    
                     if (fila.idOrdemProducao == lista.idOrdemProducao) {
-                        quantidade = lista.quantidade;
+                        
+                        quantidade += Number(lista.quantidade);
+                        
                     }
                 });
                 //corpo

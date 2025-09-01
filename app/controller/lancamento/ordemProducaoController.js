@@ -75,12 +75,14 @@ module.exports = {
         let clientes = await clienteModel.findAll();
         let produtos = await produtoModel.findAll();
         let tipoOrdemProducao = await tipoOrdemProducaoModel.findAll();
+        let statusOrdemProducao = await status_ordem_producaoModel.findAll();
 
         res.render('lancamento/ordemproducao/index', {
             "pathName": "new",
             "clientes": JSON.stringify(clientes, null),
             "produtos": JSON.stringify(produtos, null),
-            "tipoOrdemProducao": JSON.stringify(tipoOrdemProducao, null)
+            "tipoOrdemProducao": JSON.stringify(tipoOrdemProducao, null),
+            "statusOrdemProducao": JSON.stringify(statusOrdemProducao, null)
         });
     },
     newSave: async function (req, res) {
@@ -97,7 +99,7 @@ module.exports = {
                 idProduto: req.body.idProduto,
                 idTipoOrdemProducao: req.body.idTipoOrdemProducao,
                 quantidade: req.body.quantidade,
-                idStatus: 1
+                idStatus: req.body.idStatusOrdemProducao
             });
         } catch (err) {
 

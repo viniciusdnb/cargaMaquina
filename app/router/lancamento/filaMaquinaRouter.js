@@ -7,6 +7,7 @@ filaMaquinaRouter.get('/filamaquina', function(req, res){
 })
 
 filaMaquinaRouter.post('/filamaquina/adicionar', function(req, res, next){
+    
     filaMaquinaController.insert(req, res);
     //quando for necessario nao ter resposta do servidor é só mandar o status e encerra a requisição
     res.status(204).end();

@@ -12,7 +12,7 @@ const setorModel = require('../../model/models/cadastro/setorModel');
 filaMaquinaModel.belongsTo(ordemProducaoModel, { foreignKey: "idOrdemProducao" });
 ordemProducaoModel.belongsTo(clienteModel, { foreignKey: "idCliente" });
 ordemProducaoModel.belongsTo(produtoModel, { foreignKey: "idProduto" });
-maquinaModel.belongsTo(setorModel, {foreignKey: "idSetor"});
+maquinaModel.belongsTo(setorModel, { foreignKey: "idSetor" });
 
 module.exports = {
     index: async function (req, res, next) {
@@ -24,17 +24,22 @@ module.exports = {
             'pathName': 'main'
         });
     },
-    getOrdenacao: function(ultimoLinhaMaquina)
-    {
+    getOrdenacao: function (ultimoLinhaMaquina) {
 
-       
+
         var ordenacao = JSON.parse(JSON.stringify(ultimoLinhaMaquina, null));
 
         return ordenacao != null ? JSON.parse(JSON.stringify(ultimoLinhaMaquina, null)).ordenacao + 1 : 0;
     },
     insert: async function (req, res) {
 
-        const maquinas = await maquinaModel.findAll();
+        const maquina = await maquinaModel.findAll(
+            {
+                where: { idMaquina: req.body.idMaquina },
+                include: [setorModel]
+            }
+        );
+        var arrMaquina = JSON.parse(JSON.stringify(maquina, null));
 
         //FUNCAO PARA INSERIR UMA ORDEM EM UMA FILA DE MAQUINA
 
@@ -45,9 +50,9 @@ module.exports = {
             where: { idMaquina: req.body.idMaquina, finalizado: 0 }
         });
 
-   
 
-         //adiciona mais um na sequecia de ordens ou 0 se a fila da maquina estiver vazia       
+
+        //adiciona mais um na sequecia de ordens ou 0 se a fila da maquina estiver vazia       
         var novaOrdenacao = this.getOrdenacao(ultimoLinhaMaquina);
 
         //**RESOLVER NO FUTUTO***//
@@ -67,7 +72,7 @@ module.exports = {
                 'pathName': 'main'
             });
         }*/
- 
+
         //insere na tabela da fila
         await filaMaquinaModel.create({
             idMaquina: req.body.idMaquina,
@@ -76,16 +81,27 @@ module.exports = {
             ordenacao: novaOrdenacao
         });
 
+        var idStatus = "";
+
+        arrMaquina.forEach(maq => {
+            if (maq.setor.idSetor == 1) {
+                idStatus = 2;
+            } else {
+                idStatus = 5;
+            }
+        })
+
+
         //atualiza o status da ordem de producao para em fila
-        await ordemProducaoModel.update({ idStatus: 6 }, {
+        await ordemProducaoModel.update({ idStatus: idStatus }, {
             where: {
                 idOrdemProducao: req.body.idOrdemProducao
             }
         })
 
-       //res.redirect('/ordemproducao');
-            
- 
+        //res.redirect('/ordemproducao');
+
+
     },
     idOrdemProducaoExist: async function (id) {
         //verifica se o id da ordem ja existe na fila
@@ -96,27 +112,26 @@ module.exports = {
 
     },
     verFila: async function (req, res) {
-        
+
         const maquinas = await maquinaModel.findAll();
-    
+
         //tras todas as maquinas cadastrada e verifica se é para considerar velocidade da maquina
         var maquina = await maquinaModel.findAll({
             where: { idMaquina: req.body.idMaquina },
-            include:[setorModel]
+            include: [setorModel]
         });
         maquina = JSON.parse(JSON.stringify(maquina, null));
         maquina = maquina[0];
         var idSetorMaquina = maquina.idSetor;
         var considerBPMMachine = false
-        if("considerBPMMachine" in req.body)
-        {
+        if ("considerBPMMachine" in req.body) {
             considerBPMMachine = true
         }
 
-        
+
         //var considerBPMMachine = "considerBPMMachine" in req.body ? true : false;
 
-        
+
         //tras os dados da fila
         //de acordo com a maquina da requisicao e nao finalizado
         const filaMaquina = await filaMaquinaModel.findAll({
@@ -129,8 +144,8 @@ module.exports = {
                     model: ordemProducaoModel,
                     include: [clienteModel, produtoModel]
                 }
-            ], 
-             order: [['ordenacao', 'ASC']]
+            ],
+            order: [['ordenacao', 'ASC']]
         });
         //console.log(JSON.parse(JSON.stringify(filaMaquina)));
         //verifica se tem ordem cadastrada na maquina de acordo com o id da maquina passado pela req
@@ -140,25 +155,27 @@ module.exports = {
             //tras todo os lancamentos de apontamento da ordem
             //separado por setor da maquina vindo na requisição
             const list_apont_sum_qtd_grop_idOp = await list_apont_sum_qtd_grop_idOpModelView.findAll(
-                {where:{
-                    idSetor: idSetorMaquina
-                }}
+                {
+                    where: {
+                        idSetor: idSetorMaquina
+                    }
+                }
             );
             var arrListaPontamentos = JSON.parse(JSON.stringify(list_apont_sum_qtd_grop_idOp, null));
-         
+
             var data = {};
-        
+
             arrFilaMaquina.forEach(fila => {
                 var quantidade = 0
                 //verifica se o id da ordem que esta na fila é igual ao id da lista de apontamentos
                 //e passa o valor de quantidade da lista para colocar no corpo de dados para ser
                 //calculado nas horas da carga maquina
                 arrListaPontamentos.forEach(lista => {
-                    
+
                     if (fila.idOrdemProducao == lista.idOrdemProducao) {
-                        
+
                         quantidade += Number(lista.quantidade);
-                        
+
                     }
                 });
                 //corpo
@@ -173,8 +190,8 @@ module.exports = {
                     "previsionStart": "",
                     "previsionEnd": "",
                     "idFilaMaquina": fila.idFilaMaquina,
-                    "idOrdemProducao":fila.idOrdemProducao,
-                    "idMaquina":fila.idMaquina 
+                    "idOrdemProducao": fila.idOrdemProducao,
+                    "idMaquina": fila.idMaquina
                 }
             });
 
@@ -190,34 +207,33 @@ module.exports = {
                     }
                 }
             }
-            
+
             var descMaquina = maquina.descMaquina
             //o calculo de carga maquina só funciona se passar o nome da maquina
 
             var considerarHoraInicial = false;
 
-            if("considerarHoraInicial" in req.body)
-            {
+            if ("considerarHoraInicial" in req.body) {
                 considerarHoraInicial = true
             }
 
             var prevision = new machineLoad(dataDB, configWork).getPrevision(descMaquina, considerarHoraInicial);
-            
+
             return res.render('lancamento/filamaquina/index', {
                 "pathName": "fila",
                 "prevision": prevision.queue[descMaquina].queueProducts,
                 "idMaquina": req.body.idMaquina,
-                "maquinas":  JSON.stringify(maquinas, null),
-                "maquinaAtual":maquina
+                "maquinas": JSON.stringify(maquinas, null),
+                "maquinaAtual": maquina
             });
         }
-        
-        
+
+
         res.render('lancamento/filamaquina/index', {
             'msg': "",
             'maquinas': JSON.stringify(maquinas, null),
             'pathName': 'main',
-            
+
         });
 
     },
@@ -226,7 +242,7 @@ module.exports = {
 
         //id da nova maquina
         var idNovaMaquina = req.body.idMaquina;
-        
+
         //id do lancamento da tabela 
         var idFilaMaquina = req.body.idFilaMaquina;
 
@@ -239,19 +255,19 @@ module.exports = {
         var ordem = this.getOrdenacao(ultimoLinhaMaquina);
 
         //console.log(JSON.stringify(ultimoLinhaMaquina),null);
-        
+
         //transferir a ordem de producao de maquina
         //atualiza o id da maquina,
         //atualiza a ordem de acordo com a ultima ordenacao 
         //referente ao id lancamento da tabela
         const filaMaquina = await filaMaquinaModel.update({
-                idMaquina: idNovaMaquina,
-                ordenacao: ordem 
-            },{
-                where:{
-                    idFilaMaquina: idFilaMaquina
-                }
+            idMaquina: idNovaMaquina,
+            ordenacao: ordem
+        }, {
+            where: {
+                idFilaMaquina: idFilaMaquina
             }
+        }
         );
 
         this.reeordenar(idMaquinaAntiga);
@@ -263,13 +279,13 @@ module.exports = {
             'maquinas': JSON.stringify(maquinas, null),
             'pathName': 'main'
         });
-        
+
     },
     delete: async function (req, res) {
-        
+
         console.log(req.params.idFilaMaquina);
-        try { 
-           const fimaMaquin = await filaMaquinaModel.destroy({
+        try {
+            const fimaMaquin = await filaMaquinaModel.destroy({
                 where: {
                     idFilaMaquina: req.params.idFilaMaquina
                 }
@@ -278,10 +294,10 @@ module.exports = {
             this.reeordenar(req.params.idMaquina)
 
             const ordemPorducao = ordemProducaoModel.update({
-                idStatus:3
-            },{
-                where:{
-                    idOrdemProducao:req.params.idOrdemProducao
+                idStatus: 3
+            }, {
+                where: {
+                    idOrdemProducao: req.params.idOrdemProducao
                 }
             })
 
@@ -298,7 +314,7 @@ module.exports = {
             'pathName': 'main'
         });
 
-        
+
     },
     calcule: async function (req, res) {
         console.log("Iniciando cálculo...");
@@ -344,23 +360,23 @@ module.exports = {
 
 
     },
-    finalizar: async function(req, res){
+    finalizar: async function (req, res) {
 
         //funcao que reoderna os registros da fila
 
         const idMaquina = req.params.idMaquina;
         const idFilaMaquina = req.params.idFilaMaquina;
         const idOrdemProducao = req.params.idOrdemProducao;
-       
+
         //atualiza o somente o registro passado pelo parametro
-        const updateFilaMaquina = await filaMaquinaModel.update({finalizado:1},{where:{idFilaMaquina: idFilaMaquina}});
-       
+        const updateFilaMaquina = await filaMaquinaModel.update({ finalizado: 1 }, { where: { idFilaMaquina: idFilaMaquina } });
+
         this.reeordenar(idMaquina);
 
         //criar formas de atualizar o status da ordem de acordo com o tipo de produto
         //atualiza o status da ordem de prodcuao
-        const odemProducao = await ordemProducaoModel.update({idStatus:2},{where:{idOrdemProducao:idOrdemProducao}});
-        
+        const odemProducao = await ordemProducaoModel.update({ idStatus: 2 }, { where: { idOrdemProducao: idOrdemProducao } });
+
         const maquinas = await maquinaModel.findAll();
         res.render('lancamento/filamaquina/index', {
             'msg': "",
@@ -368,25 +384,25 @@ module.exports = {
             'pathName': 'main'
         });
     },
-    reeordenar:async function(idMaquina)
-    {
+    reeordenar: async function (idMaquina) {
         //pega todos os registro da tabela com o id da maquina e o finalizado 0
-        const findAllFilaMaquina = await filaMaquinaModel.findAll({order: [['ordenacao', 'ASC']],where:{idMaquina:idMaquina,finalizado:0}});
-        
+        const findAllFilaMaquina = await filaMaquinaModel.findAll({ order: [['ordenacao', 'ASC']], where: { idMaquina: idMaquina, finalizado: 0 } });
+
         const arrFilaMaquina = JSON.parse(JSON.stringify(findAllFilaMaquina))
-        
+
         //reoderna os registro
         var ordem = 0;
-        for(item of arrFilaMaquina)
-        {
-            await filaMaquinaModel.update({ordenacao:ordem},{where:{
-                idFilaMaquina:item.idFilaMaquina,
-              
-            }});
+        for (item of arrFilaMaquina) {
+            await filaMaquinaModel.update({ ordenacao: ordem }, {
+                where: {
+                    idFilaMaquina: item.idFilaMaquina,
+
+                }
+            });
 
             //console.log(item.idFilaMaquina + " " + ordem);
             ordem++;
         }
     }
-    
+
 }

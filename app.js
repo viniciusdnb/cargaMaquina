@@ -15,7 +15,7 @@ const tipoProduto = require('./app/router/cadastro/tipoProdutoRouter');
 const ordemProducaoRouter = require('./app/router/lancamento/ordemProducaoRouter');
 const apontamentoRouter = require('./app/router/lancamento/apontamentoRouter');
 const filaMaquinaRouter = require('./app/router/lancamento/filaMaquinaRouter');
-
+const apontamentoMaquinaRouter = require('./app/router/lancamento/apontamentoMaquinaRouter');
 
 app.use(express.static('./app/public'));
 app.use(express.json());
@@ -36,6 +36,7 @@ app.use('/', tipoProduto);
 app.use('/', ordemProducaoRouter);
 app.use('/', apontamentoRouter);
 app.use('/', filaMaquinaRouter);
+app.use('/', apontamentoMaquinaRouter);
 
 app.listen(port, function(){
     console.log(`app online in http://${host}:${port}`);

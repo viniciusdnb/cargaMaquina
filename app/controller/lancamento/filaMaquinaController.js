@@ -294,7 +294,7 @@ module.exports = {
             this.reeordenar(req.params.idMaquina)
 
             const ordemPorducao = ordemProducaoModel.update({
-                idStatus: 3
+                idStatus: 1
             }, {
                 where: {
                     idOrdemProducao: req.params.idOrdemProducao
@@ -362,12 +362,49 @@ module.exports = {
     },
     finalizar: async function (req, res) {
 
-        //funcao que reoderna os registros da fila
+        //funcao que reoderna os registros da fila e altera o status da ordem de producao 
+        //de acordo com o tipo de produto
 
         const idMaquina = req.params.idMaquina;
         const idFilaMaquina = req.params.idFilaMaquina;
         const idOrdemProducao = req.params.idOrdemProducao;
 
+        //pega os dados da ordem de producao e produto de acordo com item da fila
+        var arrItemFilaMaquina = JSON.parse(JSON.stringify(
+            await filaMaquinaModel.findAll({
+                where:{idFilaMaquina: req.params.idFilaMaquina},
+                include:{
+                    model: ordemProducaoModel,
+                    include: [produtoModel]
+                }
+            })
+        ));
+
+        //pega o id do tipo do produto
+        arrItemFilaMaquina.forEach(item =>{
+             produto = item.ordem_producao.produto;
+        });
+        var idTipoProduto = produto.idTipoProduto;
+
+        //seta o status para ordem de producao de acordo com o idTipoProduto
+       switch (idTipoProduto) {
+        case 2:
+            var idStatus = 7;
+            break;
+        case 3:
+        case 4:
+        case 7:
+            var idStatus = 5;
+            break;
+        case 5:
+        case 6:
+            var idStatus = 7
+            break
+        default:
+            var idStatus = 1
+            break;
+       }
+    
         //atualiza o somente o registro passado pelo parametro
         const updateFilaMaquina = await filaMaquinaModel.update({ finalizado: 1 }, { where: { idFilaMaquina: idFilaMaquina } });
 
@@ -375,7 +412,7 @@ module.exports = {
 
         //criar formas de atualizar o status da ordem de acordo com o tipo de produto
         //atualiza o status da ordem de prodcuao
-        const odemProducao = await ordemProducaoModel.update({ idStatus: 2 }, { where: { idOrdemProducao: idOrdemProducao } });
+        const odemProducao = await ordemProducaoModel.update({ idStatus: idStatus}, { where: { idOrdemProducao: idOrdemProducao } });
 
         const maquinas = await maquinaModel.findAll();
         res.render('lancamento/filamaquina/index', {

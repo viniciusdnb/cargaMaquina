@@ -76,6 +76,13 @@ CREATE TABLE maquina(
     FOREIGN KEY (idSetor) REFERENCES setor(idSetor)
 )ENGINE=InnoDB;
 
+CREATE TABLE forno (
+	idForno INT PRIMARY KEY,
+    descricaoForno VARCHAR(50),
+    velocidadeForno INT,
+    undVelocidade VARCHAR(3)
+)ENGINE=InnoDB;
+
 CREATE TABLE operdor(
     idOperador INT PRIMARY KEY AUTO_INCREMENT,
     nomeOperador VARCHAR(100)
@@ -87,9 +94,11 @@ CREATE TABLE apontamento_cabecalho(
     idMaquina INT,
     idOrdemProducao INT,
     idOperador INT,
+    idForno INT,
     FOREIGN KEY (idMaquina) REFERENCES maquina(idMaquina),
     FOREIGN KEY (idOrdemProducao) REFERENCES ordem_producao(idOrdemProducao),
-    FOREIGN KEY (idOperador) REFERENCES operdor(idOperador)
+    FOREIGN KEY (idOperador) REFERENCES operdor(idOperador),
+    FOREIGN KEY (idForno) REFERENCES forno(idForno)
 )ENGINE=InnoDB;
 
 CREATE TABLE apontamento_detalhe(
@@ -101,8 +110,10 @@ CREATE TABLE apontamento_detalhe(
     observacoes VARCHAR(250),
     idSubMotivo INT,
     idApontCabecalho INT,
+    
     FOREIGN KEY (idSubMotivo) REFERENCES sub_motivo(idSubMotivo),
-    FOREIGN KEY (idApontCabecalho) REFERENCES apontamento_cabecalho(idApontCabecalho)
+    FOREIGN KEY (idApontCabecalho) REFERENCES apontamento_cabecalho(idApontCabecalho),
+    
 )ENGINE=InnoDB;
 
 
@@ -191,7 +202,7 @@ CREATE TABLE metas_producao_maquina(
 
 
 
-INSERT INTO `maquina` ( `descMaquina`, `idSetor`, `velocidade`, `undVelocidade`) VALUES 
+/*INSERT INTO `maquina` ( `descMaquina`, `idSetor`, `velocidade`, `undVelocidade`) VALUES 
 ( 'MS06', '2', '10', 'min'), 
 ( 'MS07', '2', '10', 'min'), 
 ( 'MS08', '2', '10', 'min'), 
@@ -201,4 +212,7 @@ INSERT INTO `maquina` ( `descMaquina`, `idSetor`, `velocidade`, `undVelocidade`)
 ( 'MS12', '2', '10', 'min'), 
 ( 'MS13', '2', '10', 'min'), 
 ( 'MS14', '2', '10', 'min'), 
-( 'MS15', '2', '10', 'min');
+( 'MS15', '2', '10', 'min');*/
+
+
+-- ALTER TABLE apontamento_cabecalho ADD CONSTRAINT apontamento_cabecalho_ibfk_4 FOREIGN KEY (idForno) REFERENCES forno(idForno);

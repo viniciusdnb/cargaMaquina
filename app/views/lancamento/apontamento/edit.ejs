@@ -35,6 +35,18 @@
                         <%}); %>
                 </select>
             </div>
+             <div class="col-md-4">
+                <label class="form-label">FORNO</label>
+                <select id="selectForno" name="idForno">
+                    <option value=""></option>
+                    <% var arrForno=JSON.parse(fornos); arrForno.forEach(forno=>{%>
+                        <option <%=apontamento.idForno==forno.idForno? "selected" : "" %>
+                            value="<%=forno.idForno%>">
+                                <%=forno.descricaoForno%>
+                        </option>
+                        <%}); %>
+                </select>
+            </div>
             <div class="col-md-4">
                 <label class="form-label">LOTE</label>
                 <select id="selectOrdem" name="idOrdemProducao">
@@ -151,6 +163,15 @@
             field: "text"
         }
     });
+
+    new TomSelect("#selectForno", {
+        allowEmptyOption: true,
+        sortField: {
+            field: "text"
+        }
+    });
+
+    
 
 
 

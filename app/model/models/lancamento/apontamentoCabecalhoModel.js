@@ -21,6 +21,9 @@ const apontamentoCabecalho = connect.define(
         idOperador:{
             type: DataTypes.INTEGER
         },
+        idForno:{
+            type: DataTypes.INTEGER
+        }
     },
     {
         timestamps: false,

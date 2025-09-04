@@ -6,7 +6,7 @@ const subMotivoModel = require('../../model/models/cadastro/subMotivoModel');
 const apontamentoCabecalhoModel = require('../../model/models/lancamento/apontamentoCabecalhoModel');
 const apontamentoDetalheModel = require("../../model/models/lancamento/apontamentoDetalheModel");
 const listaApontamentosModelView = require("../../model/models/lancamento/listaApontamentosModelView");
-
+const fornoModel = require("../../model/models/cadastro/fornoModel");
 
 listaApontamentosModelView.belongsTo(maquinaModel, { foreignKey: "idMaquina" });
 
@@ -31,6 +31,7 @@ module.exports = {
         const ordemProducao = await ordemProducaoModel.findAll();
         const operadores = await operadorModel.findAll();
         const subMotivos = await subMotivoModel.findAll()
+        const fornos = await fornoModel.findAll();
         res.render('lancamento/apontamento/index', {
             "pathName": "edit",
             "apontamentoOrdemProducaoCabecalho": JSON.stringify(apontamentoCabecalho, null),
@@ -38,7 +39,8 @@ module.exports = {
             "maquinas": JSON.stringify(maquinas, null),
             "ordemProducao": JSON.stringify(ordemProducao, null),
             "operadores": JSON.stringify(operadores, null),
-            "subMotivos": JSON.stringify(subMotivos, null)
+            "subMotivos": JSON.stringify(subMotivos, null),
+            "fornos": JSON.stringify(fornos, null)
         });
     },
     update: async function (req, res) {
@@ -49,7 +51,8 @@ module.exports = {
                 data: req.body.data,
                 idMaquina: req.body.idMaquina,
                 idOrdemProducao: req.body.idOrdemProducao,
-                idOperador: req.body.idOperador
+                idOperador: req.body.idOperador,
+                idForno: req.body.idForno
             },
                 { where: { idApontCabecalho: req.body.idApontCabecalho } });
 
@@ -78,12 +81,15 @@ module.exports = {
         const ordemProducao = await ordemProducaoModel.findAll();
         const operadores = await operadorModel.findAll();
         const subMotivos = await subMotivoModel.findAll();
+        const fornos = await fornoModel.findAll();
+
         res.render('lancamento/apontamento/index', {
             "pathName": "new",
             "maquinas": JSON.stringify(maquinas, null),
             "ordemProducao": JSON.stringify(ordemProducao, null),
             "operadores": JSON.stringify(operadores, null),
-            "subMotivos": JSON.stringify(subMotivos, null)
+            "subMotivos": JSON.stringify(subMotivos, null),
+            "fornos": JSON.stringify(fornos, null)
         });
     },
     newSave: async function (req, res) {
@@ -99,7 +105,8 @@ module.exports = {
                 data: req.body.data,
                 idMaquina: req.body.idMaquina,
                 idOrdemProducao: req.body.idOrdemProducao,
-                idOperador: req.body.idOperador
+                idOperador: req.body.idOperador,
+                idForno: req.body.idForno
             }
             //pegar o id da inclusao do cabecalho do formulario
             const apontamentoCabecalho = await apontamentoCabecalhoModel.create(cabecalho);

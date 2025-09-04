@@ -14,8 +14,14 @@ filaMaquinaRouter.post('/filamaquina/adicionar', function(req, res, next){
 });
 
 filaMaquinaRouter.post('/filamaquina/verfila', function(req, res){
+  
+        if(Object.keys(req.body).length===0)
+        {
+                res.redirect('/filamaquina').end();
+        }
+        filaMaquinaController.verFila(req, res);
     
-    filaMaquinaController.verFila(req, res);
+    
 });
 
 filaMaquinaRouter.post('/filamaquina/transferir', function(req, res){    

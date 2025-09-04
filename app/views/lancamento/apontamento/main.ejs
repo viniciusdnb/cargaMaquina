@@ -10,10 +10,9 @@
     </nav>
     <nav class="navbar bg-body-tertiary">
         <div class="container-fluid">
-            <form class="d-flex" role="search">
-                <input class="form-control me-2" type="search" placeholder="procurar ordem " aria-label="Search" />
-                <button class="btn btn-outline-success" type="submit">PROCURAR</button>
-            </form>
+            <label class="form-label">PESQUISAR</label>
+            <input class="form-control me-2" type="search" placeholder="procurar" id="filtroGlobal" />
+                
         </div>
     </nav>
 </div>
@@ -25,19 +24,19 @@
             <%= msg %>
         </div>
         <% } %>
-            <table class="table">
+            <table id="tabelaApontamentos" class="table">
                 <thead class="table-dark">
                     <tr>
-                        <th>#</th>
-                        <th>DATA</th>
-                        <th>CLIENTE</th>
-                        <th>PRODUTO</th>
-                        <th>NUMERO ORDEM</th>
-                        <th>LOTE</th>
-                        <th>QUANTIDADE</th>
-                        <th>OPERADOR</th>
-                        <th>MAQUINA</th>
-                        <th>OPÇOES</th>
+                        <th data-tipo="numero">#</th>
+                        <th data-tipo="data">DATA</th>
+                        <th data-tipo="texto">CLIENTE</th>
+                        <th data-tipo="texto">PRODUTO</th>
+                        <th data-tipo="texto">NUMERO ORDEM</th>
+                        <th data-tipo="texto">LOTE</th>
+                        <th data-tipo="numero">QUANTIDADE</th>
+                        <th data-tipo="texto">OPERADOR</th>
+                        <th data-tipo="texto">MAQUINA</th>
+                        <th data-tipo="texto">OPÇOES</th>
                      
                     </tr>
                 </thead>
@@ -93,4 +92,18 @@
             </table>
 </main>
 
+<script>
+    $("#filtroGlobal").on("keyup", function(){
+        const termo = $(this).val().toLowerCase();
+        $("#tabelaApontamentos tbody tr").each(function(){
+            const linha = $(this);
+            const textoLinha = linha.text().toLowerCase();
+            linha.toggle(textoLinha.includes(termo));
+        });
+    });
+
+
+</script>
+
 <%- include('../../layout/modals/modalDelete') %>
+

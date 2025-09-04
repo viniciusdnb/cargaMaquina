@@ -9,6 +9,7 @@ const configWork = require('../../model/machineLoadModel/configWork');
 const setorModel = require('../../model/models/cadastro/setorModel');
 
 
+
 filaMaquinaModel.belongsTo(ordemProducaoModel, { foreignKey: "idOrdemProducao" });
 ordemProducaoModel.belongsTo(clienteModel, { foreignKey: "idCliente" });
 ordemProducaoModel.belongsTo(produtoModel, { foreignKey: "idProduto" });
@@ -321,7 +322,7 @@ module.exports = {
         const dataform = req.body;
         const idMaquina = dataform.idMaquina
         const ordens = dataform.ordem
-
+        this.alterarStatusOrdemproducao(ordens);
         console.log("Ordens recebidas:", ordens);
 
         try {
@@ -338,11 +339,7 @@ module.exports = {
                     }
                 );
             }
-
-
             console.log("Buscando máquinas...");
-
-
 
             const maquinas = await maquinaModel.findAll();
 
@@ -357,8 +354,32 @@ module.exports = {
             console.error("Erro ao atualizar fila:", error);
             return res.status(500).send("Erro interno ao processar a requisição.");
         }
-
-
+    },
+    alterarStatusOrdemproducao: async function(fila)
+    {
+        //funcao para alterar o status dinamicamente quando recalcular o a fila
+        //de acordo com o setor da maquina
+        //pegar ordem de producao de acordo com o item na fila
+        //verificar o setor da maquina
+        //a ordem de producao que estiver na posicao 0 da fila
+        //recebe o status em pintando ou gravando
+        //as demais ordens recebe o status em fila pintura ou em fila gravacao
+       for(const item of fila)
+        {
+            /*var arrItemFila = JSON.parse(JSON.stringify(await filaMaquinaModel.findAll({
+                where:{idFilaMaquina:item.idFilaMaquina}
+               
+            }),null))
+            arrItemFila.forEach(ordem =>{
+                if(item.ordem != 0)
+                    {
+                       await ordemProducaoModel.update({idStatus:2},
+                        {where:{idOrdemProducao: ordem.idOrdemProducao}})
+                    }
+                
+            })*/
+            
+        }
     },
     finalizar: async function (req, res) {
 

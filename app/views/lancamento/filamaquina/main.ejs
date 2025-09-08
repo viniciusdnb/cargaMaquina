@@ -10,61 +10,84 @@
 <main class="container">
     <form action="/filamaquina/verfila" method="post" class="row g-3">
         <div class="row">
-             <div class="form-check form-switch col-sm">
-                <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault"  name="considerarHoraInicial">
+            <div class="form-check form-switch col-sm">
+                <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault"
+                    name="considerarHoraInicial">
                 <label class="form-check-label" for="switchCheckDefault">CONSIDERAR HORA INICIAL 07:12</label>
+
             </div>
-<style>
-    
-    .form-check-input[type=radio]
-    {
-            border-radius: 5px;
-            width: 70%;           
-            height: 100%;
-            border: 1px solid black;
-            cursor: pointer;
-    }
-</style>
-        <div class="container-fluid text-center">
-            <div class="row">
-           <% var arrMaquinas=JSON.parse(maquinas); arrMaquinas.forEach(maquina=>{%>
-                <div class="form-check box col-md-2 g-5">
-                    <input class="form-check-input" type="radio" name="idMaquina" id="radioDefault2" value=" <%=maquina.idMaquina%>">
-                    <label class="form-check-label" for="radioDefault2">
-                            <%=maquina.descMaquina%>    
-                    </label>
+
+            <style>
+                .form-check-input[type=radio] {
+                    border-radius: 5px;
+                    width: 70%;
+                    height: 100%;
+                    border: 1px solid black;
+                    cursor: pointer;
+                }
+            </style>
+            <div class="container-fluid text-center g-3">
+                <div class="row ">
+                    <h3>Maquinas da pintura</h3>
                 </div>
-            <% }) %>
+                <div class="row g-3">
+                    <% var arrMaquinas=JSON.parse(maquinas); arrMaquinas.forEach(maquina=>{%>
+                        <% if(maquina.setor.idSetor==1){ %>
+                            <div class="form-check box col-md-2 g-5">
+                                <input class="form-check-input" type="radio" name="idMaquina" id="radioDefault2"
+                                    value=" <%=maquina.idMaquina%>">
+                                <label class="form-check-label" for="radioDefault2">
+                                    <%=maquina.descMaquina%>
+                                </label>
+                            </div>
+                            <%}%>
+                                <% }) %>
+                </div>
             </div>
-        </div>
+            <br>
+            <div class="container-fluid text-center g-3">
+                <div class="row ">
+                    <h3>Maquinas da gravação</h3>
+                </div>
+                <div class="row g-3">
+                    <% arrMaquinas.forEach(maquina=>{%>
+                        <% if(maquina.setor.idSetor==2){ %>
+                            <div class="form-check box col-md-2 g-5">
+                                <input class="form-check-input" type="radio" name="idMaquina" id="radioDefault2"
+                                    value=" <%=maquina.idMaquina%>">
+                                <label class="form-check-label" for="radioDefault2">
+                                    <%=maquina.descMaquina%>
+                                </label>
+                            </div>
+                            <%}%>
+                                <% }) %>
+                </div>
+            </div>
 
 
 
 
-           <!--<select class="col" id="selectMaquina" name="idMaquina">-->
-                <% //var arrMaquinas=JSON.parse(maquinas); arrMaquinas.forEach(maquina=>{%>
-                    <!--<option value="<%=//maquina.idMaquina%>">-->
-                        <%//=maquina.descMaquina%>
+
+
+            <!--<select class="col" id="selectMaquina" name="idMaquina">-->
+            <% //var arrMaquinas=JSON.parse(maquinas); arrMaquinas.forEach(maquina=>{%>
+                <!--<option value="<%=//maquina.idMaquina%>">-->
+                <% //=maquina.descMaquina%>
                     <!--</option>-->
                     <% //}) %>
-            <!--</select>-->
+                        <!--</select>-->
         </div>
 
         <div class=" row g-4">
             <div class="col text-center">
-                <input type="submit" class="btn btn-success" value="VER FILA"> 
+                <input type="submit" class="btn btn-success" value="VER FILA">
             </div>
-           
+
         </div>
 
     </form>
 </main>
 
 <script>
-    new TomSelect("#selectMaquina", {
-        allowEmptyOption: true,
-        sortField: {
-            field: "text"
-        }
-    });
+   
 </script>

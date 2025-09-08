@@ -17,7 +17,9 @@ maquinaModel.belongsTo(setorModel, { foreignKey: "idSetor" });
 
 module.exports = {
     index: async function (req, res, next) {
-        const maquinas = await maquinaModel.findAll();
+        const maquinas = await maquinaModel.findAll(
+            {include:[setorModel]}
+        );
 
         res.render('lancamento/filamaquina/index', {
             'msg': "",

@@ -202,17 +202,15 @@ CREATE TABLE metas_producao_maquina(
 
 
 
-/*INSERT INTO `maquina` ( `descMaquina`, `idSetor`, `velocidade`, `undVelocidade`) VALUES 
-( 'MS06', '2', '10', 'min'), 
-( 'MS07', '2', '10', 'min'), 
-( 'MS08', '2', '10', 'min'), 
-( 'MS09', '2', '10', 'min'), 
-( 'MS10', '2', '10', 'min'), 
-( 'MS11', '2', '10', 'min'), 
-( 'MS12', '2', '10', 'min'), 
-( 'MS13', '2', '10', 'min'), 
-( 'MS14', '2', '10', 'min'), 
-( 'MS15', '2', '10', 'min');*/
+CREATE TABLE tipo_dispositivo (
+    idTipoDispositivo INT PRIMARY KEY AUTO_INCREMENT,
+    descDispositivo VARCHAR(50)
+);
 
-
--- ALTER TABLE apontamento_cabecalho ADD CONSTRAINT apontamento_cabecalho_ibfk_4 FOREIGN KEY (idForno) REFERENCES forno(idForno);
+CREATE TABLE tipo_dispositivo_produto(
+    idTipoDispositivoProduto INT PRIMARY KEY AUTO_INCREMENT,
+    idProduto INT,
+    idTipoDispositivo INT,
+    FOREIGN KEY (idProduto) REFERENCES produto(idProduto),
+    FOREIGN KEY (idTipoDispositivo) REFERENCES tipo_dispositivo(idTipoDispositivo)
+);

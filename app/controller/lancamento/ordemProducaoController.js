@@ -18,7 +18,14 @@ module.exports = {
         const ordemProducao = await ordemProducaoModel.findAll({
             order: [["numeroOrdemProducao", "ASC"]],
             //includes com relacionamentos de segundo nivel e teceiro nivel
-            include: [clienteModel, {model:produtoModel,include:[{model:tipoProdutoModel}]}, tipoOrdemProducaoModel, status_ordem_producaoModel]
+            include: [clienteModel, 
+                {
+                    model:produtoModel,
+                    include:[{model:tipoProdutoModel}]
+                }, 
+                tipoOrdemProducaoModel,
+                status_ordem_producaoModel
+                ]
         });
         const list_apont_sum_qtd_grop_idOp = await list_apont_sum_qtd_grop_idOpModelView.findAll();
         

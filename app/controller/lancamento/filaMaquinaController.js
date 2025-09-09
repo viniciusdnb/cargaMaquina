@@ -116,7 +116,7 @@ module.exports = {
     },
     verFila: async function (req, res) {
 
-        const maquinas = await maquinaModel.findAll();
+        const maquinas = await maquinaModel.findAll({include: [setorModel]});
 
         //tras todas as maquinas cadastrada e verifica se é para considerar velocidade da maquina
         var maquina = await maquinaModel.findAll({
@@ -291,12 +291,13 @@ module.exports = {
             const fimaMaquin = await filaMaquinaModel.destroy({
                 where: {
                     idFilaMaquina: req.params.idFilaMaquina
-                }
+                },
+                include:[setorModel]
             });
 
             this.reeordenar(req.params.idMaquina)
 
-            const ordemPorducao = ordemProducaoModel.update({
+            const ordemPorducao = await ordemProducaoModel.update({
                 idStatus: 1
             }, {
                 where: {
@@ -437,7 +438,7 @@ module.exports = {
         //atualiza o status da ordem de prodcuao
         const odemProducao = await ordemProducaoModel.update({ idStatus: idStatus}, { where: { idOrdemProducao: idOrdemProducao } });
 
-        const maquinas = await maquinaModel.findAll();
+        const maquinas = await maquinaModel.findAll( {include:[setorModel]});
         res.render('lancamento/filamaquina/index', {
             'msg': "",
             'maquinas': JSON.stringify(maquinas, null),

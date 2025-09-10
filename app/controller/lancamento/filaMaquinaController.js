@@ -254,6 +254,7 @@ module.exports = {
         var ultimoLinhaMaquina = await filaMaquinaModel.findOne({
             order: [['ordenacao', 'DESC']],
             where: { idMaquina: idNovaMaquina, finalizado: 0 }
+           
         });
         var ordem = this.getOrdenacao(ultimoLinhaMaquina);
 
@@ -275,7 +276,7 @@ module.exports = {
 
         this.reeordenar(idMaquinaAntiga);
 
-        const maquinas = await maquinaModel.findAll();
+        const maquinas = await maquinaModel.findAll({ include:[setorModel]});
 
         res.render('lancamento/filamaquina/index', {
             'msg': "",

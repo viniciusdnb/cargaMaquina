@@ -20,7 +20,7 @@ class MachineLoad
         let lunchBreak = this.verifyLanchBreak();
         //INCLUIR TEMPO DE SETUP
         //converte os minutos para inteiro de timestamp
-        return (minutesRemainig) * 60 * 1000;
+        return (minutesRemainig + 60) * 60 * 1000;
         
     }
 

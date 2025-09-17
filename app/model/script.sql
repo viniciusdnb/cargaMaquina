@@ -211,6 +211,11 @@ CREATE TABLE tipo_dispositivo_produto(
     idTipoDispositivoProduto INT PRIMARY KEY AUTO_INCREMENT,
     idProduto INT,
     idTipoDispositivo INT,
+    idSetor INT,
     FOREIGN KEY (idProduto) REFERENCES produto(idProduto),
-    FOREIGN KEY (idTipoDispositivo) REFERENCES tipo_dispositivo(idTipoDispositivo)
+    FOREIGN KEY (idTipoDispositivo) REFERENCES tipo_dispositivo(idTipoDispositivo),
+    FOREIGN KEY (idSetor) REFERENCES setor(idSetor)
 );
+
+ALTER TABLE tipo_dispositivo_produto ADD COLUMN idSetor INT;
+ALTER TABLE tipo_dispositivo_produto ADD CONSTRAINT tipo_dispositivo_produto_ibfk_3 FOREIGN KEY  (idSetor) REFERENCES setor(idSetor);

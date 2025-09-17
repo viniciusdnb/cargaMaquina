@@ -1,6 +1,7 @@
 const { Sequelize } = require('sequelize');
 const produtoModel = require('../../model/models/cadastro/produtoModel');
 const tipoProdutoModel = require('../../model/models/cadastro/tipoProdutoModel');
+const tipoDispositivoModel = require('../../model/models/lancamento/tipoDispositivoProduto');
 
 produtoModel.belongsTo(tipoProdutoModel, { foreignKey: 'idTipoProduto' })
 
@@ -45,9 +46,11 @@ module.exports = {
     },
     new: async function (req, res) {
         const tipoProdutos = await tipoProdutoModel.findAll();
+        const tipoDispositivos = await tipoDispositivoModel.findAll();
         res.render('cadastro/produto/index', {
             "pathName": 'new',
-            "tipoProdutos": JSON.stringify(tipoProdutos, null)
+            "tipoProdutos": JSON.stringify(tipoProdutos, null),
+            "tipoDispositivos": JSON.stringify(tipoDispositivos, null)
         })
     },
     newSave: async function (req, res) {

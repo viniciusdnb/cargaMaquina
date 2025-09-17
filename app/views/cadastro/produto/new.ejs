@@ -12,25 +12,39 @@
 <main class="container">
     <% 
         var arrTipoProdutos = JSON.parse(tipoProdutos);
+        var arrTipoDispositivo = JSON.parse(tipoDispositivos)
         %>
 
-        <form action="/produto/novo/salvar" method="post" class="row g3">
+        <form action="/produto/novo/salvar" method="post" class="row g-3">
              
-            <div class="col">
+            <div class="col-md-4">
                 <label class="form-label">DESCRIÇÃO PRODUTO</label>
                 <input type="text" class="form-control"  name="descProduto">
             </div>
-            <div class="col">
+            <div class="col-md-4">
                 <label class="form-label">CODIGO OMIE</label>
                 <input type="text" class="form-control" name="codigoOmei">
             </div>
-             <div class="col">
+             <div class="col-md-4">
                 <label class="form-label">TIPO PRODUTO</label>
                 <select class="form-select" name="idTipoProduto">
                    <% arrTipoProdutos.forEach(tipoProduto=>{%>
-                        <option
-                       
+                        <option                       
                         value="<%= tipoProduto.idTipoProduto%>"><%= tipoProduto.descTipoProduto %></option>
+                   <%}) %>
+                </select>
+            </div>
+
+            <div class="col-md-12 g-3 text-center">
+                <h3>Dados de engenharia</h3>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label">DISPOSITIVO</label>
+                <select class="form-select" name="idTipoDispositivo">
+                   <% arrTipoDispositivo.forEach(dispositivo=>{%>
+                        <option                       
+                        value="<%= dispositivo.idTipoDispositivo%>"><%= dispositivo.descDispositivo %></option>
                    <%}) %>
                 </select>
             </div>

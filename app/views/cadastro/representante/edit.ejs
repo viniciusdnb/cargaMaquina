@@ -1,0 +1,37 @@
+<div class="container text-center">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">INICIO</a></li>
+            <li class="breadcrumb-item"><a href="/representante">LISTA DE REPRESENTANTE</a></li>
+            <li class="breadcrumb-item"><a>EDITAR REPRESENTANTE</a></li>
+            <li class="breadcrumb-item"><a href="/representante/adicionar">NOVO REPRESENTANTE <img src="img/add-24.png" alt=""></a>
+            </li>
+        </ol>
+    </nav>
+</div>
+<main class="container">
+    <% var arrRepresentante=JSON.parse(data);
+         arrRepresentante.forEach(el=> {
+            representante = el;
+        });
+
+        %>
+        <form action="/representante/editar/salvar" method="post" class="row g-3">
+            <input type="hidden" value="<%=representante.idRepresentante%>" name="idRepresentante">
+            
+                <div class="col">
+                    <label class="form-label">NOME CLIENTE</label>
+                    <input type="text" class="form-control" value="<%=representante.nomeRepresentante%>" name="nomeRepresentante">
+                </div>
+                <div class="row g-3">
+                    <div class="col-1">
+                         <input type="submit" class="btn btn-success" value="SALVAR">
+                    </div>
+                    <div class="col-1">
+                         <a class="btn btn-secondary" href="/representante" >CANCELAR</a>
+                    </div>                   
+                </div>
+            
+        </form>
+
+</main>

@@ -1,0 +1,54 @@
+<div class="container text-center">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">INICIO</a></li>
+            <li class="breadcrumb-item"><a>LISTA DE REPRESENTANTES</a></li>
+            <li class="breadcrumb-item"><a href="/representante/adicionar">NOVO REPRESENTANTE <img src="/img/add-24.png" alt=""></a>
+            </li>
+        </ol>
+    </nav>
+</div>
+
+
+<main class="container">
+
+
+    <% if(msg != null && typeof msg != 'undefined'){%>
+        <div class="alert alert-success" role="alert">
+            <%= msg %>
+        </div>
+        <% } %>
+            <table class="table">
+                <thead class="table-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>REPRESENTANTES</th>
+                        <th>OPÇÕES</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if(typeof data !='undefined' ){ var representantes=JSON.parse(data); representantes.forEach(representante=>{%>
+                        <tr>
+                            <td>
+                                <%=representante.idRepresentante %>
+                            </td>
+                            <td>
+                                <%=representante.nomeRepresentante %>
+                            </td>
+                            <td>
+                                <a href="/representante/editar/<%= representante.idRepresentante %>">
+                                    <img src="/img/edit-24.png" alt="">
+                                </a>|
+                                <a id="delete" onclick='perguntar("<%= representante.idRepresentante %>", "<%= representante.nomeRepresentante %>","representante")' data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                                    href="<%= representante.idRepresentante %>">
+                                    <img src="/img/trash-24.png" alt="">
+                                </a>
+                            </td>
+                        </tr>
+                        <%}) }%>
+
+                </tbody>
+            </table>
+</main>
+
+<%- include('../../layout/modals/modalDelete') %>

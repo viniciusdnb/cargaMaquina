@@ -1,0 +1,31 @@
+<div class="container text-center">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">INICIO</a></li>
+            <li class="breadcrumb-item"><a href="/representante">LISTA DE REPRESENTANTE</a></li>
+            <li class="breadcrumb-item"><a>NOVO REPRESENTANTE</a>
+            </li>
+        </ol>
+    </nav>
+</div>
+<main class="container">
+
+        <form action="/representante/novo/salvar" method="post" class="row g-3">
+           
+            
+                <div class="col">
+                    <label class="form-label">NOME REPRESENTANTE</label>
+                    <input type="text" class="form-control" name="nomeRepresentante">
+                </div>
+                <div class="row g-3">
+                    <div class="col-1">
+                         <input type="submit" class="btn btn-success" required value="SALVAR">
+                    </div>
+                    <div class="col-1">
+                         <a class="btn btn-secondary" href="/representante" >CANCELAR</a>
+                    </div>                   
+                </div>
+            
+        </form>
+
+</main>

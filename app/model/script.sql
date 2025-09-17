@@ -189,7 +189,7 @@ CREATE TABLE fila_maquina (
     ordenacao INT,
     FOREIGN KEY (idOrdemProducao) REFERENCES ordem_producao(idOrdemProducao),
     FOREIGN key (idMaquina) REFERENCES maquina(idMaquina)
-);
+)ENGINE=InnoDB;
 
 CREATE TABLE metas_producao_maquina(
 	idMetasProducaoMaquina INT PRIMARY KEY AUTO_INCREMENT,
@@ -198,14 +198,14 @@ CREATE TABLE metas_producao_maquina(
     meta INT,
     maximo INT,
     FOREIGN KEY (idMaquina) REFERENCES maquina(idMaquina)
-);
+)ENGINE=InnoDB;
 
 
 
 CREATE TABLE tipo_dispositivo (
     idTipoDispositivo INT PRIMARY KEY AUTO_INCREMENT,
     descDispositivo VARCHAR(50)
-);
+)ENGINE=InnoDB;
 
 CREATE TABLE tipo_dispositivo_produto(
     idTipoDispositivoProduto INT PRIMARY KEY AUTO_INCREMENT,
@@ -215,7 +215,30 @@ CREATE TABLE tipo_dispositivo_produto(
     FOREIGN KEY (idProduto) REFERENCES produto(idProduto),
     FOREIGN KEY (idTipoDispositivo) REFERENCES tipo_dispositivo(idTipoDispositivo),
     FOREIGN KEY (idSetor) REFERENCES setor(idSetor)
-);
+)ENGINE=InnoDB;
+
+CREATE TABLE representante(
+    idRepresentante INT PRIMARY KEY AUTO_INCREMENT,
+    nomeRepresentante VARCHAR(50)
+)ENGINE=InnoDB;
+
+
+CREATE TABLE amostra_cabecalho(
+    idAmostraCabecalho INT PRIMARY KEY AUTO_INCREMENT,
+    dataSolicitacao DATE,
+    dataEntrega DATE,
+    dataAporvacao DATE,
+    idRepresentante INT
+    idCliente INT,
+    idProduto INT,
+    padraoFisico BOOLEAN,
+    padraoPantone BOOLEAN,
+    aprovacao BOOLEAN,
+    FOREIGN KEY (idProduto) REFERENCES produto(idProduto),
+    FOREIGN KEY (idCliente) REFERENCES cliente(idCliente),
+    FOREIGN KEY (idRepesentante) REFERENCES representante (idRepesentante) 
+)ENGINE=InnoDB;
+
 
 ALTER TABLE tipo_dispositivo_produto ADD COLUMN idSetor INT;
 ALTER TABLE tipo_dispositivo_produto ADD CONSTRAINT tipo_dispositivo_produto_ibfk_3 FOREIGN KEY  (idSetor) REFERENCES setor(idSetor);

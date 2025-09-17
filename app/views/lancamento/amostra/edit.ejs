@@ -1,0 +1,157 @@
+<div class="container text-center">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">INICIO</a></li>
+            <li class="breadcrumb-item"><a href="/amostra">LISTA DE AMOSTRA</a></li>
+             <li class="breadcrumb-item">EDITAR AMOSTRA</li>
+            <li class="breadcrumb-item"><a href="/amostra/adicionar">NOVO AMOSTRAS <img src="/img/add-24.png" alt=""></a>
+            </li>
+        </ol>
+    </nav>
+    
+</div>
+<style>
+    .mouse {
+        cursor: pointer;
+    }
+</style>
+<main class="container">
+    <div class="row  col-md-4">
+       <input type="submit" class="btn btn-warning" required value="VINCULAR OU ATUALIZAR AO PRODUTO"> 
+    </div>
+    
+    <div class="row">
+           <form action="/amostra/novo/salvar" method="post" class="row g-3">
+
+
+        <div class="col-md-2">
+            <label class="form-label">DATA SOLICITAÇÃO</label>
+            <input type="date" class="form-control" name="dataSolicitacao">
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">SOLICITANTE</label>
+            <select id="selectRepresentante" name="idRepresentantes" required>
+                <option value=""></option>
+                <% var arrRepresentante=JSON.parse(representantes); arrRepresentante.forEach(representante=>{%>
+                    <option value="<%=representante.idRepresentante%>">
+                        <%=representante.nomeRepresentante%>
+                    </option>
+                    <%}); %>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label class="form-label">CLIENTE</label>
+            <select id="selectClient" name="idCliente" required>
+                <option value=""></option>
+                <% var arrClientes=JSON.parse(clientes); arrClientes.forEach(cliente=>{%>
+                    <option value="<%=cliente.idCliente%>">
+                        <%=cliente.nomeCliente%>
+                    </option>
+                    <%}); %>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">PRODUTO</label>
+            <select id="produtoSelect" name="idProduto" required>
+                <option value=""></option>
+                <% var arrProduto=JSON.parse(produtos); arrProduto.forEach(produto=>{%>
+                    <option value="<%=produto.idProduto%>">
+                        <%=produto.descProduto%>
+                    </option>
+                    <%}); %>
+            </select>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label class="form-label">TIPO AMOSTRA</label>
+                            <select id="tipoAmostraSelect" name="idTipoAmostra" required>
+                                <option value=""></option>
+                                <% var arrTipoAmostras=JSON.parse(tipoAmostras); arrTipoAmostras.forEach(tipoAmostra=>{%>
+                                    <option value="<%=tipoAmostra.idTipoAmostra%>">
+                                        <%=tipoAmostra.descricaoTipoAmostra%>
+                                    </option>
+                                    <%}); %>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">DATA APROVAÇÃO</label>
+                            <input type="date" class="form-control" name="dataSolicitacao">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">DATA ENTREGA</label>
+                            <input type="date" class="form-control" name="dataSolicitacao">
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">STATUS DA AMOSTRA</label>
+                            <select id="statusAmostraSelect" name="idStatusAmostra" required>
+                                <option value=""></option>
+                                <% var arrStatusAmostra=JSON.parse(statusAmostra); arrStatusAmostra.forEach(status=>{%>
+                                    <option value="<%=status.idStatusAmostra%>">
+                                        <%=status.descricaoStatusAmostra%>
+                                    </option>
+                                    <%}); %>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">OBSERVAÇÕES</label>
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+            </div>
+        </div>
+        <h3>EM BREVE FORMULAÇÃO</h3>
+        <div class="row g-3">
+            <div class="col-1">
+                <input type="submit" class="btn btn-success" required value="SALVAR">
+            </div>
+            <div class="col-1">
+                <a class="btn btn-secondary" href="/amostra">CANCELAR</a>
+            </div>
+        </div>
+
+    </form> 
+    </div>
+
+
+</main>
+
+<script>
+    new TomSelect("#selectRepresentante", {
+        allowEmptyOption: true,
+        sortField: {
+            field: "text"
+        }
+    })
+    new TomSelect("#selectClient", {
+        allowEmptyOption: true,
+        sortField: {
+            field: "text"
+        }
+    });
+    new TomSelect("#produtoSelect", {
+        allowEmptyOption: true,
+        sortField: {
+            field: "text"
+        }
+    });
+
+    new TomSelect("#statusAmostraSelect",{
+        allowEmptyOption: true,
+        sortField: {
+            field: "text"
+        }
+    });
+
+    new TomSelect("#tipoAmostraSelect",{
+        allowEmptyOption: true,
+        sortField: {
+            field: "text"
+        }
+    })
+</script>

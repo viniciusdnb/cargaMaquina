@@ -1,0 +1,56 @@
+<div class="container text-center">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">INICIO</a></li>
+            <li class="breadcrumb-item"><a>LISTA DE AMOSTRAS</a></li>
+            <li class="breadcrumb-item"><a href="/amostra/adicionar">NOVO AMOSTRAS <img src="/img/add-24.png" alt=""></a>
+            </li>
+        </ol>
+    </nav>
+</div>
+
+
+<main class="container-fluid">
+
+            <table class="table">
+                <thead class="table-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>DT PEDIDO</th>
+                        <th>SOLICITANTE</th>
+                        <th>CLIENTE</th>
+                        <th>PRODUTO</th>
+                        <th>TIPO</th>                        
+                        <th>STATUS</th>
+                        <th>DT APROVADO</th>
+                        <th>DT ENTREGA</th>
+                         <th>OPCOES</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if(typeof data !='undefined' ){ var amostras=JSON.parse(data); amostras.forEach(amostra=>{%>
+                        <tr>
+                            <td>
+                               
+                            </td> 
+                            <td>
+                               
+                            </td>
+                         
+                            <td>
+                                <a href="/amostra/editar/<%= cliente.idAmostraCabecalho %>">
+                                    <img src="/img/edit-24.png" alt="">
+                                </a>|
+                                <a id="delete" onclick='perguntar("<%= amostra.idAmostraCabecalho %>", "<%= %>","amostra")' data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                                    href="<%= amostra.idAmostraCabecalho %>">
+                                    <img src="/img/trash-24.png" alt="">
+                                </a>
+                            </td>
+                        </tr>
+                        <%}) }%>
+
+                </tbody>
+            </table>
+</main>
+
+<%- include('../../layout/modals/modalDelete') %>

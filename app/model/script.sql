@@ -222,21 +222,32 @@ CREATE TABLE representante(
     nomeRepresentante VARCHAR(50)
 )ENGINE=InnoDB;
 
+CREATE TABLE status_amostra(
+    idStatusAmostra INT PRIMARY KEY AUTO_INCREMENT,
+    descricaoStatusAmostra VARCHAR(20)
+)ENGINE=InnoDB;
+
+CREATE TABLE tipo_amostra(
+    idTipoAmostra INT PRIMARY KEY AUTO_INCREMENT,
+    descricaoTipoAmostra VARCHAR(20)
+)ENGINE=InnoDB;
 
 CREATE TABLE amostra_cabecalho(
     idAmostraCabecalho INT PRIMARY KEY AUTO_INCREMENT,
     dataSolicitacao DATE,
     dataEntrega DATE,
     dataAporvacao DATE,
-    idRepresentante INT
+    idRepresentante INT,
     idCliente INT,
     idProduto INT,
-    padraoFisico BOOLEAN,
-    padraoPantone BOOLEAN,
-    aprovacao BOOLEAN,
+    idTipoAmostra INT
+    idStatusAmostra INT
+    observacoes VARCHAR(250),
     FOREIGN KEY (idProduto) REFERENCES produto(idProduto),
     FOREIGN KEY (idCliente) REFERENCES cliente(idCliente),
-    FOREIGN KEY (idRepesentante) REFERENCES representante (idRepesentante) 
+    FOREIGN KEY (idRepresentante) REFERENCES representante (idRepresentante),
+    FOREIGN KEY (idStatusAmostra) REFERENCES status_amostra(idStatusAmostra),
+    FOREIGN KEY (idTipoAmostra) REFERENCES tipo_amostra(idTipoAmostra)
 )ENGINE=InnoDB;
 
 

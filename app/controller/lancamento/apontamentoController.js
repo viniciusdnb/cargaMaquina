@@ -66,7 +66,7 @@ module.exports = {
                 req.body.quantidadeRefugo
             ]
 
-
+         
             this.updateDetalhe(detalhe, req.body.idApontDetalhe, req.body.idApontCabecalho);
             
             
@@ -236,10 +236,10 @@ module.exports = {
 
             var jsonLinhaUpdate = JSON.parse(strLinhaUpdate)
 
-
+            
             await apontamentoDetalheModel.update(jsonLinhaUpdate, {
                 where: {
-                    idApontDetalhe: idApontDetalhe[linhas],
+                    idApontDetalhe: Array.isArray(idApontDetalhe)? idApontDetalhe[linhas] : idApontDetalhe,
                     idApontCabecalho: idApontCabecalho
                 }
             });

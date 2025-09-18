@@ -224,7 +224,7 @@ CREATE TABLE representante(
 
 CREATE TABLE status_amostra(
     idStatusAmostra INT PRIMARY KEY AUTO_INCREMENT,
-    descricaoStatusAmostra VARCHAR(20)
+    descricaoStatusAmostra VARCHAR(30)
 )ENGINE=InnoDB;
 
 CREATE TABLE tipo_amostra(

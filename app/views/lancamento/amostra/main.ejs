@@ -1,56 +1,90 @@
-<div class="container text-center">
+<div class="container-fluid text-center">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/">INICIO</a></li>
             <li class="breadcrumb-item"><a>LISTA DE AMOSTRAS</a></li>
-            <li class="breadcrumb-item"><a href="/amostra/adicionar">NOVO AMOSTRAS <img src="/img/add-24.png" alt=""></a>
+            <li class="breadcrumb-item"><a href="/amostra/adicionar">NOVO AMOSTRAS <img src="/img/add-24.png"
+                        alt=""></a>
             </li>
         </ol>
     </nav>
+    <nav class="navbar bg-body-tertiary">
+        <div class="container-fluid">
+            <label class="form-label">PESQUISAR</label>
+            <input class="form-control me-2" type="search" placeholder="procurar" id="filtroGlobal" />
+
+        </div>
+    </nav>
 </div>
-
-
 <main class="container-fluid">
+    <table class="table">
+        <thead class="table-dark">
+            <tr>
+                <th>#</th>
+                <th>DT PEDIDO</th>
+                <th>SOLICITANTE</th>
+                <th>CLIENTE</th>
+                <th>PRODUTO</th>
+                <th>TIPO</th>
+                <th>STATUS</th>
+                <th>DT STATUS</th>
+                <th>DT ENTREGA</th>
+                <th>OPÇÕES</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% if(typeof data !='undefined' ){ var amostras=JSON.parse(data); 
+                amostras.forEach(amostra=>{%>
+                <tr>
+                    <td>
+                        <%= amostra.idAmostraCabecalho %>
+                    </td>
+                    <td>
+                        <% var arrDtLanc=amostra.dataSolicitacao.split('-'); %>
+                            <%= `${arrDtLanc[2]}/${arrDtLanc[1]}/${arrDtLanc[0]}` %>
+                    </td>
+                    <td>
+                        <%= amostra.representante.nomeRepresentante %>
+                    </td>
+                    <td>
+                        <%= amostra.cliente.nomeCliente %>
+                    </td>
+                    <td>
+                        <%= amostra.produto.descProduto %>
+                    </td>
+                    <td>
+                        <%= amostra.tipo_amostra.descricaoTipoAmostra %>
+                    </td>
+                    <td>
+                        <%= amostra.status_amostra.descricaoStatusAmostra %>
+                    </td>
+                    <td>
+                        <% if(amostra.dataStatus !=null ){ var arrDataStatus=amostra.dataStatus.split('-'); %>
+                            <%= `${arrDataStatus[2]}/${arrDataStatus[1]}/${arrDataStatus[0]}` %>
+                                <%}%>
+                    </td>
+                    <td>
+                        <% if(amostra.dataEntrega !=null ){ var arrDataEntrega=amostra.dataEntrega.split('-'); %>
+                            <%= `${arrDataEntrega[2]}/${arrDataEntrega[1]}/${arrDataEntrega[0]}` %>
+                                <%}%>
+                    </td>
 
-            <table class="table">
-                <thead class="table-dark">
-                    <tr>
-                        <th>#</th>
-                        <th>DT PEDIDO</th>
-                        <th>SOLICITANTE</th>
-                        <th>CLIENTE</th>
-                        <th>PRODUTO</th>
-                        <th>TIPO</th>                        
-                        <th>STATUS</th>
-                        <th>DT APROVADO</th>
-                        <th>DT ENTREGA</th>
-                         <th>OPCOES</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% if(typeof data !='undefined' ){ var amostras=JSON.parse(data); amostras.forEach(amostra=>{%>
-                        <tr>
-                            <td>
-                               
-                            </td> 
-                            <td>
-                               
-                            </td>
-                         
-                            <td>
-                                <a href="/amostra/editar/<%= cliente.idAmostraCabecalho %>">
-                                    <img src="/img/edit-24.png" alt="">
-                                </a>|
-                                <a id="delete" onclick='perguntar("<%= amostra.idAmostraCabecalho %>", "<%= %>","amostra")' data-bs-toggle="modal" data-bs-target="#staticBackdrop"
-                                    href="<%= amostra.idAmostraCabecalho %>">
-                                    <img src="/img/trash-24.png" alt="">
-                                </a>
-                            </td>
-                        </tr>
-                        <%}) }%>
 
-                </tbody>
-            </table>
+                    <td>
+                        <a href="/amostra/editar/<%= amostra.idAmostraCabecalho %>">
+                            <img src="/img/edit-24.png" alt="">
+                        </a>|
+                        <a id="delete" onclick='perguntar("<%= amostra.idAmostraCabecalho %>", "<%= %>","amostra")'
+                            data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                            href="<%= amostra.idAmostraCabecalho %>">
+                            <img src="/img/trash-24.png" alt="">
+                        </a>
+                    </td>
+                </tr>
+                <%}) }%>
+
+        </tbody>
+    </table>
 </main>
 
 <%- include('../../layout/modals/modalDelete') %>

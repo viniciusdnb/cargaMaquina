@@ -19,21 +19,30 @@
     <div class="row  col-md-4">
        <input type="submit" class="btn btn-warning" required value="VINCULAR OU ATUALIZAR AO PRODUTO"> 
     </div>
-    
-    <div class="row">
-           <form action="/amostra/novo/salvar" method="post" class="row g-3">
+    <% 
+        var arrAmostraCabecalho = JSON.parse(amostraCabecalho);
+        arrAmostraCabecalho.forEach(el =>{
+            amostraCabecalho = el
+        });
 
+       
+     %>
+    <div class="row">
+        <form action="/amostra/editar/salvar" method="post" class="row g-3">
+            <input type="hidden" name="idAmostraCabecalho" value="<%= amostraCabecalho.idAmostraCabecalho%>">
 
         <div class="col-md-2">
             <label class="form-label">DATA SOLICITAÇÃO</label>
-            <input type="date" class="form-control" name="dataSolicitacao">
+            <input type="date" class="form-control" name="dataSolicitacao" disabled value="<%= amostraCabecalho.dataSolicitacao %>">
         </div>
         <div class="col-md-3">
             <label class="form-label">SOLICITANTE</label>
-            <select id="selectRepresentante" name="idRepresentantes" required>
+            <select id="selectRepresentante" name="idRepresentante" disabled>
                 <option value=""></option>
                 <% var arrRepresentante=JSON.parse(representantes); arrRepresentante.forEach(representante=>{%>
-                    <option value="<%=representante.idRepresentante%>">
+                    <option 
+                    <%= amostraCabecalho.idRepresentante == representante.idRepresentante ? "selected" : "" %> 
+                    value="<%=representante.idRepresentante%>">
                         <%=representante.nomeRepresentante%>
                     </option>
                     <%}); %>
@@ -41,10 +50,12 @@
         </div>
         <div class="col-md-3">
             <label class="form-label">CLIENTE</label>
-            <select id="selectClient" name="idCliente" required>
+            <select id="selectClient" name="idCliente" required disabled>
                 <option value=""></option>
                 <% var arrClientes=JSON.parse(clientes); arrClientes.forEach(cliente=>{%>
-                    <option value="<%=cliente.idCliente%>">
+                    <option
+                    <%= amostraCabecalho.idCliente == cliente.idCliente ? "selected" : "" %> 
+                    value="<%=cliente.idCliente%>">
                         <%=cliente.nomeCliente%>
                     </option>
                     <%}); %>
@@ -52,10 +63,12 @@
         </div>
         <div class="col-md-4">
             <label class="form-label">PRODUTO</label>
-            <select id="produtoSelect" name="idProduto" required>
+            <select id="produtoSelect" name="idProduto" required disabled>
                 <option value=""></option>
                 <% var arrProduto=JSON.parse(produtos); arrProduto.forEach(produto=>{%>
-                    <option value="<%=produto.idProduto%>">
+                    <option 
+                    <%= amostraCabecalho.idProduto == produto.idProduto ? "selected" : "" %> 
+                    value="<%=produto.idProduto%>">
                         <%=produto.descProduto%>
                     </option>
                     <%}); %>
@@ -71,38 +84,43 @@
                             <select id="tipoAmostraSelect" name="idTipoAmostra" required>
                                 <option value=""></option>
                                 <% var arrTipoAmostras=JSON.parse(tipoAmostras); arrTipoAmostras.forEach(tipoAmostra=>{%>
-                                    <option value="<%=tipoAmostra.idTipoAmostra%>">
+                                    <option 
+                                     <%= amostraCabecalho.idTipoAmostra == tipoAmostra.idTipoAmostra ? "selected" : "" %> 
+                                    value="<%=tipoAmostra.idTipoAmostra%>">
                                         <%=tipoAmostra.descricaoTipoAmostra%>
                                     </option>
                                     <%}); %>
                             </select>
                         </div>
-                        <div class="col-md-2">
-                            <label class="form-label">DATA APROVAÇÃO</label>
-                            <input type="date" class="form-control" name="dataSolicitacao">
-                        </div>
-                        <div class="col-md-2">
-                            <label class="form-label">DATA ENTREGA</label>
-                            <input type="date" class="form-control" name="dataSolicitacao">
-                        </div>
-
                         <div class="col-md-4">
                             <label class="form-label">STATUS DA AMOSTRA</label>
                             <select id="statusAmostraSelect" name="idStatusAmostra" required>
                                 <option value=""></option>
                                 <% var arrStatusAmostra=JSON.parse(statusAmostra); arrStatusAmostra.forEach(status=>{%>
-                                    <option value="<%=status.idStatusAmostra%>">
+                                    <option 
+                                     <%= amostraCabecalho.idStatusAmostra == status.idStatusAmostra ? "selected" : "" %> 
+                                    value="<%=status.idStatusAmostra%>">
                                         <%=status.descricaoStatusAmostra%>
                                     </option>
                                     <%}); %>
                             </select>
                         </div>
+                        <div class="col-md-2">
+                            <label class="form-label">DATA STATUS</label>
+                            <input type="date" class="form-control" name="dataStatus" 
+                            value="<%= amostraCabecalho.dataStatus != null ? amostraCabecalho.dataStatus : "" %>">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">DATA ENTREGA</label>
+                            <input type="date" class="form-control" name="dataEntrega"
+                             value="<%= amostraCabecalho.dataEntrega != null ? amostraCabecalho.dataEntrega : "" %>">
+                        </div>                        
                     </div>
                 </div>
             </div>
             <div class="mb-3">
-                <label for="exampleFormControlTextarea1" class="form-label">OBSERVAÇÕES</label>
-                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                <label for="observacoes" class="form-label">OBSERVAÇÕES</label>
+                <textarea class="form-control" id="observacoes" name="observacoes" rows="3"><%= amostraCabecalho.observacoes != null ? amostraCabecalho.observacoes.trim() : "" %></textarea>
             </div>
         </div>
         <h3>EM BREVE FORMULAÇÃO</h3>
@@ -117,8 +135,6 @@
 
     </form> 
     </div>
-
-
 </main>
 
 <script>

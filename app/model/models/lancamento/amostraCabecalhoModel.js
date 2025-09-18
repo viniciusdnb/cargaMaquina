@@ -1,44 +1,45 @@
 const connect = require('../../connect');
-const {DataTypes} = require('sequelize');
+const { DataTypes } = require('sequelize');
 
 const amostraCabecalhoModel = connect.define(
     'amostra_cabecalho',
-    {   
-        idAmostraCabecalho:{
+    {
+        idAmostraCabecalho: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true
         },
-        dataSolicitacao:{
+        dataSolicitacao: {
             type: DataTypes.DATE
         },
-        dataEntrega:{
+        dataEntrega: {
             type: DataTypes.DATE
         },
-        dataAporvacao:{
+        dataStatus: {
             type: DataTypes.DATE
         },
-        idRepresentante:{
+        idRepresentante: {
             type: DataTypes.INTEGER
         },
-        idCliente:{
+        idCliente: {
             type: DataTypes.INTEGER
         },
-        idProduto:{
+        idProduto: {
             type: DataTypes.INTEGER
         },
-        padraoFisico:{
-            type: DataTypes.BOOLEAN
-        },
-        padraoPantone:{
-            type: DataTypes.BOOLEAN
-        },
-        aprovacao:{
-            type: DataTypes.BOOLEAN
-        },
-        observacoes:{
+        observacoes: {
             type: DataTypes.CHAR(250)
-        }
+        },
+        idTipoAmostra: {
+            type: DataTypes.INTEGER
+        },
+        idStatusAmostra: {
+            type: DataTypes.INTEGER
+        },
+    },
+    {
+        timestamps: false,
+        freezeTableName: true
     }
 );
 

@@ -27,7 +27,7 @@
         </div>
         <div class="col-md-3">
             <label class="form-label">SOLICITANTE</label>
-            <select id="selectRepresentante" name="idRepresentantes" required>
+            <select id="selectRepresentante" name="idRepresentante" required>
                 <option value=""></option>
                 <% var arrRepresentante=JSON.parse(representantes); arrRepresentante.forEach(representante=>{%>
                     <option value="<%=representante.idRepresentante%>">
@@ -74,15 +74,6 @@
                                     <%}); %>
                             </select>
                         </div>
-                        <div class="col-md-2">
-                            <label class="form-label">DATA APROVAÇÃO</label>
-                            <input type="date" class="form-control" name="dataSolicitacao">
-                        </div>
-                        <div class="col-md-2">
-                            <label class="form-label">DATA ENTREGA</label>
-                            <input type="date" class="form-control" name="dataSolicitacao">
-                        </div>
-
                         <div class="col-md-4">
                             <label class="form-label">STATUS DA AMOSTRA</label>
                             <select id="statusAmostraSelect" name="idStatusAmostra" required>
@@ -94,12 +85,22 @@
                                     <%}); %>
                             </select>
                         </div>
+                        <div class="col-md-2">
+                            <label class="form-label">DATA STATUS</label>
+                            <input type="date" class="form-control" name="dataStatus">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">DATA ENTREGA</label>
+                            <input type="date" class="form-control" name="dataEntrega">
+                        </div>
+
+                        
                     </div>
                 </div>
             </div>
             <div class="mb-3">
-                <label for="exampleFormControlTextarea1" class="form-label">OBSERVAÇÕES</label>
-                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                <label for="observacoes" class="form-label">OBSERVAÇÕES</label>
+                <textarea class="form-control" id="observacoes" name="observacoes" rows="3"></textarea>
             </div>
         </div>
         <h3>EM BREVE FORMULAÇÃO</h3>

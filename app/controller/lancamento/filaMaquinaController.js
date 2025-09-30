@@ -313,11 +313,12 @@ module.exports = {
 
         const maquinas = await maquinaModel.findAll();
 
-        res.render('lancamento/filamaquina/index', {
+        /*res.render('lancamento/filamaquina/index', {
             'msg': "",
             'maquinas': JSON.stringify(maquinas, null),
             'pathName': 'main'
-        });
+        });*/
+        res.redirect('/filamaquina');
 
 
     },
@@ -465,6 +466,9 @@ module.exports = {
             //console.log(item.idFilaMaquina + " " + ordem);
             ordem++;
         }
-    }
-
+    },
 }
+
+
+
+

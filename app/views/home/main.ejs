@@ -1,3 +1,65 @@
-<main>
-    
+<main class="container">
+    <h4>DIAS PROGRAMADO - SETOR PINTURA</h4>
+    <ul class="list-group col-md-4 text-center">
+        <li class="list-group-item">P01 - 07 dias
+            <div class="progress" role="progressbar" aria-label="Animated striped example" aria-valuenow="32"
+                aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" style="width: 32%"></div>
+            </div>
+        </li>
+        <li class="list-group-item">P02 - 15 dias
+            <div class="progress" role="progressbar" aria-label="Animated striped example" aria-valuenow="68"
+                aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" style="width: 68%"></div>
+            </div>
+        </li>
+        <li class="list-group-item">P03 - 0 dias
+            <div class="progress" role="progressbar" aria-label="Animated striped example" aria-valuenow="0"
+                aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 0%"></div>
+            </div>
+        </li>
+        <li class="list-group-item">P04 - 9 dias
+              <div class="progress" role="progressbar" aria-label="Animated striped example" aria-valuenow="40"
+                aria-valuemin="0" aria-valuemax="100">
+                <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" style="width: 40%"></div>
+            </div>
+        </li>
+    </ul>
 </main>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+      
+        fetch('http://192.168.0.165:3000/home/ver-fila/2')
+        .then(response =>{
+            if(response.status == 200){
+                return response.json();
+            }
+        })
+        .then(data =>{
+              var dates = [];
+            for(const key in data){
+                dates.push(data[key].previsionStart);
+                
+            }
+            var sumDifDates = 1
+            var firstDate = new Date(dates[0]);
+            var dayMilisecnd = 1000*60*60*24;
+            for(let i = 1; i < dates.length; i++){
+                
+                var timeDiff = new Date(dates[i]).getTime() - firstDate.getTime();
+                firstDate = new Date(dates[i]);
+                
+                sumDifDates += Math.round(timeDiff / dayMilisecnd);
+
+                
+            }
+
+            console.log(sumDifDates);
+        });
+
+       
+       
+    })
+</script>

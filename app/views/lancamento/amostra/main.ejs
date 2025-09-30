@@ -10,8 +10,8 @@
     </nav>
     <nav class="navbar bg-body-tertiary">
         <div class="container-fluid">
-            <label class="form-label">PESQUISAR</label>
-            <input class="form-control me-2" type="search" placeholder="procurar" id="filtroGlobal" />
+            <label class="form-label text-danger">PESQUISAR EM DESENVOLVIMENTO!</label>
+            <input class="form-control me-2" type="search" placeholder="procurar" id="filtroGlobal" disabled/>
 
         </div>
     </nav>
@@ -34,36 +34,55 @@
         </thead>
         <tbody>
             <% if(typeof data !='undefined' ){ var amostras=JSON.parse(data); 
-                amostras.forEach(amostra=>{%>
+                amostras.forEach(amostra=>{
+                
+                var bg = "";
+
+                switch (amostra.status_amostra.idStatusAmostra) {
+                    case 2:
+                        bg = "style=background-color:#FE9900";
+                        break;
+                    case 3:
+                        bg = "style=background-color:#48FC01";
+                        break;
+                    case 5:
+                        bg = "style=background-color:#F75858";
+                        break;
+                    default:
+                        break;
+                }
+                    
+            %>
                 <tr>
-                    <td>
+                    <td <%= bg %>>
                         <%= amostra.idAmostraCabecalho %>
                     </td>
-                    <td>
+                    <td  <%= bg %>>
                         <% var arrDtLanc=amostra.dataSolicitacao.split('-'); %>
                             <%= `${arrDtLanc[2]}/${arrDtLanc[1]}/${arrDtLanc[0]}` %>
                     </td>
-                    <td>
+                    <td  <%= bg %>>
                         <%= amostra.representante.nomeRepresentante %>
                     </td>
-                    <td>
+                    <td  <%= bg %>>
                         <%= amostra.cliente.nomeCliente %>
                     </td>
-                    <td>
+                    <td  <%= bg %>>
                         <%= amostra.produto.descProduto %>
                     </td>
-                    <td>
+                    <td  <%= bg %>>
+                       
                         <%= amostra.tipo_amostra.descricaoTipoAmostra %>
                     </td>
-                    <td>
+                    <td  <%= bg %>>
                         <%= amostra.status_amostra.descricaoStatusAmostra %>
                     </td>
-                    <td>
+                    <td  <%= bg %>>
                         <% if(amostra.dataStatus !=null ){ var arrDataStatus=amostra.dataStatus.split('-'); %>
                             <%= `${arrDataStatus[2]}/${arrDataStatus[1]}/${arrDataStatus[0]}` %>
                                 <%}%>
                     </td>
-                    <td>
+                    <td  <%= bg %>>
                         <% if(amostra.dataEntrega !=null ){ var arrDataEntrega=amostra.dataEntrega.split('-'); %>
                             <%= `${arrDataEntrega[2]}/${arrDataEntrega[1]}/${arrDataEntrega[0]}` %>
                                 <%}%>

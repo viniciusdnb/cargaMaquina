@@ -59,7 +59,10 @@ module.exports = {
 
 
         var arrFilaMaquina = JSON.parse(JSON.stringify(filaMaquina));
-        //tras todo os lancamentos de apontamento da ordem
+        console.log(arrFilaMaquina);
+
+        if(arrFilaMaquina.length != 0){
+            //tras todo os lancamentos de apontamento da ordem
         //separado por setor da maquina vindo na requisição
         const list_apont_sum_qtd_grop_idOp = await list_apont_sum_qtd_grop_idOpModelView.findAll(
             {
@@ -69,7 +72,7 @@ module.exports = {
             }
         );
         var arrListaPontamentos = JSON.parse(JSON.stringify(list_apont_sum_qtd_grop_idOp, null));
-
+        
         var data = {};
 
         arrFilaMaquina.forEach(fila => {
@@ -125,8 +128,8 @@ module.exports = {
         
 
         var prevision = new machineLoad(dataDB, configWork).getPrevision(descMaquina, considerarHoraInicial);
-        res.status(200).send(prevision.queue[descMaquina].queueProducts)
-        console.log(prevision.queue[descMaquina].queueProducts);
+        return res.status(200).send(prevision.queue[descMaquina].queueProducts)
+        //console.log(prevision.queue[descMaquina].queueProducts);
         /*return res.render('lancamento/filamaquina/index', {
              "pathName": "fila",
              "prevision": prevision.queue[descMaquina].queueProducts,
@@ -134,6 +137,13 @@ module.exports = {
              "maquinas": JSON.stringify(maquinas, null),
              "maquinaAtual": maquina
          });*/
+        }
+
+        //maquina vazia responde a quantidade -1
+        //considerarase o primerio dia como dia numero 1
+        //aas funcao de retorno de tatas considera o primeiro dia como 0
+        return res.status(200).send(0);
+        
 
     }
 }

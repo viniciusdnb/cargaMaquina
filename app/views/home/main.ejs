@@ -1,65 +1,83 @@
 <main class="container">
     <h4>DIAS PROGRAMADO - SETOR PINTURA</h4>
-    <ul class="list-group col-md-4 text-center">
-        <li class="list-group-item">P01 - 07 dias
-            <div class="progress" role="progressbar" aria-label="Animated striped example" aria-valuenow="32"
+    <ul id="listProgress" class="list-group col-md-4 text-center">
+        <li class="list-group-item">P01 - <span id="pintura-1"></span> dias
+            <div id="progress-1" class="progress" role="progressbar" aria-label="Animated striped example" 
                 aria-valuemin="0" aria-valuemax="100">
-                <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" style="width: 32%"></div>
+                <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" >
+                </div>
             </div>
         </li>
-        <li class="list-group-item">P02 - 15 dias
-            <div class="progress" role="progressbar" aria-label="Animated striped example" aria-valuenow="68"
+        <li class="list-group-item">P02 - <span id="pintura-2"></span> dias
+            <div id="progress-2" class="progress" role="progressbar" aria-label="Animated striped example" 
                 aria-valuemin="0" aria-valuemax="100">
-                <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" style="width: 68%"></div>
+                <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" >
+                </div>
             </div>
         </li>
-        <li class="list-group-item">P03 - 0 dias
-            <div class="progress" role="progressbar" aria-label="Animated striped example" aria-valuenow="0"
+        <li class="list-group-item">P03 - <span id="pintura-3"></span> dias
+            <div id="progress-3" class="progress" role="progressbar" aria-label="Animated striped example"
                 aria-valuemin="0" aria-valuemax="100">
-                <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 0%"></div>
+                <div class="progress-bar progress-bar-striped progress-bar-animated"></div>
             </div>
         </li>
-        <li class="list-group-item">P04 - 9 dias
-              <div class="progress" role="progressbar" aria-label="Animated striped example" aria-valuenow="40"
+        <li class="list-group-item">P04 - <span id="pintura-4"></span> dias
+            <div id="progress-4" class="progress" role="progressbar" aria-label="Animated striped example" 
                 aria-valuemin="0" aria-valuemax="100">
-                <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" style="width: 40%"></div>
+                <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" >
+                </div>
             </div>
         </li>
     </ul>
 </main>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function(){
-      
-        fetch('http://192.168.0.165:3000/home/ver-fila/2')
-        .then(response =>{
-            if(response.status == 200){
-                return response.json();
-            }
-        })
-        .then(data =>{
-              var dates = [];
-            for(const key in data){
-                dates.push(data[key].previsionStart);
-                
-            }
+    document.addEventListener("DOMContentLoaded", async function () {
+        for(let m = 1; m <=4; m++ ){
             var sumDifDates = 1
-            var firstDate = new Date(dates[0]);
-            var dayMilisecnd = 1000*60*60*24;
-            for(let i = 1; i < dates.length; i++){
-                
-                var timeDiff = new Date(dates[i]).getTime() - firstDate.getTime();
-                firstDate = new Date(dates[i]);
-                
-                sumDifDates += Math.round(timeDiff / dayMilisecnd);
+            await fetch(`http://192.168.0.165:3000/home/ver-fila/${m}`)
+            .then(response => {
+                if (response.status == 200) {
+                    return response.json();
+                }
+            })
+            .then(data => {
+                var dates = [];
+                if (data != 0) {
+                    for (const key in data) {
+                        dates.push(data[key].previsionStart);
 
+                    }
+                    
+                    var firstDate = new Date(dates[0]);
+                    var dayMilisecnd = 1000 * 60 * 60 * 24;
+                    for (let i = 1; i < dates.length; i++) {
+
+                        var timeDiff = new Date(dates[i]).getTime() - firstDate.getTime();
+                        firstDate = new Date(dates[i]);
+
+                        sumDifDates += Math.round(timeDiff / dayMilisecnd);
+
+
+                    }
+                }else{
+                    sumDifDates = 0;
+                }
                 
-            }
-
-            console.log(sumDifDates);
-        });
-
+               ;
+                
+            });
+            var list = document.getElementById("listProgress");
+            var span = document.getElementById(`pintura-${m}`);
+            var progress = document.getElementById(`progress-${m}`);
+            var porcentagem = Math.round((sumDifDates / 22)*100);
+            progress.setAttribute("aria-valuenow", porcentagem);
+            var progress_bar = progress.querySelector(".progress-bar");
+            progress_bar.setAttribute("style", `width: ${porcentagem}%`)
+            span.innerText = sumDifDates;
        
-       
+        }
+        
+
     })
 </script>

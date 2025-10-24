@@ -1,4 +1,31 @@
 <div class="container-fluid text-center">
+    <style>
+        .seta-baixo {
+            display: inline-block;
+            width: 0;
+            height: 0;
+            margin-left: 6px;
+            vertical-align: middle;
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-top: 12px solid #ff0000;
+        }
+
+        .seta-cima {
+            display: inline-block;
+            width: 0;
+            height: 0;
+            margin-left: 6px;
+            vertical-align: middle;
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-bottom: 12px solid #ff0000;
+        }
+
+        .widthImg {
+            width: 16px;
+        }
+    </style>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/">INICIO</a></li>
@@ -8,81 +35,93 @@
             </li>
         </ol>
     </nav>
-    <nav class="navbar bg-body-tertiary">
+    <nav class=" bg-body-tertiary">
         <div class="container-fluid">
-            <label class="form-label text-danger">PESQUISAR EM DESENVOLVIMENTO!</label>
-            <input class="form-control me-2" type="search" placeholder="procurar" id="filtroGlobal" disabled/>
+            <div class="row">
+                <div class=" col-md-5" role="search">
+                    <label class="form-label">PESQUISAR:</label>
+                    <input type="text" class="form-control" id="filtroGlobal" placeholder="Buscar conteúdo..." />
+                </div>
+                &
+                <div class=" col-md-5" role="search">
+                    <label class="form-label text-danger">NÃO BUSCAR POR:</label>
+                    <input type="text" class="form-control text-danger" id="filtroExclusao" value=""
+                        placeholder="exceto ..." />
+                </div>
+
+            </div>
 
         </div>
     </nav>
 </div>
-<main class="container-fluid">
-    <table class="table">
-        <thead class="table-dark">
+<br>
+<main class="container-fluid g-3">
+    <table id="tabelaAmostra" class="table table-hover table-striped table-bordered">
+        <thead class="table-dark sticky-top">
             <tr>
-                <th>#</th>
-                <th>DT PEDIDO</th>
-                <th>SOLICITANTE</th>
-                <th>CLIENTE</th>
-                <th>PRODUTO</th>
-                <th>TIPO</th>
-                <th>STATUS</th>
-                <th>DT STATUS</th>
-                <th>DT ENTREGA</th>
-                <th>OPÇÕES</th>
+                <th style="cursor: pointer;" data-tipo="numero">#</th>
+                <th style="cursor: pointer;" data-tipo="data">DT PEDIDO</th>
+                <th style="cursor: pointer;" data-tipo="texto">SOLICITANTE</th>
+                <th style="cursor: pointer;" data-tipo="texto">CLIENTE</th>
+                <th style="cursor: pointer;" data-tipo="texto">PRODUTO</th>
+                <th style="cursor: pointer;" data-tipo="texto">TIPO</th>
+                <th style="cursor: pointer;" data-tipo="texto">STATUS</th>
+                <th style="cursor: pointer;" data-tipo="data">DT STATUS</th>
+                <th style="cursor: pointer;" data-tipo="data">DT ENTREGA</th>
+                <th style="cursor: pointer;" data-tipo="texto">OPÇÕES</th>
             </tr>
         </thead>
         <tbody>
-            <% if(typeof data !='undefined' ){ var amostras=JSON.parse(data); 
-                amostras.forEach(amostra=>{
-                
+            <% if(typeof data !='undefined' ){ var amostras=JSON.parse(data); amostras.forEach(amostra=>{
+
                 var bg = "";
 
                 switch (amostra.status_amostra.idStatusAmostra) {
                     case 2:
                         bg = "style=background-color:#FE9900";
-                        break;
+                    break;
                     case 3:
                         bg = "style=background-color:#48FC01";
-                        break;
+                    break;
                     case 5:
                         bg = "style=background-color:#F75858";
-                        break;
-                    default:
-                        break;
+                    break;
+                    case 6:
+                        bg = "style=background-color:#ffe600";
+                    break;
                 }
-                    
-            %>
+
+                %>
                 <tr>
-                    <td <%= bg %>>
+                    <td <%=bg %>>
                         <%= amostra.idAmostraCabecalho %>
                     </td>
-                    <td  <%= bg %>>
+                    <td <%=bg %>>
                         <% var arrDtLanc=amostra.dataSolicitacao.split('-'); %>
                             <%= `${arrDtLanc[2]}/${arrDtLanc[1]}/${arrDtLanc[0]}` %>
                     </td>
-                    <td  <%= bg %>>
+                    <td <%=bg %>>
                         <%= amostra.representante.nomeRepresentante %>
                     </td>
-                    <td  <%= bg %>>
+                    <td <%=bg %>>
                         <%= amostra.cliente.nomeCliente %>
                     </td>
-                    <td  <%= bg %>>
+                    <td <%=bg %>>
                         <%= amostra.produto.descProduto %>
                     </td>
-                    <td  <%= bg %>>
-                       
+                    <td <%=bg %>>
+
                         <%= amostra.tipo_amostra.descricaoTipoAmostra %>
                     </td>
-                    <td  <%= bg %>>
+                    <td <%=bg %>>
                         <%= amostra.status_amostra.descricaoStatusAmostra %>
                     </td>
-                    <td  <%= bg %>>
+                    <td <%=bg %>>
                         <% if(amostra.dataStatus !=null ){ var arrDataStatus=amostra.dataStatus.split('-'); %>
                             <%= `${arrDataStatus[2]}/${arrDataStatus[1]}/${arrDataStatus[0]}` %>
                                 <%}%>
                     </td>
-                    <td  <%= bg %>>
+                    <td <%=bg %>>
                         <% if(amostra.dataEntrega !=null ){ var arrDataEntrega=amostra.dataEntrega.split('-'); %>
                             <%= `${arrDataEntrega[2]}/${arrDataEntrega[1]}/${arrDataEntrega[0]}` %>
                                 <%}%>
@@ -105,5 +144,72 @@
         </tbody>
     </table>
 </main>
+
+<script>
+
+    $("#filtroGlobal, #filtroExclusao").on("keyup", aplicarFiltros);
+    function aplicarFiltros() {
+        const termoInclusao = $("#filtroGlobal").val().toLowerCase();
+        const termoExclusao = $("#filtroExclusao").val().toLowerCase();
+
+        $("#tabelaAmostra tbody tr").each(function () {
+            const linha = $(this);
+            const textoLinha = linha.text().toLowerCase();
+
+            const contemInclusao = termoInclusao === "" || textoLinha.includes(termoInclusao);
+            const contemExclusao = termoExclusao !== "" && textoLinha.includes(termoExclusao);
+
+            // Mostrar apenas se passar nos dois filtros
+            linha.toggle(contemInclusao && !contemExclusao);
+        });
+    }
+    //ordenacao por coluna
+    let ordemAscendente = true;
+    let colunaAtiva = null;
+
+    $("th").on("click", function () {
+        const coluna = $(this).index();
+        const tipo = $(this).data("tipo");
+
+        // Se clicou na mesma coluna, inverte a ordem
+        if (coluna === colunaAtiva) {
+            ordemAscendente = !ordemAscendente;
+        } else {
+            ordemAscendente = true;
+            colunaAtiva = coluna;
+        }
+
+        const tabela = $(this).closest("table");
+        const linhas = tabela.find("tbody > tr").toArray().sort(comparar(coluna, tipo));
+
+        if (!ordemAscendente) {
+            linhas.reverse();
+        }
+
+        tabela.find("tbody").empty().append(linhas);
+
+        // Limpa estilos anteriores
+        $("th").removeClass("ativo").find(".seta-baixo, .seta-cima").remove();
+
+        // Adiciona estilo e seta correspondente
+        $(this).addClass("ativo").append(`<span class="${ordemAscendente ? 'seta-baixo' : 'seta-cima'}"></span>`);
+    });
+
+
+    function comparar(coluna, tipo) {
+        return function (a, b) {
+            const valorA = $(a).find("td").eq(coluna).text().trim();
+            const valorB = $(b).find("td").eq(coluna).text().trim();
+
+            if (tipo === "numero") {
+                return parseFloat(valorA) - parseFloat(valorB);
+            } else if (tipo === "data") {
+                return new Date(valorA) - new Date(valorB);
+            } else {
+                return valorA.localeCompare(valorB);
+            }
+        };
+    }
+</script>
 
 <%- include('../../layout/modals/modalDelete') %>

@@ -1,4 +1,7 @@
-<div class="container text-center">
+
+
+<main class="container">
+    <div class="container text-center">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/">INICIO</a></li>
@@ -8,22 +11,39 @@
         </ol>
     </nav>
 </div>
+<nav class=" bg-body-tertiary">
+        <div class="container-fluid">
+            <div class="row">
+                <div class=" col-md-5" role="search">
+                    <label class="form-label">PESQUISAR:</label>
+                    <input type="text" class="form-control" id="filtroGlobal" placeholder="Buscar conteúdo..." />
+                </div>
+                &
+                <div class=" col-md-5" role="search">
+                    <label class="form-label text-danger">NÃO BUSCAR POR:</label>
+                    <input type="text" class="form-control text-danger" id="filtroExclusao" value=""
+                        placeholder="exceto ..." />
+                </div>
+               
+            </div>
 
-<main class="container">
+        </div>
+    </nav>
+<br>
 
 
-    <% if(msg != null && typeof msg != 'undefined'){%>
+    <% if(msg !=null && typeof msg !='undefined' ){%>
         <div class="alert alert-success" role="alert">
             <%= msg %>
         </div>
         <% } %>
-            <table class="table">
-                <thead class="table-dark">
+            <table id="cadastroProduto" class="table table-hover table-striped table-bordered">
+                <thead class="table-dark sticky-top">
                     <tr>
-                        <th>#</th>
-                        <th>PRODUTO</th>
-                        <th>CODIGO OMIE</th>
-                        <th>OPÇÕES</th>
+                        <th style="cursor: pointer;" data-tipo="numero">#</th>
+                        <th style="cursor: pointer;" data-tipo="texto">PRODUTO</th>
+                        <th style="cursor: pointer;" data-tipo="texto">CODIGO OMIE</th>
+                        <th style="cursor: pointer;" data-tipo="texto">OPÇÕES</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -42,11 +62,9 @@
                                 <a href="/produto/editar/<%= produto.idProduto %>">
                                     <img src="/img/edit-24.png" alt="">
                                 </a>|
-                                <a id="delete" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
-                                    onclick='perguntar("<%= produto.idProduto %>",
+                                <a id="delete" data-bs-toggle="modal" data-bs-target="#staticBackdrop" onclick='perguntar("<%= produto.idProduto %>",
                                     "<%= produto.descProduto %>",
-                                    "produto")' 
-                                    href="<%= produto.idMotivo %>">
+                                    "produto")' href="<%= produto.idMotivo %>">
                                     <img src="/img/trash-24.png" alt="">
                                 </a>
                             </td>
@@ -56,5 +74,86 @@
                 </tbody>
             </table>
 </main>
+<script>
+    /*$("#filtroGlobal").on("keyup", function () {
+        const termo = $(this).val().toLowerCase();
+        $("#tabelaLancamentos tbody tr").each(function () {
+            const linha = $(this);
+            const textoLinha = linha.text().toLowerCase();
+            linha.toggle(textoLinha.includes(termo));
+        });
+    });*/
 
+    $("#filtroGlobal, #filtroExclusao").on("keyup", aplicarFiltros);
+    function aplicarFiltros() {
+        const termoInclusao = $("#filtroGlobal").val().toLowerCase();
+        const termoExclusao = $("#filtroExclusao").val().toLowerCase();
+
+        $("#cadastroProduto tbody tr").each(function () {
+            const linha = $(this);
+            const textoLinha = linha.text().toLowerCase();
+
+            const contemInclusao = termoInclusao === "" || textoLinha.includes(termoInclusao);
+            const contemExclusao = termoExclusao !== "" && textoLinha.includes(termoExclusao);
+
+            // Mostrar apenas se passar nos dois filtros
+            linha.toggle(contemInclusao && !contemExclusao);
+        });
+    }
+
+    // Eventos de digitação
+    $("#filtroGlobal, #filtroExclusao").on("keyup", aplicarFiltros);
+    $("#filtroExclusao").ready(aplicarFiltros);
+
+
+    //ordenacao por coluna
+    let ordemAscendente = true;
+    let colunaAtiva = null;
+
+    $("th").on("click", function () {
+        const coluna = $(this).index();
+        const tipo = $(this).data("tipo");
+
+        // Se clicou na mesma coluna, inverte a ordem
+        if (coluna === colunaAtiva) {
+            ordemAscendente = !ordemAscendente;
+        } else {
+            ordemAscendente = true;
+            colunaAtiva = coluna;
+        }
+
+        const tabela = $(this).closest("table");
+        const linhas = tabela.find("tbody > tr").toArray().sort(comparar(coluna, tipo));
+
+        if (!ordemAscendente) {
+            linhas.reverse();
+        }
+
+        tabela.find("tbody").empty().append(linhas);
+
+        // Limpa estilos anteriores
+        $("th").removeClass("ativo").find(".seta-baixo, .seta-cima").remove();
+
+        // Adiciona estilo e seta correspondente
+        $(this).addClass("ativo").append(`<span class="${ordemAscendente ? 'seta-baixo' : 'seta-cima'}"></span>`);
+    });
+
+
+    function comparar(coluna, tipo) {
+        return function (a, b) {
+            const valorA = $(a).find("td").eq(coluna).text().trim();
+            const valorB = $(b).find("td").eq(coluna).text().trim();
+
+            if (tipo === "numero") {
+                return parseFloat(valorA) - parseFloat(valorB);
+            } else if (tipo === "data") {
+                return new Date(valorA) - new Date(valorB);
+            } else {
+                return valorA.localeCompare(valorB);
+            }
+        };
+    }
+
+
+</script>
 <%- include('../../layout/modals/modalDelete') %>

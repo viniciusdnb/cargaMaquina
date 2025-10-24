@@ -14,8 +14,11 @@ amostraCabecalhoModel.belongsTo(tipoAmostraModel, { foreignKey: "idTipoAmostra" 
 module.exports = {
     index: async function (req, res) {
         const amostraCabecalho = await amostraCabecalhoModel.findAll({
-            include: [clienteModel, produtoModel, representanteModel, statusAmostraModel, tipoAmostraModel]
+            order:[["idAmostraCabecalho", "DESC"]],
+           
+            include: [clienteModel, produtoModel, representanteModel, statusAmostraModel, tipoAmostraModel],
         });
+
         const data = JSON.stringify(amostraCabecalho, null);
         res.render('lancamento/amostra/index', {
             "pathName": "main",

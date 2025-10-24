@@ -4,7 +4,7 @@
         <li class="list-group-item">P01 - <span id="pintura-1"></span> dias
             <div id="progress-1" class="progress" role="progressbar" aria-label="Animated striped example" 
                 aria-valuemin="0" aria-valuemax="100">
-                <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" >
+                <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" >
                 </div>
             </div>
         </li>
@@ -24,7 +24,7 @@
         <li class="list-group-item">P04 - <span id="pintura-4"></span> dias
             <div id="progress-4" class="progress" role="progressbar" aria-label="Animated striped example" 
                 aria-valuemin="0" aria-valuemax="100">
-                <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" >
+                <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" >
                 </div>
             </div>
         </li>
@@ -42,10 +42,11 @@
                 }
             })
             .then(data => {
+                console.log(m == 1 ? data : "")
                 var dates = [];
                 if (data != 0) {
                     for (const key in data) {
-                        dates.push(data[key].previsionStart);
+                        dates.push(data[key].previsionEnd);
 
                     }
                     
@@ -74,8 +75,22 @@
             progress.setAttribute("aria-valuenow", porcentagem);
             var progress_bar = progress.querySelector(".progress-bar");
             progress_bar.setAttribute("style", `width: ${porcentagem}%`)
+            var styleColor = "bg-success";
+            if(porcentagem >= 50 && porcentagem <= 70)
+            {
+                 styleColor = "bg-warning";
+            }
+
+            if(porcentagem > 71)
+            {
+                styleColor = "bg-danger";
+            }
+
+            progress_bar.classList.add(styleColor);
             span.innerText = sumDifDates;
-       
+
+      
+            
         }
         
 

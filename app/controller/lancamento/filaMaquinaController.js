@@ -127,6 +127,7 @@ module.exports = {
         maquina = maquina[0];
         var idSetorMaquina = maquina.idSetor;
         var considerBPMMachine = false
+        //implementar botao para considerar velocidade da maquina
         if ("considerBPMMachine" in req.body) {
             considerBPMMachine = true
         }

@@ -32,7 +32,7 @@ module.exports = {
         maquina = JSON.parse(JSON.stringify(maquina, null));
         maquina = maquina[0];
         var idSetorMaquina = maquina.idSetor;
-        var considerBPMMachine = true
+        var considerBPMMachine = false
 
 
 
@@ -126,10 +126,11 @@ module.exports = {
        
             
         
-
+       
         var prevision = new machineLoad(dataDB, configWork).getPrevision(descMaquina, considerarHoraInicial);
+         console.log(prevision.queue[descMaquina].queueProducts);
         return res.status(200).send(prevision.queue[descMaquina].queueProducts)
-        //console.log(prevision.queue[descMaquina].queueProducts);
+       
         /*return res.render('lancamento/filamaquina/index', {
              "pathName": "fila",
              "prevision": prevision.queue[descMaquina].queueProducts,

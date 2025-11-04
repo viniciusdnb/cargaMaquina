@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function(){
     linhas.forEach(linha=>{
         newOrdemFila.push({
             "idFilaMaquina": linha.querySelector('.idFilaMaquina').textContent.trim(),
+            "idOrdemProducao": linha.querySelector('.idOrdemProducao').textContent.trim(),
             "ordem":ordem
         });
         ordem++;

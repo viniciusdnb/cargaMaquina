@@ -27,12 +27,14 @@
                 </thead>
                 <tbody id="tbody">
                     <% 
+                   
                    //console.log(maquinaAtual)
                     var i=0; Object.keys(prevision).forEach(key=>{
 
                         %>
                         <tr class="linha">
                             <td style="display: none;" class="idFilaMaquina"><%=prevision[key].idFilaMaquina%></td>
+                            <td style="display: none;" class="idOrdemProducao"><%=prevision[key].idOrdemProducao%></td>
                             <td class="ordem">
                                 <%=i%>
                             </td>

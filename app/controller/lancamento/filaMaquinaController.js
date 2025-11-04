@@ -324,16 +324,17 @@ module.exports = {
 
     },
     calcule: async function (req, res) {
-        console.log("Iniciando cálculo...");
-        const dataform = req.body;
+        //console.log("Iniciando cálculo...");
+        const dataform = req.body; 
+        //console.log(dataform);
         const idMaquina = dataform.idMaquina
         const ordens = dataform.ordem
         this.alterarStatusOrdemproducao(ordens);
-        console.log("Ordens recebidas:", ordens);
+        //console.log("Ordens recebidas:", ordens);
 
         try {
             for (const item of ordens) {
-                console.log("Atualizando item:", item);
+                //console.log("Atualizando item:", item);
 
                 await filaMaquinaModel.update(
                     { ordenacao: item.ordem },
@@ -349,7 +350,7 @@ module.exports = {
 
             const maquinas = await maquinaModel.findAll();
 
-            console.log("Renderizando página...");
+            //console.log("Renderizando página...");
             return res.render('lancamento/filamaquina/index', {
                 msg: "",
                 maquinas: JSON.stringify(maquinas, null),
@@ -370,20 +371,24 @@ module.exports = {
         //a ordem de producao que estiver na posicao 0 da fila
         //recebe o status em pintando ou gravando
         //as demais ordens recebe o status em fila pintura ou em fila gravacao
+        
        for(const item of fila)
         {
-            /*var arrItemFila = JSON.parse(JSON.stringify(await filaMaquinaModel.findAll({
-                where:{idFilaMaquina:item.idFilaMaquina}
-               
-            }),null))
-            arrItemFila.forEach(ordem =>{
-                if(item.ordem != 0)
-                    {
-                       await ordemProducaoModel.update({idStatus:2},
-                        {where:{idOrdemProducao: ordem.idOrdemProducao}})
+            console.log(item);
+            if(item.ordem == 0){
+                await ordemProducaoModel.update({idStatus:3},{
+                    where:{
+                        idOrdemProducao: item.idOrdemProducao
                     }
-                
-            })*/
+                })
+            }else{
+                await ordemProducaoModel.update({idStatus:2},{
+                    where:{
+                        idOrdemProducao: item.idOrdemProducao
+                    }
+                });
+            }
+            
             
         }
     },

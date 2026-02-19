@@ -1,0 +1,57 @@
+<div class="container text-center">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">INICIO</a></li>
+            <li class="breadcrumb-item"><a>SELECIONE UM ITEM DISPONIVEL</a></li>
+        </ol>
+    </nav>
+</div>
+<div class="container-fluid">
+    <table class="table">
+        <thead class="table-dark">
+            <tr>
+                <th>ORDEM PRODUCAO</th>
+                <th>LOTE</th>
+                <th>CLIENTE</th>
+                <th>PRODUTO</th>
+                <th>QUANTIDADE</th>
+                <th>QUANTIDADE PRODUZIDO</th>
+                <th>OPCOES</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% data.forEach(element=> {
+                %>
+                <tr>
+                    <td class="text-center">
+                        <%= element.ordem_producao.numeroOrdemProducao%>
+                    </td>
+                    <td>
+                        <%= element.ordem_producao.loteOrdemProducao%>
+                    </td>
+                    <td>
+                        <%= element.ordem_producao.cliente.nomeCliente%>
+                    </td>
+                    <td>
+                        <%= element.ordem_producao.produto.descProduto%>
+                    </td>
+                    <td class="text-center">
+                        <%= element.ordem_producao.quantidade%>
+                    </td>
+                    <td class="text-center">
+                        <%= element.total%>
+                    </td>
+                    <td>
+                        <a href="/#">
+                            <img src="/img/add-24.png" alt="">
+                        </a>|
+                        <a href="/#">
+                            <img src="/img/check-24.png" alt="">
+                        </a>
+                    </td>
+
+                </tr>
+                <% }); %>
+        </tbody>
+    </table>
+</div>

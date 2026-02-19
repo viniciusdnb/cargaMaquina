@@ -18,6 +18,7 @@ const filaMaquinaRouter = require('./app/router/lancamento/filaMaquinaRouter');
 const apontamentoMaquinaRouter = require('./app/router/lancamento/apontamentoMaquinaRouter');
 const representanteRouter = require('./app/router/cadastro/representanteRouter');
 const amostraRouter = require('./app/router/lancamento/amostraRouter');
+const filaSerigrafiaRouter = require('./app/router/lancamento/filaSerigrafiaRouter');
 
 app.use(express.static('./app/public'));
 app.use(express.json());
@@ -41,6 +42,7 @@ app.use('/', filaMaquinaRouter);
 app.use('/', apontamentoMaquinaRouter);
 app.use('/', representanteRouter);
 app.use('/', amostraRouter);
+app.use('/', filaSerigrafiaRouter);
 
 app.listen(port, function(){
     console.log(`app online in http://${host}:${port}`);

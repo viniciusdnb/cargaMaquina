@@ -95,6 +95,7 @@ CREATE TABLE apontamento_cabecalho(
     idOrdemProducao INT,
     idOperador INT,
     idForno INT,
+    numeroGravacao INT,
     FOREIGN KEY (idMaquina) REFERENCES maquina(idMaquina),
     FOREIGN KEY (idOrdemProducao) REFERENCES ordem_producao(idOrdemProducao),
     FOREIGN KEY (idOperador) REFERENCES operdor(idOperador),
@@ -141,7 +142,7 @@ INNER JOIN produto ON ordem_producao.idProduto = produto.idProduto)
 INNER JOIN maquina ON apontamento_cabecalho.idMaquina = maquina.idMaquina)
 INNER JOIN operdor ON apontamento_cabecalho.idOperador = operdor.idOperador)
 INNER JOIN apontamento_detalhe ON apontamento_cabecalho.idApontCabecalho = apontamento_detalhe.idApontCabecalho)
-GROUP BY apontamento_cabecalho.idApontCabecalho DESC;
+GROUP BY apontamento_cabecalho.idApontCabecalho;
 
 'SELECT
 	apontamento_cabecalho.idApontCabecalho, apontamento_cabecalho.idOrdemProducao AS idOrdemProducaoCabecalho, 		  

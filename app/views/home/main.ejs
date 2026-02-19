@@ -5,14 +5,14 @@
         <li class="list-group-item">P01 - <span id="pintura-1"></span> dias
             <div id="progress-1" class="progress" role="progressbar" aria-label="Animated striped example" 
                 aria-valuemin="0" aria-valuemax="100">
-                <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" >
+                <div class="progress-bar progress-bar-striped progress-bar-animated " >
                 </div>
             </div>
         </li>
         <li class="list-group-item">P02 - <span id="pintura-2"></span> dias
             <div id="progress-2" class="progress" role="progressbar" aria-label="Animated striped example" 
                 aria-valuemin="0" aria-valuemax="100">
-                <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" >
+                <div class="progress-bar progress-bar-striped progress-bar-animated " >
                 </div>
             </div>
         </li>
@@ -25,25 +25,25 @@
         <li class="list-group-item">P04 - <span id="pintura-4"></span> dias
             <div id="progress-4" class="progress" role="progressbar" aria-label="Animated striped example" 
                 aria-valuemin="0" aria-valuemax="100">
-                <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" >
+                <div class="progress-bar progress-bar-striped progress-bar-animated " >
                 </div>
             </div>
-        </li>
+        </li>        
     </ul>
 </main>
 
 <script>
     document.addEventListener("DOMContentLoaded", async function () {
-        for(let m = 1; m <=4; m++ ){
+        for(let m = 1; m <=5; m++ ){
             var sumDifDates = 1
-            await fetch(`http://192.168.0.165:3000/home/ver-fila/${m}`)
+            await fetch(`http://192.168.0.10:3000/home/ver-fila/${m}`)
             .then(response => {
                 if (response.status == 200) {
                     return response.json();
                 }
             })
             .then(data => {
-                //console.log(m == 3 ? data : "")
+                //console.log(m == 5 ? data : "")
                 var dates = [new Date];
                 if (data != 0) {
                     for (const key in data) {

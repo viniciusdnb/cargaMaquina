@@ -1,5 +1,5 @@
 const connect = require('../../connect');
-const {DataTypes, Model} = require('sequelize');
+const {DataTypes} = require('sequelize');
 
 const apontamentoCabecalho = connect.define(
     'apontamento_cabecalho',
@@ -22,6 +22,9 @@ const apontamentoCabecalho = connect.define(
             type: DataTypes.INTEGER
         },
         idForno:{
+            type: DataTypes.INTEGER
+        },
+        numeroGravacao:{
             type: DataTypes.INTEGER
         }
     },

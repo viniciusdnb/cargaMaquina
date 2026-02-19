@@ -106,7 +106,8 @@ module.exports = {
                 idMaquina: req.body.idMaquina,
                 idOrdemProducao: req.body.idOrdemProducao,
                 idOperador: req.body.idOperador,
-                idForno: req.body.idForno
+                idForno: req.body.idForno,
+                numeroGravacao: req.body.numeroGravacao
             }
             //pegar o id da inclusao do cabecalho do formulario
             const apontamentoCabecalho = await apontamentoCabecalhoModel.create(cabecalho);

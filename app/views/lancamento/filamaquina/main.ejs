@@ -29,7 +29,7 @@
             </style>
             <div class="container-fluid text-center g-3">
                 <div class="row ">
-                    <h3>Maquinas da pintura</h3>
+                    <h3>PINTURA</h3>
                 </div>
                 <div class="row g-3">
                     <% var arrMaquinas=JSON.parse(maquinas); arrMaquinas.forEach(maquina=>{%>
@@ -48,7 +48,7 @@
             <br>
             <div class="container-fluid text-center g-3">
                 <div class="row ">
-                    <h3>Maquinas da gravação</h3>
+                    <h3>GRAVAÇÃO - EM BREVE</h3>
                 </div>
                 <div class="row g-3">
                     <% arrMaquinas.forEach(maquina=>{%>
@@ -57,6 +57,7 @@
                                 <input class="form-check-input" type="radio" name="idMaquina" id="radioDefault2"
                                     value=" <%=maquina.idMaquina%>">
                                 <label class="form-check-label" for="radioDefault2">
+                                    FORNO 01
                                     <%=maquina.descMaquina%>
                                 </label>
                             </div>

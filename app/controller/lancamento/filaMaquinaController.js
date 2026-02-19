@@ -20,7 +20,7 @@ module.exports = {
         const maquinas = await maquinaModel.findAll(
             {include:[setorModel]}
         );
-
+        console.log(JSON.stringify(maquinas, null));
         res.render('lancamento/filamaquina/index', {
             'msg': "",
             'maquinas': JSON.stringify(maquinas, null),

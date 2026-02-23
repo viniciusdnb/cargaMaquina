@@ -17,6 +17,7 @@ CREATE TABLE produto(
     descProduto VARCHAR(100),
     idTipoProduto INT,
     codigoOmie VARCHAR(25),
+    numeroGravacao INT,
     FOREIGN KEY (idTipoProduto) REFERENCES tipo_Produto(idTipoProduto)
 )ENGINE=InnoDB;
 
@@ -189,6 +190,18 @@ CREATE TABLE fila_maquina (
     finalizado BOOLEAN,
     ordenacao INT,
     FOREIGN KEY (idOrdemProducao) REFERENCES ordem_producao(idOrdemProducao),
+    FOREIGN key (idMaquina) REFERENCES maquina(idMaquina)
+)ENGINE=InnoDB;
+
+CREATE TABLE fila_gravacao(
+    idFilaGravacao INT PRIMARY KEY AUTO_INCREMENT,
+    idForno INT,
+    idMaquina INT,
+    idOrdemProducao INT,
+    finalizado BOOLEAN,
+    ordenacao INT,
+    FOREIGN KEY (idOrdemProducao) REFERENCES ordem_producao(idOrdemProducao),
+    FOREIGN KEY (idForno) REFERENCES forno(idForno),
     FOREIGN key (idMaquina) REFERENCES maquina(idMaquina)
 )ENGINE=InnoDB;
 

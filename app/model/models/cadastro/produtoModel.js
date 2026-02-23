@@ -16,6 +16,9 @@ const produtoModel = connect.define(
         },
         codigoOmie: {
             type: DataTypes.CHAR
+        },
+        numeroGravacao:{
+            type:DataTypes.INTEGER
         }
     },
     {

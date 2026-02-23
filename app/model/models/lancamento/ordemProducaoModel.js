@@ -31,6 +31,9 @@ const ordemProducaoModel = connect.define(
         },
         quantidade: {
             type: DataTypes.INTEGER
+        },
+        idStatus:{
+            type: DataTypes.INTEGER
         }
     },
     {

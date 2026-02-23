@@ -1,0 +1,164 @@
+<div class="container text-center">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">INICIO</a></li>
+            <li class="breadcrumb-item"><a>MONTAGEM DE SETUP</a></li>
+        </ol>
+    </nav>
+</div>
+<div class="container card p-2">
+    <div class="row">
+        <div class="col">
+            <input type="hidden" name="idOrdemProducao" id="idOrdemProducao" value="<%=arrOrdemProducao[0].idOrdemProducao%>">
+            <p>OP: <%= arrOrdemProducao[0].numeroOrdemProducao%>
+            </p>
+        </div>
+        <div class="col">
+            <p>LOTE: <%= arrOrdemProducao[0].loteOrdemProducao%>
+            </p>
+        </div>
+        <div class="col">
+            <p>CLIENTE: <%= arrOrdemProducao[0].cliente.nomeCliente%>
+            </p>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col">
+            <p>QUANTIDADE: <%= arrOrdemProducao[0].produto.descProduto%>
+            </p>
+        </div>
+
+    </div>
+    <div>
+        <div class="col">
+            <p>QUANTIDADE: <%= arrOrdemProducao[0].quantidade%>
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3">
+            <p>NUMERO DE GRAVAÇÕES: 3</p>
+        </div>
+        <div class="col-sm-6">
+            <p>QUANTIDADE DE PASSADAS: 150.000</p>
+        </div>
+        <div class="col-sm-3">
+            <p>FLUXO: SILK -> SILK -> HOT</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-3">
+            <p>QUANTIDADE PROGRAMADO: 0</p>
+        </div>
+
+    </div>
+
+
+
+</div>
+<div class="row p-5">
+    <div class="col card">
+        <div class="row p-2">
+            <p class="text-center">MAQUINAS</p>
+            <div class="col">
+                <div id="maquina">
+                    <div id="maquina_item" class="list-group">
+                        <% arrMaquinas.forEach(maquina=>{
+                            %>
+                            <div class="list-group-item">
+                                <input type="hidden" class="idMaquina" name="idMaquina" value="<%=maquina.idMaquina%>">
+                                <%=maquina.descMaquina%>
+                            </div>
+                            <%}) %>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="col card">
+        <div class="col">
+            <div id="setup" style="height: 100%;">
+                <div id="setup_item" class="list-group p-1" style="height: 100%;">
+                    <div class="list-group-item text-center" style="height: 100%;">
+                        SETUP
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col card">
+        <div class="row p-2">
+            <p class="text-center">FORNOS</p>
+            <div class="col">
+                <div id="forno">
+                    <div id="forno_item" class="list-group">
+
+                        <% arrFornos.forEach(forno=>{
+                            %>
+                            <div onclick='enviarFila(this)' style="cursor: pointer;"
+                                class="list-group-item forno_enviar text-center filtered">
+                                <input type="hidden" class="idForno" name="idForno" value="<%=forno.idForno%>">
+                                <%= forno.descricaoForno %> ENVIAR
+                            </div>
+                            <% }) %>                               
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    new Sortable(document.querySelector('#maquina #maquina_item'), {
+        animation: 150,
+        ghostClass: 'ghost',
+        group: 'item_maquina'
+    });
+    new Sortable(document.querySelector('#setup #setup_item'), {
+        group: {
+            name: 'item_maquina',
+
+        },
+        animation: 150,
+        ghostClass: 'ghost',
+
+    });
+    new Sortable(document.querySelector('#forno #forno_item'), {
+        filter: '.filtered',
+        animation: 150,
+        ghostClass: 'ghost',
+        group: 'item_maquina'
+    })
+
+    var setup = document.querySelector('#setup');
+    var setup_item = setup.getElementsByTagName('div');
+
+    for (var i = 0; i < setup_item.length; i++) {
+        new Sortable(setup_item[i], {
+            group: 'item_maquina',
+            animation: 150,
+            fallbackOnBody: true,
+            swapThreshold: 0.65
+        });
+    };
+
+    var forno = document.querySelector('#forno');
+    var forno_item = forno.getElementsByTagName('div');
+
+    for (var i = 0; i < forno_item.length; i++) {
+        new Sortable(forno_item[i], {
+
+            group: 'item_maquina',
+            animation: 150,
+            fallbackOnBody: true,
+            swapThreshold: 0.65
+        });
+    };
+
+</script>
+<script src="/js/enviarFilaGravacao.js"></script>

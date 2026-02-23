@@ -24,26 +24,27 @@
                 %>
                 <tr>
                     <td class="text-center">
-                        <%= element.ordem_producao.numeroOrdemProducao%>
+                        <%= element.numeroOrdemProducao%>
                     </td>
                     <td>
-                        <%= element.ordem_producao.loteOrdemProducao%>
+                        <%= element.loteOrdemProducao%>
                     </td>
                     <td>
-                        <%= element.ordem_producao.cliente.nomeCliente%>
+                        <%= element.cliente.nomeCliente%>
                     </td>
                     <td>
-                        <%= element.ordem_producao.produto.descProduto%>
+                        <%= element.produto.descProduto%>
                     </td>
                     <td class="text-center">
-                        <%= element.ordem_producao.quantidade%>
+                        <%= element.quantidade%>
                     </td>
                     <td class="text-center">
-                        <%= element.total%>
+                        <%= element.quantidadeProduzida%>
                     </td>
                     <td>
-                        <a href="/#">
-                            <img src="/img/add-24.png" alt="">
+                       
+                        <a href="/fila-setup/<%= element.idOrdemProducao%>">
+                            <img src="/img/send-24.png" alt="">
                         </a>|
                         <a href="/#">
                             <img src="/img/check-24.png" alt="">

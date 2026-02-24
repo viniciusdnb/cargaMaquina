@@ -9,11 +9,8 @@ const fila_gravacaoModel = connect.define(
             primaryKey: true,
             autoIncrement: true            
         },
-        idForno:{
-             type: DataTypes.INTEGER,             
-        },
-        idMaquina:{
-             type: DataTypes.INTEGER,             
+        idMaquinarioFila:{
+            type: DataTypes.INTEGER
         },
         idOrdemProducao:{
             type: DataTypes.INTEGER

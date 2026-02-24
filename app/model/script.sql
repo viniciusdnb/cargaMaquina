@@ -193,17 +193,25 @@ CREATE TABLE fila_maquina (
     FOREIGN key (idMaquina) REFERENCES maquina(idMaquina)
 )ENGINE=InnoDB;
 
-CREATE TABLE fila_gravacao(
-    idFilaGravacao INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE maquinario_fila(
+    idMaquinarioFila INT PRIMARY KEY AUTO_INCREMENT,
     idForno INT,
     idMaquina INT,
+    FOREIGN KEY (idForno) REFERENCES forno(idForno),
+    FOREIGN key (idMaquina) REFERENCES maquina(idMaquina)
+)
+
+CREATE TABLE fila_gravacao(
+    idFilaGravacao INT PRIMARY KEY AUTO_INCREMENT,
     idOrdemProducao INT,
+    idMaquinarioFila INT,
     finalizado BOOLEAN,
     ordenacao INT,
     FOREIGN KEY (idOrdemProducao) REFERENCES ordem_producao(idOrdemProducao),
-    FOREIGN KEY (idForno) REFERENCES forno(idForno),
-    FOREIGN key (idMaquina) REFERENCES maquina(idMaquina)
+    FOREIGN KEY (idMaquinarioFila) REFERENCES maquinario_fila(idMaquinarioFila)
 )ENGINE=InnoDB;
+
+
 
 CREATE TABLE metas_producao_maquina(
 	idMetasProducaoMaquina INT PRIMARY KEY AUTO_INCREMENT,

@@ -1,0 +1,53 @@
+<div class="container-fluid text-center">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">INICIO</a></li>
+            <li class="breadcrumb-item"><a href="/">PREVIEW</a></li>
+            <li class="breadcrumb-item">
+                <h3>MAQUINA FORNO: <%=arrData[0].nomeForno%>
+                </h3>
+            </li>
+
+        </ol>
+    </nav>
+</div>
+<main class="container-fluid">
+    <% let maquinario=arrData[0].maquinario; maquinario.forEach(maquina=>{
+        if(maquina.idSetor == 2){%>
+            <h4><%=maquina.nomeMaquina%></h4>
+        <table class="table table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <td>#</td>
+                    <td>OP</td>
+                    <td>CLIENTE</td>
+                    <td>PRODUTO</td>
+                    <td>QTD PEDIDO</td>
+                    <td>QTD PRODUZIDO</td>
+                    <td>COMEÇA</td>
+                    <td>TERMINA</td>
+                    <td>opções</td>
+                </tr>
+            </thead>
+            <tbody>
+                <%
+                    maquina.produtos.forEach(produto=>{%>
+                        <tr>
+                           <%//console.log(produto);%>
+                            <td><%=produto.ordenacao%></td>   
+                            <td><%=produto.ordemProducao%></td> 
+                            <td><%=produto.cliente%></td> 
+                            <td><%=produto.nomeProduto%></td> 
+                            <td><%=produto.quantidade%></td>  
+                            <td><%=produto.quantidadeProduzido%></td>  
+                        </tr>
+                    <%})
+                %>
+            </tbody>
+        </table>
+        <br>
+
+
+        <% }}) %>
+
+</main>

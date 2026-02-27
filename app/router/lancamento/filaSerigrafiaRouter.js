@@ -12,6 +12,13 @@ filaSerigrafiaRouter.get('/fila-setup/:idOrdemProducao', function(req, res){
 
 filaSerigrafiaRouter.post('/fila-serigrafia', function(req, res){
     filaSerigrafiaController.insert(req, res);
+});
+
+filaSerigrafiaRouter.get('/fila-serigrafia/verfila/:idForno', function(req, res){
+    filaSerigrafiaController.verFila(req, res);
+});
+filaSerigrafiaRouter.get('/fila-serigrafia/preview', function(req, res){
+    filaSerigrafiaController.preview(req, res);
 })
 
 module.exports = filaSerigrafiaRouter;

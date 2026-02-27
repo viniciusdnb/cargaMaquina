@@ -6,7 +6,8 @@ const maquinario_filaModel = connect.define(
     {
         idMaquinarioFila:{
             type: DataTypes.INTEGER,
-            primaryKey: true
+            primaryKey: true,
+            autoIncrement: true
         },
         idMaquina:{
             type: DataTypes.INTEGER
@@ -17,6 +18,7 @@ const maquinario_filaModel = connect.define(
     },{
         timestamps: false,
         freezeTableName: true
+        
     }   
     
 );

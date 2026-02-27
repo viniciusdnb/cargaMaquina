@@ -8,9 +8,10 @@ const fila_gravacaoModel = connect.define(
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true            
-        },
+        },    
         idMaquinarioFila:{
-            type: DataTypes.INTEGER
+            type: DataTypes.INTEGER,
+            
         },
         idOrdemProducao:{
             type: DataTypes.INTEGER
@@ -23,8 +24,10 @@ const fila_gravacaoModel = connect.define(
         }
     },
     {
+        tableName: "fila_gravacao",
         timestamps: false,
         freezeTableName: true
+        
     }   
     
 );

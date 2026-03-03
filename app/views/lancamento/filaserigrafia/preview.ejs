@@ -2,30 +2,26 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/">INICIO</a></li>
-            <li class="breadcrumb-item"><a>SELECIONE FORNO</a></li>
+            <li class="breadcrumb-item"><h3>SELECIONE UMA MAQUINA OU FORNO</h3></li>
         </ol>
     </nav>
 </div>
 <div class="row">
     <% console.log(arrData[0].maquinario[0].produtos); arrForno.forEach(forno=>{%>
         <div class="col-sm-6">
-            <div class="row" style="border: 1px solid #DEE2E6; border-radius: 5px; padding: 10px; margin: 10px;">
-                <div class="col-sm-4">
+            <div class="row" style="border: 1px solid black; border-radius: 5px; padding: 10px; margin: 10px;">
+                <div class="col-sm-8">
                     <div class="accordion" id="accordionExample">
                         <% arrData.forEach(dataForno=>{
                             if(dataForno.idForno == forno.idForno){
                             dataForno.maquinario.forEach(maquinario =>{
                             arrMaquina.forEach(maquina =>{
                             if(maquina.idMaquina == maquinario.idMaquina && maquina.idSetor == 2){%>
-                            <div class="accordion-item">
-                                
-                                <h2 class="accordion-header">
-                                    
+                            <div class="accordion-item">                                
+                                <h2 class="accordion-header">                                    
                                     <button class="accordion-button" type="button" data-bs-toggle="collapse"
                                         data-bs-target="#collapse<%=maquina.descMaquina+dataForno.idForno%>" aria-expanded="true" aria-controls="collapse<%=maquina.descMaquina+dataForno.idForno%>">
-                                       
-                                        <%= maquina.descMaquina %>
-                                        
+                                       <%= maquina.descMaquina %>
                                     </button>
                                 </h2>
                                 <div id="collapse<%=maquina.descMaquina+dataForno.idForno%>" class="accordion-collapse collapse"
@@ -53,12 +49,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-4 list-group">
-                    <div class="list-group-item">-</div>
-                    <div class="list-group-item">-</div>
-                    <div class="list-group-item">-</div>
-
-                </div>
+                
             </div>
 
 

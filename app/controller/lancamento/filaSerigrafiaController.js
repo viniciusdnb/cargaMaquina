@@ -3,7 +3,7 @@ const ordemProducaoModel = require('../../model/models/lancamento/ordemProducaoM
 const clienteModel = require('../../model/models/cadastro/clienteModel');
 const produtoModel = require('../../model/models/cadastro/produtoModel');
 const list_apont_sum_qtd_grop_idOp = require('../../model/models/lancamento/list_apont_sum_qtd_grop_idOpModelView');
-const { Op, or } = require('sequelize');
+const { Op, or, where } = require('sequelize');
 const maquinaModel = require('../../model/models/cadastro/maquinaModel');
 const fornoModel = require('../../model/models/cadastro/fornoModel');
 const maquinario_filaModel = require('../../model/models/lancamento/maquinario_filaModel');
@@ -21,7 +21,7 @@ module.exports = {
     index: async function (req, res) {
         
         let arrOrdemProducao = await this.getQuantidadeProduzido();
-
+ 
         
        
         res.render('lancamento/filaserigrafia', {
@@ -88,7 +88,7 @@ module.exports = {
     getfilaMaquinas: async function (idOrdemProducao) {
         let filaGravacao = await filaGravacaoModel.findAll(
             {
-                where: { idOrdemProducao: idOrdemProducao },
+                where: { idOrdemProducao: idOrdemProducao, finalizado: 0 },
                 include: [maquinario_filaModel]
             });
         let arrFilaGravacao = JSON.parse(JSON.stringify(filaGravacao, null));
@@ -109,10 +109,11 @@ module.exports = {
         let maquinas = await maquinaModel.findAll({ where: { [Op.or]: [{ idSetor: 2 }, { idSetor: 3 }] } });
         let arrMaquinas = JSON.parse(JSON.stringify(maquinas, null));
         let arrMaquinasDisponivel = [];
-
+        //arrumar uma forma apos finalizar liberar a maquina para usar para o item
         if (arrMaquinasEmUso.length != 0) {
             arrMaquinas.forEach(maquina => {
                 let existMaquina = false;
+
                 for (const key in arrMaquinasEmUso) {
                     if (maquina.idMaquina == arrMaquinasEmUso[key].idMaquina) {
                         existMaquina = true;
@@ -293,17 +294,18 @@ module.exports = {
 
             // 🎯 Adiciona produtos não finalizados e não repetidos
             fila_gravacaos.forEach(fila => {
-                console.log(fila);
+                //console.log(fila);
                 if (fila.finalizado) return;
-
+               
                 const produto = fila?.ordem_producao?.produto;
                 if (!produto) return;
-
+                
                 const produtoJaExiste = maquinaExistente.produtos.find(
-                    p => p.idProduto === produto.idProduto
+                    
+                    p => p.idProduto === produto.idProduto || p.idOrdemProducao != produto.idOrdemProducao
                 );
-
-                if (!produtoJaExiste) {
+                
+                if (!produtoJaExiste || produto.idOrdemProducao != produtoJaExiste.idOrdemProducao) {
                     
                     maquinaExistente.produtos.push({
                         
@@ -314,13 +316,26 @@ module.exports = {
                         ordemProducao: fila.ordem_producao.numeroOrdemProducao,
                         ordenacao:fila.ordenacao,
                         quantidade:fila.ordem_producao.quantidade,  
-                        quantidadeProduzido:""
+                        quantidadeProduzido:"",
+                        idFilaGravacao: fila.idFilaGravacao
                     });
                 }
             });
         });
 
         return Object.values(fornosMap);
+    },
+
+    finaliza: async function(req, res){
+        let idFilaGravacao = req.params.idFilaGravacao;
+        console.log(idFilaGravacao);
+        await filaGravacaoModel.update({finalizado:1},
+            {
+                where:{
+                    idFilaGravacao:idFilaGravacao
+                }});
+        res.redirect("/fila-serigrafia/preview");
+
     }
 
 }

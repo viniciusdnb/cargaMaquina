@@ -19,6 +19,9 @@ filaSerigrafiaRouter.get('/fila-serigrafia/verfila/:idForno', function(req, res)
 });
 filaSerigrafiaRouter.get('/fila-serigrafia/preview', function(req, res){
     filaSerigrafiaController.preview(req, res);
+});
+filaSerigrafiaRouter.get('/fila-serigrafia/finalizar/:idFilaGravacao', function(req, res){
+    filaSerigrafiaController.finaliza(req, res);
 })
 
 module.exports = filaSerigrafiaRouter;

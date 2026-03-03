@@ -40,6 +40,10 @@
                             <td><%=produto.nomeProduto%></td> 
                             <td><%=produto.quantidade%></td>  
                             <td><%=produto.quantidadeProduzido%></td>  
+                            <td><%//onsole.log(produto)%>
+                                <a><img src="/img/delete-24.png"></a>
+                                <a href="/fila-serigrafia/finalizar/<%=produto.idFilaGravacao%>"><img src="/img/check-24.png"></a>    
+                            </td>
                         </tr>
                     <%})
                 %>
@@ -51,3 +55,13 @@
         <% }}) %>
 
 </main>
+
+
+<script>
+   document.addEventListener('DOMContentLoaded', function(){
+    new Sortable(document.querySelector('.table tbody'),{
+        animation: 150,
+        ghostClass: "ghost"
+    })
+   })
+</script>

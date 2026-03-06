@@ -220,7 +220,7 @@ module.exports = {
             if ("considerarHoraInicial" in req.body) {
                 considerarHoraInicial = true
             }
-
+            
             var prevision = new machineLoad(dataDB, configWork).getPrevision(descMaquina, considerarHoraInicial);
 
             return res.render('lancamento/filamaquina/index', {

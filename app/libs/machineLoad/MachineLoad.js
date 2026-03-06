@@ -1,17 +1,14 @@
-class MachineLoad
-{
-    constructor(fileDataDB, fileConfig)
-    {
+class MachineLoad {
+    constructor(fileDataDB, fileConfig) {
         const InterfaceCore = require('./InterfaceCore');
         this.dataDB = fileDataDB;
         this.config = fileConfig;
         this.dateTimeNow = new Date();
         this.InterfaceCore = new InterfaceCore(this.config);
-        
+
     }
 
-    timeStampRemainigProduction(machine,sequence)
-    {
+    timeStampRemainigProduction(machine, sequence) {
         let orderQuantity = parseInt(this.dataDB.queue[machine].queueProducts[sequence].orderQuantity);
         let quantityProduced = parseInt(this.dataDB.queue[machine].queueProducts[sequence].quantityProduced);
         let bpm = this.verifyBpm(machine, sequence);
@@ -21,118 +18,108 @@ class MachineLoad
         //INCLUIR TEMPO DE SETUP
         //converte os minutos para inteiro de timestamp
         return (minutesRemainig + 60) * 60 * 1000;
-        
+
     }
 
-    getPrevision(machine, considerarHoraInicial)
-    {
+    getPrevision(machine, considerarHoraInicial) {
         //seta o horario atual para o primeiro item da simulação
-        
+
         //seta o horario inicial padrao para simulação 
-        if(considerarHoraInicial)
-        {   
-            
+        if (considerarHoraInicial) {
+
             var dateTimeNow = new Date();
-            dateTimeNow.setHours(7,12,0);
+            dateTimeNow.setHours(7, 12, 0);
             
-            this.dataDB.queue[machine].queueProducts[0].previsionStart =new Date(dateTimeNow);
-            console.log( this.dataDB.queue[machine].queueProducts[0].previsionStart);
+            this.dataDB.queue[machine].queueProducts[0].previsionStart = new Date(dateTimeNow);
+
+            //console.log( this.dataDB.queue[machine].queueProducts[0].previsionStart);
         }
 
         this.setPrevisionFirstItem(machine, dateTimeNow);
-        
-       
-         //pega a quantidade de objetos dentro do objeto
+
+
+        //pega a quantidade de objetos dentro do objeto
         //a forma é diferente do array
-      
-       
-       
+
+
+
 
         var numbersQueueProducts = Object.keys(this.dataDB.queue[machine].queueProducts).length;
         var queueKey = 0;
 
-        for(let i = 1; i < numbersQueueProducts; i++)
-        {
-           
+        for (let i = 1; i < numbersQueueProducts; i++) {
+
             var dataTimePrevisionPrevious = new Date(this.dataDB.queue[machine].queueProducts[queueKey].previsionEnd);
-            
+
             this.dataDB.queue[machine].queueProducts[i].previsionStart = dataTimePrevisionPrevious;
 
-            var newPrevision = this.setPrevisions(machine,i, dataTimePrevisionPrevious);
+            var newPrevision = this.setPrevisions(machine, i, dataTimePrevisionPrevious);
 
             this.dataDB.queue[machine].queueProducts[i].previsionEnd = newPrevision;
 
             queueKey++;
 
         }
-       
-       return this.dataDB;
+
+        return this.dataDB;
     }
 
-    setPrevisions(machine, queueKey, dateTimeNow)
-    {
+    setPrevisions(machine, queueKey, dateTimeNow) {
         var timeRemainingProduction = this.timeStampRemainigProduction(machine, queueKey);
         var dateTimeNowSimulation = this.getDateTimeNowSimulation(dateTimeNow);
 
-         var tempoAdicional = 0
-         //console.log((timeRemainingProduction / (1000 * 60 * 60)))
-        if((timeRemainingProduction / (1000 * 60 * 60)) > 10)
-            {
-                 tempoAdicional = ((((timeRemainingProduction / (1000 * 60 * 60))/10)*15)*60)*60*1000
-            }
-        var newDateTimePrevision = new Date(dateTimeNowSimulation.getTime()+timeRemainingProduction + tempoAdicional);
-        
+        var tempoAdicional = 0
+        //console.log((timeRemainingProduction / (1000 * 60 * 60)))
+        if ((timeRemainingProduction / (1000 * 60 * 60)) > 10) {
+            tempoAdicional = ((((timeRemainingProduction / (1000 * 60 * 60)) / 10) * 15) * 60) * 60 * 1000
+        }
+        var newDateTimePrevision = new Date(dateTimeNowSimulation.getTime() + timeRemainingProduction + tempoAdicional);
+
         //arrumar uma forma de verificar se nao esta contando com horario da noite
         return this.InterfaceCore.getNewPrevision(newDateTimePrevision);
     }
 
 
-    setPrevisionFirstItem(machine,dateTimeNow)
-    {
-       //funcao que cria a primeira simulção dos horarios da fila,
-       //levando em consideração se é pra inicial a simulação com horario padriao do sistema ou inicio 
-       //do horario de trabalho
+    setPrevisionFirstItem(machine, dateTimeNow) {
+        //funcao que cria a primeira simulção dos horarios da fila,
+        //levando em consideração se é pra inicial a simulação com horario padriao do sistema ou inicio 
+        //do horario de trabalho
         var dateTimeNowSimulation = this.getDateTimeNowSimulation(dateTimeNow);
-        
-       
-       
+
+
+
         this.dataDB.queue[machine].queueProducts[0].previsionEnd = this.setPrevisions(machine, 0, dateTimeNowSimulation);
-        
+
     }
 
-    getDateTimeNowSimulation(dateTimeNow = null)
-    {
-        if(dateTimeNow == null){
+    getDateTimeNowSimulation(dateTimeNow = null) {
+        if (dateTimeNow == null) {
             return new Date(this.InterfaceCore.getNewPrevision(this.dateTimeNow));
         }
-           
+
         return new Date(this.InterfaceCore.getNewPrevision(dateTimeNow));
 
     }
 
-    verifyLanchBreak()
-    {
-        if(this.config.lunchBreak.considerLunchBreak)
-        {
+    verifyLanchBreak() {
+        if (this.config.lunchBreak.considerLunchBreak) {
             return parseInt(this.config.lunchBreak.inTtimeMinutesLunch);
         }
-            return 0;
-        
-    }
-    
-    verifyBpm(machine, sequence)
-    {
-        if(this.dataDB.queue[machine].considerBPMMachine)
-        {
-             var bpm = this.dataDB.queue[machine].queueProducts[sequence].bpmProduct;
-            
+        return 0;
 
-        }else{
+    }
+
+    verifyBpm(machine, sequence) {
+        if (this.dataDB.queue[machine].considerBPMMachine) {
+            var bpm = this.dataDB.queue[machine].queueProducts[sequence].bpmProduct;
+
+
+        } else {
 
             var bpm = this.dataDB.queue[machine].bpm;
-    
+
         }
-        
+
         return bpm;
     }
 }

@@ -5,7 +5,7 @@
             <li class="breadcrumb-item"><a>MONTAGEM DE SETUP</a></li>
         </ol>
     </nav>
-</div>
+</div><% console.log(arrOrdemProducao[0])%>
 <div class="container card p-2">
     <div class="row">
         <div class="col">
@@ -38,22 +38,17 @@
     </div>
     <div class="row">
         <div class="col-sm-3">
-            <p>NUMERO DE GRAVAÇÕES: 3</p>
+            <%
+                var numeroGravacao = arrOrdemProducao[0].produto.numeroGravacao;
+                var quantidade = arrOrdemProducao[0].quantidade;
+            %>
+            <p>NUMERO DE GRAVAÇÕES: <%= numeroGravacao != null ? numeroGravacao : 0 %></p>
         </div>
         <div class="col-sm-6">
-            <p>QUANTIDADE DE PASSADAS: 150.000</p>
-        </div>
-        <div class="col-sm-3">
-            <p>FLUXO: SILK -> SILK -> HOT</p>
-        </div>
+            <p>QUANTIDADE DE PASSADAS: <%= numeroGravacao != null ? quantidade*numeroGravacao : 0 %></p>
+        </div>       
     </div>
-    <div class="row">
-        <div class="col-sm-3">
-            <p>QUANTIDADE PROGRAMADO: 0</p>
-        </div>
-
-    </div>
-
+  
 
 
 </div>
@@ -66,7 +61,7 @@
                     <div id="maquina_item" class="list-group">
                         <% arrMaquinas.forEach(maquina=>{
                             %>
-                            <div class="list-group-item">
+                            <div class="list-group-item list-group-item-action" style="cursor: pointer;">
                                 <input type="hidden" class="idMaquina" name="idMaquina" value="<%=maquina.idMaquina%>">
                                 <%=maquina.descMaquina%>
                             </div>
@@ -81,8 +76,8 @@
     <div class="col card">
         <div class="col">
             <div id="setup" style="height: 100%;">
-                <div id="setup_item" class="list-group p-1" style="height: 100%;">
-                    <div class="list-group-item text-center" style="height: 100%;">
+                <div id="setup_item" class="list-group p-3" style="height: 100%;">
+                    <div class="list-group-item text-center " style="height: 100%;">
                         SETUP
                     </div>
                 </div>
@@ -95,19 +90,18 @@
             <div class="col">
                 <div id="forno">
                     <div id="forno_item" class="list-group">
-
                         <% arrFornos.forEach(forno=>{
                             %>
-                            <div onclick='enviarFila(this)' style="cursor: pointer;"
-                                class="list-group-item forno_enviar text-center filtered">
+                            <div 
+                                onclick='enviarFila(this)' 
+                                style="cursor: pointer; color: blue;"
+                                class="list-group-item list-group-item-action forno_enviar text-center filtered">
                                 <input type="hidden" class="idForno" name="idForno" value="<%=forno.idForno%>">
                                 <%= forno.descricaoForno %> ENVIAR
                             </div>
                             <% }) %>                               
                     </div>
-
                 </div>
-
             </div>
         </div>
     </div>

@@ -2,9 +2,9 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/">INICIO</a></li>
-            <li class="breadcrumb-item"><a href="/">PREVIEW</a></li>
+            <li class="breadcrumb-item"><a href="/fila-serigrafia/preview">PREVIEW</a></li>
             <li class="breadcrumb-item">
-                <h3>MAQUINA FORNO: <%=arrData[0].nomeForno%>
+                <h3>MAQUINA FORNO: <%=arrData.nomeForno%>
                 </h3>
             </li>
 
@@ -12,10 +12,15 @@
     </nav>
 </div>
 <main class="container-fluid">
-    <% let maquinario=arrData[0].maquinario; maquinario.forEach(maquina=>{
-        if(maquina.idSetor == 2){%>
-            <h4><%=maquina.nomeMaquina%></h4>
-        <table class="table table-hover">
+    <% arrData.data.forEach(maquinas=>{
+        for(const key in maquinas){
+           
+            %>
+        <h4>
+            <% var nomeMaquina = Object.keys(maquinas[key]).pop()%>
+            <%=nomeMaquina %>
+        </h4>
+        <table class="table table-hover" id="table<%= nomeMaquina%>">
             <thead class="table-dark">
                 <tr>
                     <td>#</td>
@@ -30,38 +35,96 @@
                 </tr>
             </thead>
             <tbody>
-                <%
-                    maquina.produtos.forEach(produto=>{%>
+               
+                    <%
+                        for(const i in maquinas[key][nomeMaquina].queueProducts){
+                             console.log(maquinas[key][nomeMaquina].queueProducts[i])
+                        %>
                         <tr>
-                           <%//console.log(produto);%>
-                            <td><%=produto.ordenacao%></td>   
-                            <td><%=produto.ordemProducao%></td> 
-                            <td><%=produto.cliente%></td> 
-                            <td><%=produto.nomeProduto%></td> 
-                            <td><%=produto.quantidade%></td>  
-                            <td><%=produto.quantidadeProduzido%></td>  
-                            <td><%//onsole.log(produto)%>
-                                <a><img src="/img/delete-24.png"></a>
-                                <a href="/fila-serigrafia/finalizar/<%=produto.idFilaGravacao%>"><img src="/img/check-24.png"></a>    
-                            </td>
+                            <td><%=i%></td>
+                            <td><%=maquinas[key][nomeMaquina].queueProducts[i].ordemProducao%></td>
+                            <td><%=maquinas[key][nomeMaquina].queueProducts[i].cliente%></td>
+                            <td><%=maquinas[key][nomeMaquina].queueProducts[i].produto%></td>
+                            <td><%=maquinas[key][nomeMaquina].queueProducts[i].orderQuantity%></td>
+                            <td><%=maquinas[key][nomeMaquina].queueProducts[i].quantityProduced%></td>
+                            <td><%=maquinas[key][nomeMaquina].queueProducts[i].previsionStart%></td>
+                            <td><%=maquinas[key][nomeMaquina].queueProducts[i].previsionEnd%></td>
                         </tr>
-                    <%})
-                %>
+                        <%}
+                       
+                    %>
+              
             </tbody>
         </table>
-        <br>
+
+        <%} }) %>
+
+            <table class="table table-hover" id="table">
+                <thead class="table-dark">
+                    <tr>
+                        <td>#</td>
+                        <td>OP</td>
+                        <td>CLIENTE</td>
+                        <td>PRODUTO</td>
+                        <td>QTD PEDIDO</td>
+                        <td>QTD PRODUZIDO</td>
+                        <td>COMEÇA</td>
+                        <td>TERMINA</td>
+                        <td>opções</td>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr>
+
+                        <td>
+
+                        </td>
+                        <td>
+
+                        </td>
+                        <td>
+
+                        </td>
+                        <td>
+
+                        </td>
+                        <td>
+
+                        </td>
+                        <td>
+
+                        </td>
+                        <td>
+                            <a href="" data-bs-toggle="modal" data-bs-target="#staticBackdropTransfer"
+                                /*onclick='transferir("","")' */ />
+                            <img src="/img/transfer-24.png"></a>
+
+                            <a><img src="/img/delete-24.png"></a>
+                            <a href="/fila-serigrafia/finalizar/"><img src="/img/check-24.png"></a>
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+            <br>
 
 
-        <% }}) %>
+
 
 </main>
 
 
 <script>
-   document.addEventListener('DOMContentLoaded', function(){
-    new Sortable(document.querySelector('.table tbody'),{
-        animation: 150,
-        ghostClass: "ghost"
+    document.addEventListener('DOMContentLoaded', function () {
+        var tables = document.querySelectorAll('.table');
+        Array.from(tables).forEach(elemtent => {
+            new Sortable(document.querySelector(`#${elemtent.id} tbody`), {
+                animation: 150,
+                ghostClass: "ghost",
+                group: "table"
+            })
+        })
     })
-   })
+
 </script>

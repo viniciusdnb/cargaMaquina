@@ -20,5 +20,10 @@ function enviarFila(el){
         'Content-Type':'application/json'
     },
     body:JSON.stringify(objFila)
+   }).then(res =>{
+        if(res.ok){
+            location.reload();
+        }
    });
+   
 }

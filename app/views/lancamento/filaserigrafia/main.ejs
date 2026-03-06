@@ -21,6 +21,7 @@
         </thead>
         <tbody>
             <% data.forEach(element=> {
+                console.log(element)
                 %>
                 <tr>
                     <td class="text-center">
@@ -36,18 +37,18 @@
                         <%= element.produto.descProduto%>
                     </td>
                     <td class="text-center">
-                        <%= element.quantidade%>
+                        <%= element.produto.numeroGravacao != null ?
+                         element.produto.numeroGravacao * element.quantidade : element.quantidade   %>
                     </td>
                     <td class="text-center">
                         <%= element.quantidadeProduzida%>
                     </td>
-                    <td>
-                       
+                    <td>                       
                         <a href="/fila-setup/<%= element.idOrdemProducao%>">
                             <img src="/img/send-24.png" alt="">
                         </a>|
-                        <a href="/#">
-                            <img src="/img/check-24.png" alt="">
+                        <a  href="/ordemproducao/editar/<%= element.idOrdemProducao%>">
+                            <img src="/img/edit-24.png" alt="">
                         </a>
                     </td>
 

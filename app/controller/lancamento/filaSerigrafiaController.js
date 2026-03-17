@@ -265,8 +265,7 @@ module.exports = {
 
             for (const produto of produtos) {
 
-                let result = await this.getCount(produto.idOrdemProducao);
-
+                let result = await this.getCount(produto.idOrdemProducao);                
                 let qtdOrdem = result <= 0
                     ? produto.quantidade
                     : produto.quantidade / result;
@@ -285,10 +284,11 @@ module.exports = {
                     quantityProduced: qtdProduzido,
                     previsionStart: "",
                     previsionEnd: "",
-                    idFilaMaquina: produto.idFilaGravacao,
+                    idFilaGravacao: produto.idFilaGravacao,
                     idOrdemProducao: produto.idOrdemProducao,
-                    idMaquina: arrData[0].maquinario[0].idMaquina,
-                    numeroGravacao: produto.numeroGravacao
+                    idMaquina: maquinario.idMaquina,
+                    numeroGravacao: produto.numeroGravacao,
+                    ordenacao: produto.ordenacao
                 };
 
             }
@@ -300,7 +300,8 @@ module.exports = {
             data[nomeMaquina] = {
                 bpm: 7,
                 considerBPMMachine: false,
-                queueProducts: prod
+                queueProducts: prod, 
+                
             };
         }
 
@@ -476,6 +477,25 @@ module.exports = {
         return await filaGravacaoModel.count({
             where: { idOrdemProducao: idOrdemProducao, finalizado: 0 }
         });
+    },
+
+    calcule: async function(req, res){
+        const dataForm = req.body;
+        for(const item of dataForm){
+            await filaGravacaoModel.update(
+                {ordenacao: item.ordem},
+                {
+                    where:{
+                        idFilaGravacao: item.idFilaGravacao
+                    }
+                }
+            )
+        };
+
+        res.sendStatus(200);
+        
     }
+
+
 
 }

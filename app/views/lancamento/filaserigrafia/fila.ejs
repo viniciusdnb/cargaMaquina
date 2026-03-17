@@ -1,3 +1,4 @@
+<script src="/js/recalcular-fila-gravacao.js"></script>
 <div class="container-fluid text-center">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -16,7 +17,7 @@
  <%   
         arrData.data.forEach(maquinas=>{
         for(const key in maquinas){
-           
+           //console.log(maquinas[key])
             %>
         <h4>
             <% 
@@ -42,10 +43,12 @@
                
                     <%
                         for(const i in maquinas[key][nomeMaquina].queueProducts){
-                             //console.log(maquinas[key][nomeMaquina].queueProducts[i])
+                             console.log(maquinas[key][nomeMaquina].queueProducts[i])
                         %>
-                        <tr>
-                            <td><%=i%></td>
+                        <tr class="linha">
+                            <input type="hidden" class="idFilaGravacao" value="<%=maquinas[key][nomeMaquina].queueProducts[i].idFilaGravacao%>">
+                            <input type="hidden" class="idMaquina" value="<%=maquinas[key][nomeMaquina].queueProducts[i].idMaquina%>">
+                            <td><%=maquinas[key][nomeMaquina].queueProducts[i].ordenacao%></td>
                             <td><%=maquinas[key][nomeMaquina].queueProducts[i].ordemProducao%></td>
                             <td><%=maquinas[key][nomeMaquina].queueProducts[i].cliente%></td>
                             <td><%=maquinas[key][nomeMaquina].queueProducts[i].produto%></td>
@@ -94,7 +97,7 @@
             new Sortable(document.querySelector(`#${elemtent.id} tbody`), {
                 animation: 150,
                 ghostClass: "ghost",
-                group: "table"
+                
             })
         })
     })

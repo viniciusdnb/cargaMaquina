@@ -71,6 +71,7 @@ CREATE TABLE sub_motivo(
 CREATE TABLE maquina(
     idMaquina INT PRIMARY KEY AUTO_INCREMENT,
     descMaquina VARCHAR(50),
+    modelo VARCHAR(50),
     idSetor INT,
     velocidade INT,
     undVelocidade VARCHAR(3),
@@ -207,6 +208,7 @@ CREATE TABLE fila_gravacao(
     idMaquinarioFila INT,
     finalizado BOOLEAN,
     ordenacao INT,
+    numeroGravacao INT,
     FOREIGN KEY (idOrdemProducao) REFERENCES ordem_producao(idOrdemProducao),
     FOREIGN KEY (idMaquinarioFila) REFERENCES maquinario_fila(idMaquinarioFila)
 )ENGINE=InnoDB;

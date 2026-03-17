@@ -13,13 +13,16 @@ const maquinaModel = connect.define(
             type: DataTypes.CHAR
         },
         idSetor:{
-            type: DataTypes.INTEGER,    
+            type: DataTypes.INTEGER    
         },
         velocidade:{
             type: DataTypes.INTEGER
         },
         undVelocidade:{
              type: DataTypes.CHAR
+        },
+        modelo:{
+            type: DataTypes.CHAR
         }
     },
      {

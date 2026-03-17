@@ -10,6 +10,7 @@ const maquinario_filaModel = require('../../model/models/lancamento/maquinario_f
 const filaGravacaoModel = require('../../model/models/lancamento/fila_gravacaoModel');
 const machineLoad = require('../../libs/machineLoad/MachineLoad');
 const configWork = require('../../model/machineLoadModel/configWork');
+const fs = require('fs').promises;
 
 ordemProducaoModel.belongsTo(clienteModel, { foreignKey: "idCliente" });
 ordemProducaoModel.belongsTo(produtoModel, { foreignKey: "idProduto" });
@@ -31,10 +32,10 @@ module.exports = {
             'pathName': 'main'
         });
     },
-    getQuantidadeProduzido: async function () {
+    getQuantidadeProduzido: async function (idMaquina = null) {
         let ordemProducao = await ordemProducaoModel.findAll(
             {
-                where: { idStatus: { [Op.or]: [5, 6] } },
+                where: { idStatus: { [Op.or]: [2, 5, 6, 12] } },
                 include: [clienteModel, produtoModel]
             }
         );
@@ -42,7 +43,12 @@ module.exports = {
         //funcao para percorrer as ordens de producao e verificar se elas tem lancamentos nos setor da gravacao 
         for (const key in arrOrdemProducao) {
             let ordem = arrOrdemProducao[key]
-            let list = await list_apont_sum_qtd_grop_idOp.findAll({ where: { idOrdemProducao: ordem.idOrdemProducao, idSetor: 2 } });
+            if(idMaquina !=null){
+                var list = await list_apont_sum_qtd_grop_idOp.findAll({ where: { idOrdemProducao: ordem.idOrdemProducao, idSetor: 2, idMaquina:idMaquina } });
+            }else{
+                 var list = await list_apont_sum_qtd_grop_idOp.findAll({ where: { idOrdemProducao: ordem.idOrdemProducao, idSetor: 2 } });
+            }
+            
             let sumQuantidade = 0
             if (list.length != 0) {
                 let arrList = JSON.parse(JSON.stringify(list, null));
@@ -57,12 +63,16 @@ module.exports = {
 
         return arrOrdemProducao;
     },
-    getOrdenacao: function (ultimoLinhaMaquina) {
+    getOrdenacao: async function (ultimoLinhaMaquina) {
 
 
-        var ordenacao = JSON.parse(JSON.stringify(ultimoLinhaMaquina, null));
-
-        return ordenacao != null ? JSON.parse(JSON.stringify(ultimoLinhaMaquina, null)).ordenacao + 1 : 0;
+        var ultimaLinha = JSON.parse(JSON.stringify(ultimoLinhaMaquina, null));
+        
+        /*var log = ultimaLinha != null ? JSON.parse(JSON.stringify(ultimoLinhaMaquina, null)) : ">\n";
+       
+        await fs.appendFile('log.txt',`${log}`,'utf8');*/
+       
+        return ultimaLinha != null && ultimaLinha.ordenacao >= 0 ? ultimaLinha.ordenacao + 1 : 0;
     },
     setup: async function (req, res) {
         let idOrdemProducao = req.params.idOrdemProducao
@@ -139,6 +149,10 @@ module.exports = {
         let arrMaquinas = req.body.maquinas;
         let idForno = req.body.idForno;
         let idOrdemProducao = req.body.idOrdemProducao;
+         let numeroGravacao = 1
+         if(req.body.valueGravacao){
+           numeroGravacao = req.body.valueGravacao
+         }
         let arrIdMaquinarioFila = [];
 
         for (const key in arrMaquinas) {
@@ -148,8 +162,8 @@ module.exports = {
             });
 
             arrIdMaquinarioFila.push(maquinarioFila.idMaquinarioFila);
-        }
-
+        } 
+ 
         let ultimoLinhaMaquina = await filaGravacaoModel.findOne({
             order: [['ordenacao', 'DESC']],
             where: { finalizado: 0 },
@@ -164,8 +178,9 @@ module.exports = {
             await filaGravacaoModel.create({
                 idOrdemProducao: idOrdemProducao,
                 finalizado: false,
-                ordenacao: this.getOrdenacao(ultimoLinhaMaquina),
-                idMaquinarioFila: arrIdMaquinarioFila[key]
+                ordenacao: await this.getOrdenacao(ultimoLinhaMaquina),
+                idMaquinarioFila: arrIdMaquinarioFila[key],
+                numeroGravacao: numeroGravacao
             });
         }
 
@@ -194,84 +209,113 @@ module.exports = {
             ]
         });
         let arrFila = JSON.parse(JSON.stringify(fila, null));
-        let arrData = JSON.parse(JSON.stringify(this.montarEstruturaFornos(arrFila)));
-        let arrApontamentos = await this.getQuantidadeProduzido();
-        //console.log(arrFila);
-        for (const f in arrData) {
-            for (const m in arrData[f].maquinario) {
-                for (const p in arrData[f].maquinario[m].produtos) {
-                    arrApontamentos.forEach(apontamentos => {
 
-                        if (arrData[f].maquinario[m].produtos[p].idOrdemProducao == apontamentos.idOrdemProducao) {
-                            arrData[f].maquinario[m].produtos[p].quantidadeProduzido = apontamentos.quantidadeProduzida
-                        }
-                    });
+        if (arrFila.length != 0) {
+            let arrData = JSON.parse(JSON.stringify(this.montarEstruturaFornos(arrFila)));
+            
+            
+            
+            for (const f in arrData) {
 
+                for (const m in arrData[f].maquinario) {
+                    for (const p in arrData[f].maquinario[m].produtos) {
+                       
+                        let arrApontamentos = await this.getQuantidadeProduzido(arrData[f].maquinario[m].idMaquina);
+
+                        arrApontamentos.forEach(apontamentos => {
+                            
+                            if (arrData[f].maquinario[m].produtos[p].idOrdemProducao == apontamentos.idOrdemProducao) {
+                                
+                                arrData[f].maquinario[m].produtos[p].quantidadeProduzido = apontamentos.quantidadeProduzida
+                                
+                            }
+                        });
+
+
+                    }
 
                 }
-
             }
+            return res.render(
+                'lancamento/filaserigrafia', {
+                'arrData': {
+                    idForno: arrData[0].idForno,
+                    nomeForno: arrData[0].nomeForno,
+                    data: await this.gethoras(arrData)
+                },
+                'pathName': 'fila'
+                }
+            );
+
         }
 
+        res.redirect('/fila-serigrafia/preview');
 
-     
-       
-
-        res.render(
-            'lancamento/filaserigrafia', {
-            'arrData': {idForno: arrData[0].idForno, nomeForno: arrData[0].nomeForno,
-               data: this.gethoras(arrData)
-            },
-
-            'pathName': 'fila'
-        }
-        );
     },
-    gethoras: function (arrData) {
+    gethoras: async function (arrData) {
 
-        
         let maquinarios = arrData[0].maquinario;
         let data = {};
-        let dataDB = {"queue":[]};
-        maquinarios.forEach(maquinario => {
+
+        for (const maquinario of maquinarios) {
+
             let produtos = maquinario.produtos;
-            produtos.forEach(produto => {
-                console.log(produto)
-                data[produto.ordenacao] = {
-                    "cliente": produto.cliente,
-                    "produto": produto.nomeProduto,
-                    "ordemProducao": produto.ordemProducao,
-                    "orderQuantity": produto.quantidade,
-                    "bpmProduct": 10,
-                    "setup": 60,
-                    "quantityProduced": produto.quantidadeProduzido,
-                    "previsionStart": "",
-                    "previsionEnd": "",
-                    "idFilaMaquina": produto.idFilaGravacao,
-                    "idOrdemProducao": produto.idOrdemProducao,
-                    "idMaquina": arrData[0].maquinario[0].idMaquina
+            let nomeMaquina = maquinario.nomeMaquina;
+            let prod = {};
 
-                }
-            });
+            for (const produto of produtos) {
 
-           
-            dataDB.queue.push({"queue":{
-                [maquinario.nomeMaquina]:{
-                    "bpm": 10,
-                    "considerBPMMachine": false,
-                    "queueProducts": data
+                let result = await this.getCount(produto.idOrdemProducao);
 
-                }}});
-        });
+                let qtdOrdem = result <= 0
+                    ? produto.quantidade
+                    : produto.quantidade / result;
+
+                /*let qtdProduzido = result <= 0
+                    ? produto.quantidadeProduzido
+                    : produto.quantidadeProduzido / result;*/
+                let qtdProduzido = produto.quantidadeProduzido;
+                prod[produto.ordenacao] = {
+                    cliente: produto.cliente,
+                    produto: produto.nomeProduto,
+                    ordemProducao: produto.ordemProducao,
+                    orderQuantity: qtdOrdem,
+                    bpmProduct: 10,
+                    setup: 60,
+                    quantityProduced: qtdProduzido,
+                    previsionStart: "",
+                    previsionEnd: "",
+                    idFilaMaquina: produto.idFilaGravacao,
+                    idOrdemProducao: produto.idOrdemProducao,
+                    idMaquina: arrData[0].maquinario[0].idMaquina,
+                    numeroGravacao: produto.numeroGravacao
+                };
+
+            }
+            //corrigir velocidade
+            //arrumar forma de considerar individualmente a velocidade do produto
+            //arrumar "inverter a logica" da variavel considerBPMMachine
+            //false -> considera velocidade da maquina
+            //true -> considera velocidade do produto
+            data[nomeMaquina] = {
+                bpm: 7,
+                considerBPMMachine: false,
+                queueProducts: prod
+            };
+        }
 
         let arrQueue = [];
-       
-        for(const key in dataDB.queue){
-            //console.log(Object.keys(dataDB.queue[key].queue).pop());
-            arrQueue.push(new machineLoad(dataDB.queue[key],configWork).getPrevision(Object.keys(dataDB.queue[key].queue).pop(), true))
 
+        for (const key in data) {
+
+            let dataDB = {};
+            dataDB.queue = { [key]: data[key] };
+
+            arrQueue.push(
+                new machineLoad(dataDB, configWork).getPrevision(key, true)
+            );
         }
-      
+
         return arrQueue;
     },
     previewFila: async function () {
@@ -294,6 +338,7 @@ module.exports = {
             ]
         });
 
+        //await this.reeordenar(21, 2);
         return JSON.parse(JSON.stringify(fila, null));
     },
     preview: async function (req, res) {
@@ -316,14 +361,14 @@ module.exports = {
         arrData.forEach(item => {
             const { forno, maquina, fila_gravacaos } = item;
 
-            if (!forno || !maquina || !fila_gravacaos) return;
-
+            
             // 🔥 Cria forno se ainda não existir
             if (!fornosMap[forno.idForno]) {
                 fornosMap[forno.idForno] = {
                     idForno: forno.idForno,
                     nomeForno: forno.descricaoForno,
-                    maquinario: []
+                    maquinario: [],
+                    
                 };
             }
 
@@ -368,9 +413,10 @@ module.exports = {
                         idOrdemProducao: fila.ordem_producao.idOrdemProducao,
                         ordemProducao: fila.ordem_producao.numeroOrdemProducao,
                         ordenacao: fila.ordenacao,
-                        quantidade: fila.ordem_producao.quantidade,
+                        quantidade: fila.ordem_producao.quantidade * produto.numeroGravacao,
                         quantidadeProduzido: "",
-                        idFilaGravacao: fila.idFilaGravacao
+                        idFilaGravacao: fila.idFilaGravacao,
+                        numeroGravacao: fila.numeroGravacao == 0 ? 1 : fila.numeroGravacao
                     });
                 }
             });
@@ -380,16 +426,56 @@ module.exports = {
     },
     finaliza: async function (req, res) {
         let idFilaGravacao = req.params.idFilaGravacao;
-        console.log(idFilaGravacao);
+
+        let findAllFila = await filaGravacaoModel.findAll({ where: { idFilaGravacao: idFilaGravacao } })
+        let arrFila = JSON.parse(JSON.stringify(findAllFila, null));
+        let idMaquinarioFila = arrFila[0].idMaquinarioFila;
+        let findAllMaquinario = await maquinario_filaModel.findAll({
+            where: { idMaquinarioFila: idMaquinarioFila }
+        });
+        let arrFilaMaquina = JSON.parse(JSON.stringify(findAllMaquinario, null));
+
         await filaGravacaoModel.update({ finalizado: 1 },
             {
                 where: {
                     idFilaGravacao: idFilaGravacao
                 }
             });
+        await this.reeordenar(arrFilaMaquina[0].idMaquina, arrFilaMaquina[0].idForno);
+
         res.redirect("/fila-serigrafia/preview");
 
     },
+    reeordenar: async function (idMaquina, idForno) {
+        let findAllMaquinario = await maquinario_filaModel.findAll({
+            
+            where: { idMaquina: idMaquina, idForno: idForno },
+            include: [{
+                model: filaGravacaoModel,
+                where: { finalizado: false },
+                order: [['ordenacao', 'ASC']],
+            }]
+        });
 
+        let arrFilaMaquinario = JSON.parse(JSON.stringify(findAllMaquinario, null));
+        let ordem = 0
+        for (const item of arrFilaMaquinario) {
+            let id = item.fila_gravacaos[0].idFilaGravacao
+            await filaGravacaoModel.update({ ordenacao: ordem }, {
+                where: {
+                    idFilaGravacao: id
+                }
+            })
+            ordem++;
+        }
+
+        //console.log(JSON.parse(JSON.stringify(findAllMaquinario, null)))
+    },
+
+    getCount: async function (idOrdemProducao) {
+        return await filaGravacaoModel.count({
+            where: { idOrdemProducao: idOrdemProducao, finalizado: 0 }
+        });
+    }
 
 }

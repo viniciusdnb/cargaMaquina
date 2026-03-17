@@ -7,6 +7,7 @@ filaSerigrafiaRouter.get('/fila-serigrafia', function(req, res){
 });
 
 filaSerigrafiaRouter.get('/fila-setup/:idOrdemProducao', function(req, res){
+    
     filaSerigrafiaController.setup(req, res);
 });
 

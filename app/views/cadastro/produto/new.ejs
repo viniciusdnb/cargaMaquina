@@ -40,13 +40,9 @@
             </div>
 
             <div class="col-md-4">
-                <label class="form-label">DISPOSITIVO</label>
-                <select class="form-select" name="idTipoDispositivo">
-                   <% arrTipoDispositivo.forEach(dispositivo=>{%>
-                        <option                       
-                        value="<%= dispositivo.idTipoDispositivo%>"><%= dispositivo.descDispositivo %></option>
-                   <%}) %>
-                </select>
+                <label class="form-label">NUMERO DE GRAVACOES</label>
+                <input class="form-control"type="number" name="numeroGravacao" id="numeroGravacao">
+                
             </div>
            
             <div class="row g-3">

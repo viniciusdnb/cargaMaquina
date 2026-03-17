@@ -35,7 +35,8 @@ module.exports = {
         const produto = await produtoModel.update({
             descProduto: req.body.descProduto,
             idTipoProduto: req.body.idTipoProduto,
-            codigoOmie: req.body.codigoOmie
+            codigoOmie: req.body.codigoOmie,
+            numeroGravacao: Number(req.body.numeroGravacao)
         }, {
             where: {
                 idProduto: req.body.idProduto
@@ -58,7 +59,8 @@ module.exports = {
             const produto = await produtoModel.create({
                 descProduto: req.body.descProduto,
                 idTipoProduto: req.body.idTipoProduto,
-                codigoOmie: req.body.codigoOmie
+                codigoOmie: req.body.codigoOmie,
+                numeroGravacao: req.body.numeroGravacao
             })
         } catch (error) {
 

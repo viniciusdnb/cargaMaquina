@@ -29,10 +29,10 @@ class MachineLoad {
 
             var dateTimeNow = new Date();
             dateTimeNow.setHours(7, 12, 0);
-            
+            //console.log(this.dataDB.queue[machine].queueProducts);
             this.dataDB.queue[machine].queueProducts[0].previsionStart = new Date(dateTimeNow);
 
-            //console.log( this.dataDB.queue[machine].queueProducts[0].previsionStart);
+            
         }
 
         this.setPrevisionFirstItem(machine, dateTimeNow);

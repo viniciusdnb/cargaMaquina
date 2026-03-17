@@ -12,12 +12,15 @@
     </nav>
 </div>
 <main class="container-fluid">
-    <% arrData.data.forEach(maquinas=>{
+    <form action="" method="post" id="form-fila">
+ <%   
+        arrData.data.forEach(maquinas=>{
         for(const key in maquinas){
            
             %>
         <h4>
-            <% var nomeMaquina = Object.keys(maquinas[key]).pop()%>
+            <% 
+            var nomeMaquina = Object.keys(maquinas[key]).pop()%>
             <%=nomeMaquina %>
         </h4>
         <table class="table table-hover" id="table<%= nomeMaquina%>">
@@ -27,6 +30,7 @@
                     <td>OP</td>
                     <td>CLIENTE</td>
                     <td>PRODUTO</td>
+                    <td>GRAVAÇÃO</td>
                     <td>QTD PEDIDO</td>
                     <td>QTD PRODUZIDO</td>
                     <td>COMEÇA</td>
@@ -38,17 +42,29 @@
                
                     <%
                         for(const i in maquinas[key][nomeMaquina].queueProducts){
-                             console.log(maquinas[key][nomeMaquina].queueProducts[i])
+                             //console.log(maquinas[key][nomeMaquina].queueProducts[i])
                         %>
                         <tr>
                             <td><%=i%></td>
                             <td><%=maquinas[key][nomeMaquina].queueProducts[i].ordemProducao%></td>
                             <td><%=maquinas[key][nomeMaquina].queueProducts[i].cliente%></td>
                             <td><%=maquinas[key][nomeMaquina].queueProducts[i].produto%></td>
+                           
+                            <td class="text-center"><%=maquinas[key][nomeMaquina].queueProducts[i].numeroGravacao%></td>
                             <td><%=maquinas[key][nomeMaquina].queueProducts[i].orderQuantity%></td>
                             <td><%=maquinas[key][nomeMaquina].queueProducts[i].quantityProduced%></td>
-                            <td><%=maquinas[key][nomeMaquina].queueProducts[i].previsionStart%></td>
-                            <td><%=maquinas[key][nomeMaquina].queueProducts[i].previsionEnd%></td>
+                            <td><%=
+                                maquinas[key][nomeMaquina].queueProducts[i].previsionStart.toLocaleString()
+                                %></td>
+                            <td><%=maquinas[key][nomeMaquina].queueProducts[i].previsionEnd.toLocaleString()%></td>
+                             <td>
+                            <a href="" data-bs-toggle="modal" data-bs-target="#staticBackdropTransfer"
+                                /*onclick='transferir("","")' */ />
+                            <img src="/img/transfer-24.png"></a>
+
+                            <a><img src="/img/delete-24.png"></a>
+                            <a href="/fila-serigrafia/finalizar/<%=maquinas[key][nomeMaquina].queueProducts[i].idFilaMaquina%>"><img src="/img/check-24.png"></a>
+                        </td>
                         </tr>
                         <%}
                        
@@ -56,58 +72,14 @@
               
             </tbody>
         </table>
+        <br><br>
+    <%} }) %>
 
-        <%} }) %>
+     <input type="submit" class="btn btn-success" value="CALCULAR">
+    </form>
+   
 
-            <table class="table table-hover" id="table">
-                <thead class="table-dark">
-                    <tr>
-                        <td>#</td>
-                        <td>OP</td>
-                        <td>CLIENTE</td>
-                        <td>PRODUTO</td>
-                        <td>QTD PEDIDO</td>
-                        <td>QTD PRODUZIDO</td>
-                        <td>COMEÇA</td>
-                        <td>TERMINA</td>
-                        <td>opções</td>
-                    </tr>
-                </thead>
-                <tbody>
-
-                    <tr>
-
-                        <td>
-
-                        </td>
-                        <td>
-
-                        </td>
-                        <td>
-
-                        </td>
-                        <td>
-
-                        </td>
-                        <td>
-
-                        </td>
-                        <td>
-
-                        </td>
-                        <td>
-                            <a href="" data-bs-toggle="modal" data-bs-target="#staticBackdropTransfer"
-                                /*onclick='transferir("","")' */ />
-                            <img src="/img/transfer-24.png"></a>
-
-                            <a><img src="/img/delete-24.png"></a>
-                            <a href="/fila-serigrafia/finalizar/"><img src="/img/check-24.png"></a>
-                        </td>
-                    </tr>
-
-                </tbody>
-            </table>
-            <br>
+       
 
 
 

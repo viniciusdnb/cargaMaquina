@@ -2,7 +2,15 @@ function enviarFila(el){
     var idForno = el.querySelector(".idForno");
     var idMaquina = el.querySelectorAll('.idMaquina');
     var idOrdemProducao = document.querySelector('#idOrdemProducao').value;
-    console.log(idOrdemProducao);
+    var radio = document.querySelectorAll(".form-check-input")
+    var radioChecked
+    Array.from(radio).forEach(r =>{
+       if(r.checked){
+        radioChecked = r.value;
+       }
+    });
+
+   
     var objFila = {
 
         idOrdemProducao:idOrdemProducao,
@@ -12,9 +20,10 @@ function enviarFila(el){
     idMaquina.forEach(id=>{
         maquinas.push({idMaquina:id.value});
     });
-    objFila["maquinas"]= maquinas;
+    objFila["maquinas"] = maquinas;
+    objFila["valueGravacao"] = radioChecked
    
-    fetch(`http://192.168.0.15:3000/fila-serigrafia`,{
+    fetch('/fila-serigrafia',{
     method: 'POST',
     headers:{
         'Content-Type':'application/json'

@@ -21,6 +21,9 @@ const fila_gravacaoModel = connect.define(
         },
         ordenacao:{
             type:DataTypes.INTEGER
+        },
+        numeroGravacao:{
+             type:DataTypes.INTEGER
         }
     },
     {

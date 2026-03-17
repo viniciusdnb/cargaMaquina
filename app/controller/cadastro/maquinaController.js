@@ -40,7 +40,8 @@ module.exports = {
             descMaquina: req.body.descMaquina,
             idSetor: req.body.idSetor,
             velocidade: req.body.velocidade,
-            undVelocidade: req.body.undVelocidade
+            undVelocidade: req.body.undVelocidade,
+            modelo: req.body.modelo
         }, {
             where: {
                 idMaquina: req.body.idMaquina,
@@ -62,7 +63,8 @@ module.exports = {
                 descMaquina: req.body.descMaquina,
                 idSetor: req.body.idSetor,
                 velocidade: req.body.velocidade,
-                undVelocidade: req.body.undVelocidade
+                undVelocidade: req.body.undVelocidade,
+                modelo: req.body.modelo
 
             });
 

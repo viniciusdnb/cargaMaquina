@@ -53,9 +53,12 @@
                                         <ul class="list-group">
                                             <% maquinario.produtos.forEach(produto=>{%>
                                                 <li class="list-group-item">
-                                                    <%=produto.nomeProduto %>
+                                                    <div class="row">
+                                                        <div class="col-sm-8"><%=produto.nomeProduto %></div>  
+                                                        <div class="col-sm-2 text-center">GRAVAÇÃO: <%= produto.numeroGravacao %></div>  
+                                                    </div>                                                
                                                 </li>
-                                                <%})%>
+                                            <%})%>
                                         </ul>
                                     </div>
                                 </div>

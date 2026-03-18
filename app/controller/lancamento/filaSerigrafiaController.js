@@ -43,12 +43,12 @@ module.exports = {
         //funcao para percorrer as ordens de producao e verificar se elas tem lancamentos nos setor da gravacao 
         for (const key in arrOrdemProducao) {
             let ordem = arrOrdemProducao[key]
-            if(idMaquina !=null){
-                var list = await list_apont_sum_qtd_grop_idOp.findAll({ where: { idOrdemProducao: ordem.idOrdemProducao, idSetor: 2, idMaquina:idMaquina } });
-            }else{
-                 var list = await list_apont_sum_qtd_grop_idOp.findAll({ where: { idOrdemProducao: ordem.idOrdemProducao, idSetor: 2 } });
+            if (idMaquina != null) {
+                var list = await list_apont_sum_qtd_grop_idOp.findAll({ where: { idOrdemProducao: ordem.idOrdemProducao, idSetor: 2, idMaquina: idMaquina } });
+            } else {
+                var list = await list_apont_sum_qtd_grop_idOp.findAll({ where: { idOrdemProducao: ordem.idOrdemProducao, idSetor: 2 } });
             }
-            
+
             let sumQuantidade = 0
             if (list.length != 0) {
                 let arrList = JSON.parse(JSON.stringify(list, null));
@@ -63,15 +63,15 @@ module.exports = {
 
         return arrOrdemProducao;
     },
-    getOrdenacao: async function (ultimoLinhaMaquina) {
+    getOrdenacao: function (ultimoLinhaMaquina) {
 
 
         var ultimaLinha = JSON.parse(JSON.stringify(ultimoLinhaMaquina, null));
-        
+
         /*var log = ultimaLinha != null ? JSON.parse(JSON.stringify(ultimoLinhaMaquina, null)) : ">\n";
        
         await fs.appendFile('log.txt',`${log}`,'utf8');*/
-       
+
         return ultimaLinha != null && ultimaLinha.ordenacao >= 0 ? ultimaLinha.ordenacao + 1 : 0;
     },
     setup: async function (req, res) {
@@ -149,10 +149,10 @@ module.exports = {
         let arrMaquinas = req.body.maquinas;
         let idForno = req.body.idForno;
         let idOrdemProducao = req.body.idOrdemProducao;
-         let numeroGravacao = 1
-         if(req.body.valueGravacao){
-           numeroGravacao = req.body.valueGravacao
-         }
+        let numeroGravacao = 1
+        if (req.body.valueGravacao) {
+            numeroGravacao = req.body.valueGravacao
+        }
         let arrIdMaquinarioFila = [];
 
         for (const key in arrMaquinas) {
@@ -162,8 +162,8 @@ module.exports = {
             });
 
             arrIdMaquinarioFila.push(maquinarioFila.idMaquinarioFila);
-        } 
- 
+        }
+
         let ultimoLinhaMaquina = await filaGravacaoModel.findOne({
             order: [['ordenacao', 'DESC']],
             where: { finalizado: 0 },
@@ -189,6 +189,7 @@ module.exports = {
 
     },
     verFila: async function (req, res) {
+        let maquinas = await maquinaModel.findAll({ where: { idSetor: 2 } });
         let fila = await maquinario_filaModel.findAll({
             where: {
                 idForno: req.params.idForno
@@ -212,22 +213,22 @@ module.exports = {
 
         if (arrFila.length != 0) {
             let arrData = JSON.parse(JSON.stringify(this.montarEstruturaFornos(arrFila)));
-            
-            
-            
+
+
+
             for (const f in arrData) {
 
                 for (const m in arrData[f].maquinario) {
                     for (const p in arrData[f].maquinario[m].produtos) {
-                       
+
                         let arrApontamentos = await this.getQuantidadeProduzido(arrData[f].maquinario[m].idMaquina);
 
                         arrApontamentos.forEach(apontamentos => {
-                            
+
                             if (arrData[f].maquinario[m].produtos[p].idOrdemProducao == apontamentos.idOrdemProducao) {
-                                
+
                                 arrData[f].maquinario[m].produtos[p].quantidadeProduzido = apontamentos.quantidadeProduzida
-                                
+
                             }
                         });
 
@@ -243,8 +244,9 @@ module.exports = {
                     nomeForno: arrData[0].nomeForno,
                     data: await this.gethoras(arrData)
                 },
+                maquinas: JSON.parse(JSON.stringify(maquinas, null)),
                 'pathName': 'fila'
-                }
+            }
             );
 
         }
@@ -265,7 +267,7 @@ module.exports = {
 
             for (const produto of produtos) {
 
-                let result = await this.getCount(produto.idOrdemProducao);                
+                let result = await this.getCount(produto.idOrdemProducao);
                 let qtdOrdem = result <= 0
                     ? produto.quantidade
                     : produto.quantidade / result;
@@ -300,8 +302,8 @@ module.exports = {
             data[nomeMaquina] = {
                 bpm: 7,
                 considerBPMMachine: false,
-                queueProducts: prod, 
-                
+                queueProducts: prod,
+
             };
         }
 
@@ -362,14 +364,14 @@ module.exports = {
         arrData.forEach(item => {
             const { forno, maquina, fila_gravacaos } = item;
 
-            
+
             // 🔥 Cria forno se ainda não existir
             if (!fornosMap[forno.idForno]) {
                 fornosMap[forno.idForno] = {
                     idForno: forno.idForno,
                     nomeForno: forno.descricaoForno,
                     maquinario: [],
-                    
+
                 };
             }
 
@@ -449,7 +451,7 @@ module.exports = {
     },
     reeordenar: async function (idMaquina, idForno) {
         let findAllMaquinario = await maquinario_filaModel.findAll({
-            
+
             where: { idMaquina: idMaquina, idForno: idForno },
             include: [{
                 model: filaGravacaoModel,
@@ -479,13 +481,13 @@ module.exports = {
         });
     },
 
-    calcule: async function(req, res){
+    calcule: async function (req, res) {
         const dataForm = req.body;
-        for(const item of dataForm){
+        for (const item of dataForm) {
             await filaGravacaoModel.update(
-                {ordenacao: item.ordem},
+                { ordenacao: item.ordem },
                 {
-                    where:{
+                    where: {
                         idFilaGravacao: item.idFilaGravacao
                     }
                 }
@@ -493,7 +495,100 @@ module.exports = {
         };
 
         res.sendStatus(200);
-        
+
+    },
+    trasnfer: async function (req, res) {
+
+        let idMaquinaAntiga = req.body.idMaquinaAntiga;
+        let idFilaGravacao = req.body.idFilaGravacao;
+        let newIdMaquina = req.body.newIdMaquina;
+        let idForno = req.body.idForno;
+
+
+        let ultimoLinhaMaquina = await filaGravacaoModel.findOne({
+            order: [['ordenacao', 'DESC']],
+            where: {
+                finalizado: 0
+            },
+            include: [{
+                model: maquinario_filaModel,
+                where: { idMaquina: newIdMaquina }
+            }]
+        });
+
+        if (ultimoLinhaMaquina != null) {
+            let ordem = this.getOrdenacao(ultimoLinhaMaquina);
+
+            //atualiza a ordenação da fila
+            await filaGravacaoModel.update({ ordenacao: ordem }, {
+                where: {
+                    idFilaGravacao: idFilaGravacao
+                }
+            });
+
+
+            let fila = await filaGravacaoModel.findAll({
+                where: {
+                    idFilaGravacao: idFilaGravacao
+                }, include: [{ model: maquinario_filaModel }]
+            });
+
+            //atualiza a maquina
+            let arrFila = JSON.parse(JSON.stringify(fila, null));
+            let idMaquinarioFila = arrFila[0].idMaquinarioFila;
+
+
+            //verificar o forno da maquina que esta transferindo para atualizar tambem
+
+            let f = await filaGravacaoModel.findAll({
+                order: [['ordenacao', 'DESC']],
+                where: {
+                    finalizado: 0
+                },
+                include: [{
+                    model: maquinario_filaModel,
+                    where: { idMaquina: newIdMaquina }
+                }]
+
+            });
+
+            let arrF = JSON.parse(JSON.stringify(f, null));
+            let newIdForno = "";
+            arrF.forEach(forno => {
+                if (forno.ordenacao == 0) {
+                    newIdForno = forno.maquinario_fila.idForno
+                }
+            })
+
+
+            if (arrFila[0].maquinario_fila.idForno != newIdForno) {
+                console.log(idMaquinarioFila + " " + newIdForno);
+
+                await maquinario_filaModel.update({ idMaquina: newIdMaquina, idForno: newIdForno }, {
+                    where: {
+                        idMaquinarioFila: idMaquinarioFila,
+
+                    }
+                });
+            } else {
+                await maquinario_filaModel.update({ idMaquina: newIdMaquina }, {
+                    where: {
+                        idMaquinarioFila: idMaquinarioFila,
+
+                    }
+                });
+            }
+
+
+
+            this.reeordenar(idMaquinaAntiga, idForno);
+
+        } 
+
+        //nao permitido nao faz nada redireciona para o preview
+
+
+        this.preview(req, res);
     }
 
 

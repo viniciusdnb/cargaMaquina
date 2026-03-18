@@ -61,12 +61,13 @@
                                 %></td>
                             <td><%=maquinas[key][nomeMaquina].queueProducts[i].previsionEnd.toLocaleString()%></td>
                              <td>
-                            <a href="" data-bs-toggle="modal" data-bs-target="#staticBackdropTransfer"
-                                /*onclick='transferir("","")' */ />
-                            <img src="/img/transfer-24.png"></a>
+                            
+                           <a href="" data-bs-toggle="modal" data-bs-target="#staticBackdropTransfer"
+                                onclick='transferir("<%=maquinas[key][nomeMaquina].queueProducts[i].idFilaGravacao%>","<%=maquinas[key][nomeMaquina].queueProducts[i].idMaquina%>", "<%=arrData.idForno%>")'><img
+                                        src="/img/transfer-24.png"></a>
 
-                            <a><img src="/img/delete-24.png"></a>
-                            <a href="/fila-serigrafia/finalizar/<%=maquinas[key][nomeMaquina].queueProducts[i].idFilaMaquina%>"><img src="/img/check-24.png"></a>
+                            <!--<a><img src="/img/delete-24.png"></a>-->
+                            <a href="/fila-serigrafia/finalizar/<%=maquinas[key][nomeMaquina].queueProducts[i].idFilaGravacao%>"><img src="/img/check-24.png"></a>
                         </td>
                         </tr>
                         <%}

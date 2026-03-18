@@ -27,6 +27,10 @@ filaSerigrafiaRouter.get('/fila-serigrafia/finalizar/:idFilaGravacao', function(
 
 filaSerigrafiaRouter.post('/fila-serigrafia/recalcular', function(req, res){
     filaSerigrafiaController.calcule(req, res);
+});
+
+filaSerigrafiaRouter.post('/fila-serigrafia/transferir', function(req, res){
+    filaSerigrafiaController.trasnfer(req, res);
 })
 
 module.exports = filaSerigrafiaRouter;

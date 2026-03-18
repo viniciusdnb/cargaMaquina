@@ -50,7 +50,7 @@ class MachineLoad {
         for (let i = 1; i < numbersQueueProducts; i++) {
 
             var dataTimePrevisionPrevious = new Date(this.dataDB.queue[machine].queueProducts[queueKey].previsionEnd);
-
+            //console.log(this.dataDB.queue[machine]) 
             this.dataDB.queue[machine].queueProducts[i].previsionStart = dataTimePrevisionPrevious;
 
             var newPrevision = this.setPrevisions(machine, i, dataTimePrevisionPrevious);

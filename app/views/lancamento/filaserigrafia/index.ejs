@@ -4,6 +4,9 @@
     <%- include('../../layout/aside'); -%>
    
     <%- include(pathName); -%>
+    <% if(pathName == "fila"){%>
+        <%- include('modalTransfer'); -%>
+    <%}%>
     
     <%- include('footer'); -%>
 <%- include('../../layout/footer'); -%>

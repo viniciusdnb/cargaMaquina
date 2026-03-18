@@ -1,0 +1,49 @@
+<div class="modal fade" id="staticBackdropTransfer" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">TRASNFERIR PARA QUAL MAQUINA</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       
+        <form class="" method="post" action="/fila-serigrafia/transferir">
+          <input type="hidden" name="idMaquinaAntiga" id="idMaquinaAntiga" />
+          <input type="hidden" name="idFilaGravacao" id="idFilaGravacao" />
+          <input type="hidden" name="idForno" id="idForno" />
+          <select class="form-select" name="newIdMaquina" id="">
+
+            <option>Selecione ...</option>
+            <%
+            
+            if(typeof maquinas !='undefined' ){ 
+              
+              maquinas.forEach(maquina=>{%>
+              <option value="<%= maquina.idMaquina %>">
+                <%= maquina.descMaquina %>
+              </option>
+              <%})}%>
+          </select>
+          <input type="submit" name="TRASNFERIR" class="btn btn-success" />
+        </form>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">FECHAR</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function transferir(id, idMaquinaAntiga, idForno) {      
+      var idFilaGravacao = document.getElementById('idFilaGravacao');
+      idFilaGravacao.setAttribute("value", id);      
+ 
+      var idMaquina = document.getElementById('idMaquinaAntiga');
+      idMaquina.setAttribute("value", idMaquinaAntiga);
+      
+      var forno = document.getElementById('idForno');
+      forno.setAttribute("value", idForno)
+    }
+
+  </script>

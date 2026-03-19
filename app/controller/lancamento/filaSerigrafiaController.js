@@ -11,6 +11,8 @@ const filaGravacaoModel = require('../../model/models/lancamento/fila_gravacaoMo
 const machineLoad = require('../../libs/machineLoad/MachineLoad');
 const configWork = require('../../model/machineLoadModel/configWork');
 const fs = require('fs').promises;
+const HistoricoApontamento = require('../../libs/HistoricoApontamento');
+
 
 ordemProducaoModel.belongsTo(clienteModel, { foreignKey: "idCliente" });
 ordemProducaoModel.belongsTo(produtoModel, { foreignKey: "idProduto" });
@@ -209,16 +211,39 @@ module.exports = {
                 { model: maquinaModel }
             ]
         });
+
+
+
+
+
+
+
+
+
+
         let arrFila = JSON.parse(JSON.stringify(fila, null));
 
         if (arrFila.length != 0) {
             let arrData = JSON.parse(JSON.stringify(this.montarEstruturaFornos(arrFila)));
 
-
+            let arrHistoricoApontamento = []
 
             for (const f in arrData) {
 
                 for (const m in arrData[f].maquinario) {
+
+                    
+                    let findAllMaquinario = await maquinario_filaModel.findAll({
+
+                        where: { idMaquina: arrData[f].maquinario[m].idMaquina, idForno: req.params.idForno },
+                        include: [{
+                            model: filaGravacaoModel,
+                            where: { finalizado: false },
+                            order: [['ordenacao', 'ASC']],
+                        }]
+                    });
+                    arrHistoricoApontamento.push(JSON.parse(JSON.stringify(findAllMaquinario, null)));
+                    
                     for (const p in arrData[f].maquinario[m].produtos) {
 
                         let arrApontamentos = await this.getQuantidadeProduzido(arrData[f].maquinario[m].idMaquina);
@@ -237,6 +262,18 @@ module.exports = {
 
                 }
             }
+            
+           let data = [];
+           arrHistoricoApontamento.forEach(a=>{
+            a[0]["idOrdemProducao"] = a[0].fila_gravacaos[0].idOrdemProducao;
+            data.push([a[0]]);
+           });
+           let historico = [];
+          for(h in data){
+            historico.push(await HistoricoApontamento.getHistorico(data[h]))
+          }
+
+          
             return res.render(
                 'lancamento/filaserigrafia', {
                 'arrData': {
@@ -244,6 +281,7 @@ module.exports = {
                     nomeForno: arrData[0].nomeForno,
                     data: await this.gethoras(arrData)
                 },
+                'arrHistorico': historico,
                 maquinas: JSON.parse(JSON.stringify(maquinas, null)),
                 'pathName': 'fila'
             }
@@ -562,7 +600,7 @@ module.exports = {
 
 
             if (arrFila[0].maquinario_fila.idForno != newIdForno) {
-                console.log(idMaquinarioFila + " " + newIdForno);
+                //console.log(idMaquinarioFila + " " + newIdForno);
 
                 await maquinario_filaModel.update({ idMaquina: newIdMaquina, idForno: newIdForno }, {
                     where: {
@@ -583,7 +621,7 @@ module.exports = {
 
             this.reeordenar(idMaquinaAntiga, idForno);
 
-        } 
+        }
 
         //nao permitido nao faz nada redireciona para o preview
 

@@ -43,7 +43,7 @@
                
                     <%
                         for(const i in maquinas[key][nomeMaquina].queueProducts){
-                             console.log(maquinas[key][nomeMaquina].queueProducts[i])
+                             //console.log(maquinas[key][nomeMaquina].queueProducts[i].idMaquina)
                         %>
                         <tr class="linha">
                             <input type="hidden" class="idFilaGravacao" value="<%=maquinas[key][nomeMaquina].queueProducts[i].idFilaGravacao%>">
@@ -51,7 +51,44 @@
                             <td><%=maquinas[key][nomeMaquina].queueProducts[i].ordenacao%></td>
                             <td><%=maquinas[key][nomeMaquina].queueProducts[i].ordemProducao%></td>
                             <td><%=maquinas[key][nomeMaquina].queueProducts[i].cliente%></td>
-                            <td><%=maquinas[key][nomeMaquina].queueProducts[i].produto%></td>
+                            <td>
+                                <div class="row">
+                                    <%=maquinas[key][nomeMaquina].queueProducts[i].produto%>
+                                </div>
+                                <div class="row">
+                                    <p class="d-inline-flex gap-1">
+                                        <a class="btn btn-outline-info" data-bs-toggle="collapse" href="#collapse<%= maquinas[key][nomeMaquina].queueProducts[i].idOrdemProducao%>"
+                                            role="button" aria-expanded="false" aria-controls="collapse<%= maquinas[key][nomeMaquina].queueProducts[i].idOrdemProducao%>">
+                                            HISTORICO APONTAMENTOS
+                                        </a>
+                                    </p>
+                                    <%
+                                        for(const h in arrHistorico){
+                                            arrHistorico[h].forEach(historico=>{
+                                                if(maquinas[key][nomeMaquina].queueProducts[i].idOrdemProducao == historico.idOrdemProducao &&
+                                                    maquinas[key][nomeMaquina].queueProducts[i].idMaquina == historico.idMaquina
+                                                ){%>                                                   
+                                                    <div class="collapse" id="collapse<%= maquinas[key][nomeMaquina].queueProducts[i].idOrdemProducao%>">
+                                                        <div class="row">
+                                                            <div class="col-sm-4"><%=historico.data%></div>
+                                                            <div class="col-sm-4"><%=historico.operador%></div>
+                                                            <div class="col-sm-4"><%=historico.quantidade%></div>
+                                                        </div>
+                                                    </div>
+                                                <%}
+                                            })
+                                        }
+
+                                       
+                                        %>   
+                                          
+                                            
+                                            
+
+                                </div>
+                            
+                                
+                            </td>
                            
                             <td class="text-center"><%=maquinas[key][nomeMaquina].queueProducts[i].numeroGravacao%></td>
                             <td><%=maquinas[key][nomeMaquina].queueProducts[i].orderQuantity%></td>

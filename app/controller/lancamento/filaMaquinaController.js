@@ -11,7 +11,7 @@ const apontamentoCabecalhoModel = require('../../model/models/lancamento/apontam
 const apontamentoDetalheModel = require('../../model/models/lancamento/apontamentoDetalheModel');
 const {Op} = require('sequelize');
 const operadorModel = require('../../model/models/cadastro/operadorModel');
-
+const HistoricoApontamento = require('../../libs/HistoricoApontamento');
 
 filaMaquinaModel.belongsTo(ordemProducaoModel, { foreignKey: "idOrdemProducao" });
 ordemProducaoModel.belongsTo(clienteModel, { foreignKey: "idCliente" });
@@ -163,8 +163,9 @@ module.exports = {
         if (filaMaquina.length !== 0) {
 
             var arrFilaMaquina = JSON.parse(JSON.stringify(filaMaquina));
-            let arrHistorico = await this.getHistoricoApontamento(arrFilaMaquina); 
-
+            console.log(arrFilaMaquina)
+            //let arrHistorico = await this.getHistoricoApontamento(arrFilaMaquina); 
+            let arrHistorico = await HistoricoApontamento.getHistorico(arrFilaMaquina);
             //tras todo os lancamentos de apontamento da ordem
             //separado por setor da maquina vindo na requisição
             const list_apont_sum_qtd_grop_idOp = await list_apont_sum_qtd_grop_idOpModelView.findAll(

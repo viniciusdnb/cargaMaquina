@@ -7,12 +7,17 @@ const list_apont_sum_qtd_grop_idOpModelView = require('../../model/models/lancam
 const machineLoad = require('../../libs/machineLoad/MachineLoad');
 const configWork = require('../../model/machineLoadModel/configWork');
 const setorModel = require('../../model/models/cadastro/setorModel');
-
+const apontamentoCabecalhoModel = require('../../model/models/lancamento/apontamentoCabecalhoModel');
+const apontamentoDetalheModel = require('../../model/models/lancamento/apontamentoDetalheModel');
+const {Op} = require('sequelize');
+const operadorModel = require('../../model/models/cadastro/operadorModel');
 
 
 filaMaquinaModel.belongsTo(ordemProducaoModel, { foreignKey: "idOrdemProducao" });
 ordemProducaoModel.belongsTo(clienteModel, { foreignKey: "idCliente" });
 ordemProducaoModel.belongsTo(produtoModel, { foreignKey: "idProduto" });
+apontamentoCabecalhoModel.hasMany(apontamentoDetalheModel,{foreignKey: "idApontCabecalho"});
+apontamentoCabecalhoModel.belongsTo(operadorModel,{foreignKey: "idOperador"});
 maquinaModel.belongsTo(setorModel, { foreignKey: "idSetor" });
 
 module.exports = {
@@ -151,11 +156,15 @@ module.exports = {
             ],
             order: [['ordenacao', 'ASC']]
         });
+        
+
         //console.log(JSON.parse(JSON.stringify(filaMaquina)));
         //verifica se tem ordem cadastrada na maquina de acordo com o id da maquina passado pela req
         if (filaMaquina.length !== 0) {
 
             var arrFilaMaquina = JSON.parse(JSON.stringify(filaMaquina));
+            let arrHistorico = await this.getHistoricoApontamento(arrFilaMaquina); 
+
             //tras todo os lancamentos de apontamento da ordem
             //separado por setor da maquina vindo na requisição
             const list_apont_sum_qtd_grop_idOp = await list_apont_sum_qtd_grop_idOpModelView.findAll(
@@ -228,7 +237,8 @@ module.exports = {
                 "prevision": prevision.queue[descMaquina].queueProducts,
                 "idMaquina": req.body.idMaquina,
                 "maquinas": JSON.stringify(maquinas, null),
-                "maquinaAtual": maquina
+                "maquinaAtual": maquina,
+                "arrHistorico": arrHistorico
             });
         }
 
@@ -239,6 +249,47 @@ module.exports = {
             'pathName': 'main',
 
         });
+
+    },
+    getHistoricoApontamento: async function(arrFilaMaquina){
+        
+        let idMaquina = arrFilaMaquina[0].idMaquina;
+        let idOrdemProducao = arrFilaMaquina[0].idOrdemProducao;
+
+        let apontCabDetModel = await apontamentoCabecalhoModel.findAll({
+            where:{
+                idMaquina:idMaquina,
+                idOrdemProducao:idOrdemProducao
+            },
+            include:[{
+                model:apontamentoDetalheModel,
+                where:{
+                    idSubMotivo:1,
+                    quantidadeProduzido:{
+                        [Op.gt]:0
+                    }
+                }
+            },{
+                model:operadorModel
+            }]
+        });
+
+        let arrApontCabDetModel = JSON.parse(JSON.stringify(apontCabDetModel, null))
+        let arrHistorico = [];
+
+        arrApontCabDetModel.forEach(historico=>{
+            arrHistorico.push({
+                "idOrdemProducao":idOrdemProducao,
+                "data":historico.data,
+                "quantidade":historico.apontamento_detalhes[0].quantidadeProduzido,
+                "operador":historico.operdor.nomeOperador
+
+            
+            });
+        });
+        
+        return arrHistorico;
+       
 
     },
     trasnfer: async function (req, res) {

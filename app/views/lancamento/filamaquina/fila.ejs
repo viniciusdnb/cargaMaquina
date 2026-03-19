@@ -3,14 +3,17 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="/">INICIO</a></li>
             <li class="breadcrumb-item"><a href="/filamaquina">FILA</a></li>
-            <li class="breadcrumb-item">MAQUINA ATUAL: <h3><%= maquinaAtual.descMaquina %> -> <%= maquinaAtual.setor.descSetor%> </h3></li>
+            <li class="breadcrumb-item">MAQUINA ATUAL: <h3>
+                    <%= maquinaAtual.descMaquina %> -> <%= maquinaAtual.setor.descSetor%>
+                </h3>
+            </li>
         </ol>
     </nav>
 </div>
 <main class="container-fluid">
-    <%  %>
+    <% %>
         <form action="" method="post" id="form-fila">
-            <input type="hidden" value="<%= idMaquina %>" id="idMaquina"/>
+            <input type="hidden" value="<%= idMaquina %>" id="idMaquina" />
             <table class="table table-hover">
                 <thead class="table-dark">
                     <tr>
@@ -26,15 +29,16 @@
                     </tr>
                 </thead>
                 <tbody id="tbody">
-                    <% 
-                   
-                   //console.log(maquinaAtual)
-                    var i=0; Object.keys(prevision).forEach(key=>{
+                    <% console.log(arrHistorico); var i=0; Object.keys(prevision).forEach(key=>{
 
                         %>
                         <tr class="linha">
-                            <td style="display: none;" class="idFilaMaquina"><%=prevision[key].idFilaMaquina%></td>
-                            <td style="display: none;" class="idOrdemProducao"><%=prevision[key].idOrdemProducao%></td>
+                            <td style="display: none;" class="idFilaMaquina">
+                                <%=prevision[key].idFilaMaquina%>
+                            </td>
+                            <td style="display: none;" class="idOrdemProducao">
+                                <%=prevision[key].idOrdemProducao%>
+                            </td>
                             <td class="ordem">
                                 <%=i%>
                             </td>
@@ -43,9 +47,35 @@
                             </td>
                             <td>
                                 <%= prevision[key].cliente %>
+                                    
+
                             </td>
                             <td>
-                                <%= prevision[key].produto %>
+                                <div class="row">
+                                   <%= prevision[key].produto %>  
+                                </div>
+                                <div class="row">
+                                <p class="d-inline-flex gap-1">
+                                        <a class="btn btn-outline-info" data-bs-toggle="collapse" href="#collapse<%= prevision[key].idOrdemProducao%>"
+                                            role="button" aria-expanded="false" aria-controls="collapse<%= prevision[key].idOrdemProducao%>">
+                                            HISTORICO APONTAMENTOS
+                                        </a>
+                                    </p>
+                                    <% arrHistorico.forEach(historico=>{
+                                        if(prevision[key].idOrdemProducao == historico.idOrdemProducao){%>
+
+                                        <div class="collapse" id="collapse<%= prevision[key].idOrdemProducao%>">
+                                            <div class="row">
+                                                <div class="col-sm-4"><%=historico.data%></div>
+                                                <div class="col-sm-4"><%=historico.operador%></div>
+                                                <div class="col-sm-4"><%=historico.quantidade%></div>
+                                            </div>
+                                        </div>
+                                        <% } }) %>
+
+                                </div>
+
+                                
                             </td>
                             <td class="text-center">
                                 <%= prevision[key].orderQuantity %>
@@ -63,10 +93,14 @@
                             <td><a href="" data-bs-toggle="modal" data-bs-target="#staticBackdropTransfer"
                                     onclick='transferir("<%=prevision[key].idFilaMaquina%>","<%=prevision[key].idMaquina%>")'><img
                                         src="/img/transfer-24.png"></a>
-                                <a href="/filamaquina/delete/<%=prevision[key].idFilaMaquina%>/<%= prevision[key].idOrdemProducao %>/<%=prevision[key].idMaquina%>"><img src="/img/delete-24.png"></a>
-                                <a href="/filamaquina/finalizar/<%=prevision[key].idFilaMaquina%>/<%=prevision[key].idMaquina%>/<%= prevision[key].idOrdemProducao %>"><img src="/img/check-24.png"></a>
-                                
-                                </td>
+                                <a
+                                    href="/filamaquina/delete/<%=prevision[key].idFilaMaquina%>/<%= prevision[key].idOrdemProducao %>/<%=prevision[key].idMaquina%>"><img
+                                        src="/img/delete-24.png"></a>
+                                <a
+                                    href="/filamaquina/finalizar/<%=prevision[key].idFilaMaquina%>/<%=prevision[key].idMaquina%>/<%= prevision[key].idOrdemProducao %>"><img
+                                        src="/img/check-24.png"></a>
+
+                            </td>
                         </tr>
 
                         <% i++; })%>
@@ -79,10 +113,10 @@
 </main>
 
 <script>
-   document.addEventListener('DOMContentLoaded', function(){
-    new Sortable(document.querySelector('.table tbody'),{
-        animation: 150,
-        ghostClass: "ghost"
+    document.addEventListener('DOMContentLoaded', function () {
+        new Sortable(document.querySelector('.table tbody'), {
+            animation: 150,
+            ghostClass: "ghost"
+        })
     })
-   })
 </script>
